@@ -16,6 +16,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Net;
 using System.Security.Cryptography;
+using System.Windows.Media.Animation;
 
 namespace EC_Launcher
 {
@@ -23,16 +24,12 @@ namespace EC_Launcher
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
-        
-        
+    { 
 
         public MainWindow()
         {
             InitializeComponent();
         }
-
-        
 
 
         private void Window_Activated(object sender, EventArgs e)
@@ -42,7 +39,12 @@ namespace EC_Launcher
             if (!File.Exists("Client_Game_File_Hashes.txt"))
             {
                 File.Create("Client_Game_File_Hashes.txt").Close();
-                //MessageBox.Show("Created Hash File ");
+            }
+            
+            if(!GlobalVariables.DevMode)
+            {
+                GenerateHashButton.Visibility = Visibility.Hidden;
+                DeveloperMode_Label.Visibility = Visibility.Hidden;
             }
         }
 
@@ -62,10 +64,64 @@ namespace EC_Launcher
             WebClient client = new WebClient();
             client.BaseAddress = "https://www.dropbox.com/sh/a3l30yu2ale22f6/AABOtNXGvsk6UYUzhNtfrmiba?dl=0";
             //client.DownloadFile("http://gitlab.ecrisis.su/nc/ec/tree/master/", "ec.jpg");
+            
+        }
 
+        public void ProgressBar_Change()
+        {
+            ProgressBar1.Maximum = 100;
+
+            Action incPgBar = () => { ProgressBar1.Value++; };
+            var task = new Task(
+                () => 
+                {
+                    for (var i = 0; i < 10000; i++)
+                    {
+                        ProgressBar1.Dispatcher.Invoke(incPgBar);                        
+                        System.Threading.Thread.Sleep(100);
+                    }
+                }
+                );
+            task.Start();
+            ProgressBar1.Value = 0;
+        }
+
+        private void GenerateHashButton_Click(object sender, RoutedEventArgs e)
+        {
             HashFile.GetGameFileHashes();
+            ProgressBar_Change();
+        }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {           
+
         }
 
         
+
+        private void FacebookButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void VKButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void YouTubeButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DiscordButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Discord Button");
+        }
+
+        private void SteamButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

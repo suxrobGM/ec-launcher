@@ -6,12 +6,13 @@
         xmlns:local="clr-namespace:EC_Launcher"
         mc:Ignorable="d"
         Title="Hearts of Iron IV: Economic Crisis Launcher" Height="450" Width="800" Activated="Window_Activated">
+
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="Background.bmp"/>
         </Grid.Background>
 
-        <StackPanel HorizontalAlignment="Left" Height="147" Margin="10,71,0,0" VerticalAlignment="Top" Width="158">
+        <StackPanel HorizontalAlignment="Left" Height="185" Margin="10,71,0,0" VerticalAlignment="Top" Width="158">
             <StackPanel.Background>
                 <RadialGradientBrush>
                     <GradientStop Color="Black"/>
@@ -49,6 +50,21 @@
                 </Button.Foreground>
             </Button>
 
+            <Button x:Name="ReportBugButton" Content="Report Bug" HorizontalAlignment="Left" VerticalAlignment="Top" Width="158" Height="27" FontWeight="Bold" FontSize="14" FontFamily="Stencil" Margin="0,3,0,0" Click="GenerateHashButton_Click">
+                <Button.BorderBrush>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="#FFD8D8D8" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.BorderBrush>
+                <Button.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="#FF4F4BB0" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.Foreground>
+            </Button>
+            
             <Button x:Name="DonateButton" Content="Donate!" HorizontalAlignment="Left" VerticalAlignment="Top" Width="158" Height="28" FontWeight="Bold" FontSize="14" FontFamily="Stencil" Margin="0,3,0,0">
                 <Button.BorderBrush>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -64,7 +80,22 @@
                 </Button.Foreground>
             </Button>
 
-            <Button x:Name="SettingsButton" Content="Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Width="158" Height="28" FontWeight="Bold" FontSize="14" FontFamily="Stencil" Margin="0,3,0,0">
+            <Button x:Name="SettingsButton" Content="Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Width="158" Height="28" FontWeight="Bold" FontSize="14" FontFamily="Stencil" Margin="0,3,0,0" Click="SettingsButton_Click">
+                <Button.BorderBrush>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="#FFD8D8D8" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.BorderBrush>
+                <Button.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="#FF4F4BB0" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.Foreground>
+            </Button>
+            
+            <Button x:Name="GenerateHashButton" Content="Generate Hash" HorizontalAlignment="Left" VerticalAlignment="Top" Width="158" Height="27" FontWeight="Bold" FontSize="14" FontFamily="Stencil" Margin="0,3,0,0" Click="GenerateHashButton_Click">
                 <Button.BorderBrush>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="Black" Offset="0"/>
@@ -79,9 +110,12 @@
                 </Button.Foreground>
             </Button>
         </StackPanel>
-        <WebBrowser x:Name="WebBrowser1" HorizontalAlignment="Left" Height="266" Margin="291,42,0,0" VerticalAlignment="Top" Width="491"/>
+
+        <WebBrowser x:Name="WebBrowser1" HorizontalAlignment="Left" Height="264" Margin="291,42,0,0" VerticalAlignment="Top" Width="491"/>
         <ProgressBar x:Name="ProgressBar1" HorizontalAlignment="Left" Height="19" Margin="10,289,0,0" VerticalAlignment="Top" Width="276"/>
-        <Label x:Name="ModVersionLabel" Content="Mod Version: " HorizontalAlignment="Left" Margin="291,313,0,0" VerticalAlignment="Top" FontWeight="Bold" Background="{x:Null}">
+        <TextBlock x:Name="PgBar_TextBlock" Visibility="Hidden" Text="{Binding ElementName=ProgressBar1, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="133,290,642,113" />
+
+        <Label x:Name="ModVersionLabel" Content="Mod Version: " HorizontalAlignment="Left" Margin="486,313,0,0" VerticalAlignment="Top" FontWeight="Bold" Background="{x:Null}">
             <Label.Foreground>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Black" Offset="0"/>
@@ -89,7 +123,7 @@
                 </LinearGradientBrush>
             </Label.Foreground>
         </Label>
-        <Label x:Name="LauncherVersionLabel" Content="Launcher Version: " HorizontalAlignment="Left" Margin="425,313,0,0" VerticalAlignment="Top" FontWeight="Bold">
+        <Label x:Name="LauncherVersionLabel" Content="Launcher Version: " HorizontalAlignment="Left" Margin="624,313,0,0" VerticalAlignment="Top" FontWeight="Bold">
             <Label.Foreground>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Black" Offset="0"/>
@@ -97,6 +131,43 @@
                 </LinearGradientBrush>
             </Label.Foreground>
         </Label>
+        <Label x:Name="DeveloperMode_Label" Content="Developer Mode" HorizontalAlignment="Left" Margin="678,383,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFF30000" FontWeight="Bold"/>
+        <Label Content="Follow us: " HorizontalAlignment="Left" Margin="10,313,0,0" VerticalAlignment="Top" FontWeight="Bold">
+            <Label.Foreground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="0"/>
+                    <GradientStop Color="White" Offset="1"/>
+                </LinearGradientBrush>
+            </Label.Foreground>
+        </Label>
+        <StackPanel HorizontalAlignment="Left" Height="30" Margin="80,308,0,0" VerticalAlignment="Top" Width="206" Orientation="Horizontal">
+            <Button x:Name="FacebookButton" Content="" Width="30" BorderBrush="{x:Null}" Height="30" VerticalAlignment="Top" Click="FacebookButton_Click">
+                <Button.Background>
+                    <ImageBrush ImageSource="icons/facebook.png"/>
+                </Button.Background>
+            </Button>
+            <Button x:Name="VKButton" Content="" Width="30" BorderBrush="{x:Null}" Click="VKButton_Click">
+                <Button.Background>
+                    <ImageBrush ImageSource="icons/vk.png"/>
+                </Button.Background>
+            </Button>
+            <Button x:Name="YouTubeButton" Content="" Width="30" BorderBrush="{x:Null}" Click="YouTubeButton_Click">
+                <Button.Background>
+                    <ImageBrush ImageSource="icons/youtube.png"/>
+                </Button.Background>
+            </Button>
+            <Button x:Name="DiscordButton" Content="" Width="30" BorderBrush="{x:Null}" Click="DiscordButton_Click" IsTabStop="False">
+                <Button.Background>
+                    <ImageBrush ImageSource="icons/discord.png"/>
+                </Button.Background>
+            </Button>
+            <Button x:Name="SteamButton" Content="" Width="30" BorderBrush="{x:Null}" Click="SteamButton_Click">
+                <Button.Background>
+                    <ImageBrush ImageSource="icons/steam.png"/>
+                </Button.Background>
+            </Button>
+        </StackPanel>
+
 
     </Grid>
 </Window>

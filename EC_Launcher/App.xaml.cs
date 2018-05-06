@@ -13,5 +13,16 @@ namespace EC_Launcher
     /// </summary>
     public partial class App : Application
     {
+        
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            foreach (string arg in e.Args)
+            {
+                if(arg == "-dev_mode") //аргумент -dev_mode включает режим разработчика
+                {
+                    GlobalVariables.DevMode = true;
+                }
+            }    
+        }
     }
 }

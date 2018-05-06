@@ -4,34 +4,41 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Diagnostics;
-using System.Net;
 using System.Security.Cryptography;
 
 namespace EC_Launcher
 {
     class HashFile
     {
-        public static List<string> HashList = new List<string>();
+
+        //словарь хранить себя хеши
+        //public static Dictionary<string, string> HashDict = new Dictionary<string, string>();
+
         public static void GetGameFileHashes()
         {
             FileStream hash_file = new FileStream("Client_Game_File_Hashes.txt", FileMode.Truncate);
             StreamWriter writer = new StreamWriter(hash_file);
-            //ProgressBar1.Maximum = Directory.EnumerateFiles(MOD_DIR + @"\history\countries").Count();
 
-            foreach (var file in Directory.EnumerateFiles(GlobalVariables.MOD_DIR + @"\history\countries"))
+            //получить польный список файлов(где-то 17-18к шт.)
+            string[] files = Directory.GetFiles(GlobalVariables.MOD_DIR, "*", SearchOption.AllDirectories); 
+
+            foreach (var file in files)
             {
-                string file_name = file.ToString().Remove(0, GlobalVariables.MOD_DIR.Length);
-                using (var stream = File.OpenRead(file))
+                if (!file.Contains(".git")) //не счытивать файлы гита
                 {
-                    writer.WriteLine(GetHash_MD5(stream).ToString() + " - " + file_name);
-                    HashList.Add(GetHash_MD5(stream).ToString() + " - " + file_name);
-                    //ProgressBar1.Value++;
+                    string file_name = file.ToString().Remove(0, GlobalVariables.MOD_DIR.Length);
+                    using (var stream = File.OpenRead(file))
+                    {
+                        writer.WriteLine(GetHash_MD5(stream).ToString() + " - " + file_name); //записать на файле                      
+                        //HashDict.Add(file_name, GetHash_MD5(stream).ToString());
+                    }
                 }
+                    
             }
             writer.Close();
         }
 
+        //получить md5 хеша
         public static string GetHash_MD5(Stream stream)
         {
             byte[] bytes;
@@ -46,7 +53,6 @@ namespace EC_Launcher
             {
                 buffer.AppendFormat("{0:x2}", b);
             }
-
 
             return buffer.ToString();
         }

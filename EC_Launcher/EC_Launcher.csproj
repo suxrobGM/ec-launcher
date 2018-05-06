@@ -133,5 +133,16 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\discord.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\facebook.png" />
+    <Resource Include="icons\steam.png" />
+    <Resource Include="icons\youtube.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\vk.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
