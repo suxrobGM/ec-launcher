@@ -36,9 +36,9 @@ namespace EC_Launcher
         {
             WebBrowser1.Navigate("https://www.facebook.com/groups/HOI.Economic.Crisis");
 
-            if (!File.Exists("Client_Game_File_Hashes.txt"))
+            if (!File.Exists("Client_Mod_Hashes.txt"))
             {
-                File.Create("Client_Game_File_Hashes.txt").Close();
+                File.Create("Client_Mod_Hashes.txt").Close();
             }
             
             if(!GlobalVariables.DevMode)
@@ -101,27 +101,27 @@ namespace EC_Launcher
 
         private void FacebookButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Process.Start("https://www.facebook.com/groups/HOI.Economic.Crisis");
         }
 
         private void VKButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Process.Start("https://vk.com/ec_hoi_mod");
         }
 
         private void YouTubeButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Process.Start("http://www.youtube.com/c/HeartsofIronIVEconomicCrisis2013");
         }
 
         private void DiscordButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Discord Button");
+            Process.Start("https://discordapp.com/invite/GPbPBe2");
         }
 
         private void SteamButton_Click(object sender, RoutedEventArgs e)
         {
-
+            //Process.Start("https://www.facebook.com/groups/HOI.Economic.Crisis");
         }
     }
 }

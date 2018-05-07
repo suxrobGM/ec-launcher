@@ -1,0 +1,4 @@
+/.vs/*
+/EC_Launcher/bin/*
+/EC_Launcher/obj/*
+*.exe

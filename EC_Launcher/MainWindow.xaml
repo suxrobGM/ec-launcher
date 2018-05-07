@@ -140,6 +140,8 @@
                 </LinearGradientBrush>
             </Label.Foreground>
         </Label>
+        
+        <!-- Social community buttons -->
         <StackPanel HorizontalAlignment="Left" Height="30" Margin="80,308,0,0" VerticalAlignment="Top" Width="206" Orientation="Horizontal">
             <Button x:Name="FacebookButton" Content="" Width="30" BorderBrush="{x:Null}" Height="30" VerticalAlignment="Top" Click="FacebookButton_Click">
                 <Button.Background>
@@ -167,7 +169,6 @@
                 </Button.Background>
             </Button>
         </StackPanel>
-
 
     </Grid>
 </Window>
