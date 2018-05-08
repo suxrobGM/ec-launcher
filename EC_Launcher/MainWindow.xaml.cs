@@ -93,8 +93,11 @@ namespace EC_Launcher
         }
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
-        {           
-
+        {
+            SettingsWindow SettingsWin = new SettingsWindow();
+            
+            SettingsWin.Owner = this;
+            SettingsWin.Show();           
         }
 
         
