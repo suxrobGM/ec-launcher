@@ -15,8 +15,8 @@ using System.Windows.Shapes;
 using System.IO;
 using System.Diagnostics;
 using System.Net;
-using System.Security.Cryptography;
-using System.Windows.Media.Animation;
+
+
 
 namespace EC_Launcher
 {
@@ -24,36 +24,54 @@ namespace EC_Launcher
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    { 
+    {
+
+        SettingsWindow SettingsWindow = new SettingsWindow(); //Новая окна Settings
 
         public MainWindow()
         {
             InitializeComponent();
         }
 
-
         private void Window_Activated(object sender, EventArgs e)
         {
-            WebBrowser1.Navigate("https://www.facebook.com/groups/HOI.Economic.Crisis");
+            //WebBrowser1.Navigate("https://www.facebook.com/groups/HOI.Economic.Crisis");
 
             if (!File.Exists("Client_Mod_Hashes.txt"))
             {
                 File.Create("Client_Mod_Hashes.txt").Close();
             }
-            
-            if(!GlobalVariables.DevMode)
+
+            //если не существует файл, то создать файл и запольнить 
+            if (!File.Exists("Settings.xml"))
+            {
+                File.Create("Settings.xml").Close();
+                SettingsXML.SetDefaultValues(GlobalVariables.GAME_DIR, GlobalVariables.MOD_DIR);
+            }
+            //Загрузить данные из xml файла
+            SettingsWindow.SetUIValues(SettingsXML.ReadGamePath(), SettingsXML.ReadModPath(), SettingsXML.ReadAppLanguage());
+
+            if (!GlobalVariables.DevMode)
             {
                 GenerateHashButton.Visibility = Visibility.Hidden;
                 DeveloperMode_Label.Visibility = Visibility.Hidden;
-            }
+            }            
         }
 
 
         private void OpenGameButton_Click(object sender, RoutedEventArgs e)
         {
-            string exePath = @"D:\Games\Steam\steamapps\common\Hearts of Iron IV\hoi4.exe ";
-            string arguments = @"-mod=mod\EC2013.mod";
-            Process.Start(exePath, arguments);
+            string exePath = GlobalVariables.GAME_DIR + @"\hoi4.exe";
+            //string arguments = @"-mod=mod\EC2013.mod";
+            try
+            {
+                Process.Start(exePath);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("ERROR:<"+ex.Message+ "> Please set right directory of game in the settings");
+            }
+            
             //progressBar1.Maximum = Process.Start(exePath).StartTime.Second;
             //progressBar1.Value = Process.Start(exePath).;
             //MessageBox.Show(progressBar1.Value.ToString());
@@ -94,10 +112,8 @@ namespace EC_Launcher
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            SettingsWindow SettingsWin = new SettingsWindow();
-            
-            SettingsWin.Owner = this;
-            SettingsWin.Show();           
+            SettingsWindow.Owner = this;
+            SettingsWindow.Show();           
         }
 
         
@@ -124,7 +140,7 @@ namespace EC_Launcher
 
         private void SteamButton_Click(object sender, RoutedEventArgs e)
         {
-            //Process.Start("https://www.facebook.com/groups/HOI.Economic.Crisis");
+            Process.Start("https://www.steam.com");
         }
     }
 }
