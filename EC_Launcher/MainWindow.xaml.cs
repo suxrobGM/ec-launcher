@@ -113,7 +113,7 @@ namespace EC_Launcher
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             SettingsWindow.Owner = this;
-            SettingsWindow.Show();           
+            SettingsWindow.ShowDialog();           
         }
 
         
