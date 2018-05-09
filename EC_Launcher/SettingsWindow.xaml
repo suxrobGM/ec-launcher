@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EC_Launcher"
         mc:Ignorable="d"
+        ResizeMode="NoResize"
         Title="Settings" Height="310.825" Width="551.7" Closing="Window_Closing">
     <Grid>
         <Grid.Background>

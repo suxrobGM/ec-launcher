@@ -28,7 +28,10 @@ namespace EC_Launcher
         public void SetUIValues(string GamePath, string ModPath, string Language)
         {
             GameDir_TBox.Text = GamePath;
+            GlobalVariables.GAME_DIR = GamePath;
+
             ModDir_TBox.Text = ModPath;
+            GlobalVariables.MOD_DIR = ModPath;
 
             if (Language == "English")
             {

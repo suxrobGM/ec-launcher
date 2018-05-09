@@ -24,7 +24,8 @@ namespace EC_Launcher
     public partial class MainWindow : Window
     {
 
-        SettingsWindow SettingsWindow = new SettingsWindow(); //Новая окна Settings
+        SettingsWindow SettingsWind = new SettingsWindow(); //Новая окна Settings
+        ReportBugWindow ReportBugWind = new ReportBugWindow();
 
         public MainWindow()
         {
@@ -47,7 +48,7 @@ namespace EC_Launcher
                 SettingsXML.SetDefaultValues(GlobalVariables.GAME_DIR, GlobalVariables.MOD_DIR);
             }
             //Загрузить данные из xml файла
-            SettingsWindow.SetUIValues(SettingsXML.ReadGamePath(), SettingsXML.ReadModPath(), SettingsXML.ReadAppLanguage());
+            SettingsWind.SetUIValues(SettingsXML.ReadGamePath(), SettingsXML.ReadModPath(), SettingsXML.ReadAppLanguage());
 
             if (!GlobalVariables.DevMode)
             {
@@ -113,8 +114,8 @@ namespace EC_Launcher
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            SettingsWindow.Owner = this;
-            SettingsWindow.ShowDialog();           
+            SettingsWind.Owner = this;
+            SettingsWind.ShowDialog();           
         }
 
         
@@ -147,6 +148,12 @@ namespace EC_Launcher
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Environment.Exit(0);
+        }
+
+        private void ReportBugButton_Click(object sender, RoutedEventArgs e)
+        {
+            ReportBugWind.Owner = this;
+            ReportBugWind.ShowDialog();
         }
     }
 }

@@ -16,7 +16,7 @@ namespace EC_Launcher
 
         public static void GetGameFileHashes()
         {
-            FileStream hash_file = new FileStream("Client_Game_File_Hashes.txt", FileMode.Truncate);
+            FileStream hash_file = new FileStream("Client_Mod_Hashes.txt", FileMode.Truncate);
             StreamWriter writer = new StreamWriter(hash_file);
 
             //получить польный список файлов(где-то 17-18к шт.)

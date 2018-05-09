@@ -58,7 +58,7 @@
                 </Button.Foreground>
             </Button>
 
-            <Button x:Name="ReportBugButton" Content="Report Bug" HorizontalAlignment="Left" VerticalAlignment="Top" Width="158" Height="27" FontWeight="Bold" FontSize="14" FontFamily="Stencil" Margin="0,3,0,0" Click="GenerateHashButton_Click">
+            <Button x:Name="ReportBugButton" Content="Report Bug" HorizontalAlignment="Left" VerticalAlignment="Top" Width="158" Height="27" FontWeight="Bold" FontSize="14" FontFamily="Stencil" Margin="0,3,0,0" Click="ReportBugButton_Click">
                 <Button.BorderBrush>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="Black" Offset="0"/>
@@ -118,10 +118,10 @@
                 </Button.Foreground>
             </Button>
         </StackPanel>
-        <ProgressBar x:Name="ProgressBar1" HorizontalAlignment="Left" Height="20" Margin="10,358,0,0" VerticalAlignment="Top" Width="276"/>
+        <ProgressBar x:Name="ProgressBar1" HorizontalAlignment="Left" Height="20" Margin="10,358,0,0" VerticalAlignment="Top" Width="222"/>
         <TextBlock x:Name="PgBar_TextBlock" Visibility="Hidden" Text="{Binding ElementName=ProgressBar1, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="133,290,642,113" />
 
-        <Label x:Name="ModVersionLabel" Content="Mod Version: " HorizontalAlignment="Left" Margin="333,358,0,0" VerticalAlignment="Top" FontWeight="Bold" Background="{x:Null}">
+        <Label x:Name="ModVersionLabel" Content="Mod Version: " HorizontalAlignment="Left" Margin="291,358,0,0" VerticalAlignment="Top" FontWeight="Bold" Background="{x:Null}">
             <Label.Foreground>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Black" Offset="0"/>
@@ -184,7 +184,7 @@
         </Rectangle>
         <Button x:Name="CloseButton" Content="" HorizontalAlignment="Left" Margin="745,0,0,0" VerticalAlignment="Top" Width="45" Height="29" BorderBrush="{x:Null}" Click="CloseButton_Click">
             <Button.Background>
-                <ImageBrush ImageSource="icons/close_box_green.png"/>
+                <ImageBrush ImageSource="icons/cancel_button.png"/>
             </Button.Background>
         </Button>
         <Label Content="Hearts of Iron IV: Economic Crisis Launcher" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" FontFamily="Perpetua Titling MT">
