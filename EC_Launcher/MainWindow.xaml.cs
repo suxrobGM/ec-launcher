@@ -16,8 +16,6 @@ using System.IO;
 using System.Diagnostics;
 using System.Net;
 
-
-
 namespace EC_Launcher
 {
     /// <summary>
@@ -35,7 +33,7 @@ namespace EC_Launcher
 
         private void Window_Activated(object sender, EventArgs e)
         {
-            //WebBrowser1.Navigate("https://www.facebook.com/groups/HOI.Economic.Crisis");
+            WBrowser.Navigate("https://vk.com/ec_hoi_mod");
 
             if (!File.Exists("Client_Mod_Hashes.txt"))
             {
@@ -55,7 +53,9 @@ namespace EC_Launcher
             {
                 GenerateHashButton.Visibility = Visibility.Hidden;
                 DeveloperMode_Label.Visibility = Visibility.Hidden;
-            }            
+            }
+
+            LauncherVersionLabel.Content = "Launcher Version: " + GlobalVariables.AppVersion;
         }
 
 
@@ -81,6 +81,7 @@ namespace EC_Launcher
         {
             WebClient client = new WebClient();
             client.BaseAddress = "https://www.dropbox.com/sh/a3l30yu2ale22f6/AABOtNXGvsk6UYUzhNtfrmiba?dl=0";
+            
             //client.DownloadFile("http://gitlab.ecrisis.su/nc/ec/tree/master/", "ec.jpg");
             
         }
@@ -141,6 +142,11 @@ namespace EC_Launcher
         private void SteamButton_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("https://www.steam.com");
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }
