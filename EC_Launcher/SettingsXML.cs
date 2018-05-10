@@ -39,6 +39,8 @@ namespace EC_Launcher
             return Language.ToString();
         }
 
+       
+
 
 
         //Setters
@@ -71,17 +73,31 @@ namespace EC_Launcher
         }
 
 
+        
 
-        public static void SetDefaultValues(string GamePath, string ModPath, string Language = "English")
+        public static void SetDefaultSettings(string GamePath, string ModPath, string Language = "English")
         {
             XDocument SettingsDoc = new XDocument(
-                 new XElement("General_Settings",
-                    new XElement("Game_Path", GamePath),
-                    new XElement("Mod_Path", ModPath),
-                    new XElement("Language", Language)
-                    )
-            );
+                                            new XElement("General_Settings",
+                                                new XElement("Game_Path", GamePath),
+                                                new XElement("Mod_Path", ModPath),
+                                                new XElement("Language", Language)
+                                            )
+                                        );
+
+             
+            /*var VersionSection = new XElement("Version",
+                                       new XComment("Do not change these strings!!!"),
+                                       new XElement("Mod_Version", ModVersion),
+                                       new XElement("App_Version", AppVersion)
+                                   );
             
+            SettingsDoc.Root.AddFirst(GeneralSection);
+            SettingsDoc.Root.Add(VersionSection);
+            SettingsDoc.Descendants("Root").First().Add(GeneralSection);
+            SettingsDoc.Descendants("Root").Last().Add(VersionSection);
+            */
+
             SettingsDoc.Save("Settings.xml");
         }
     }

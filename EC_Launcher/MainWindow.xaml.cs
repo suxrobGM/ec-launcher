@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.IO;
 using System.Diagnostics;
 using System.Net;
+using System.Xml.Linq;
 
 namespace EC_Launcher
 {
@@ -45,10 +46,16 @@ namespace EC_Launcher
             if (!File.Exists("Settings.xml"))
             {
                 File.Create("Settings.xml").Close();
-                SettingsXML.SetDefaultValues(GlobalVariables.GAME_DIR, GlobalVariables.MOD_DIR);
+                SettingsXML.SetDefaultSettings(GlobalVariables.GAME_DIR, GlobalVariables.MOD_DIR);
             }
             //Загрузить данные из xml файла
             SettingsWind.SetUIValues(SettingsXML.ReadGamePath(), SettingsXML.ReadModPath(), SettingsXML.ReadAppLanguage());
+
+            if(!File.Exists("Version.xml"))
+            {
+                File.Create("Version.xml").Close();
+                VersionXML.SetDefaultVersion(GlobalVariables.ModVersion, GlobalVariables.AppVersion);
+            }
 
             if (!GlobalVariables.DevMode)
             {
@@ -56,7 +63,8 @@ namespace EC_Launcher
                 DeveloperMode_Label.Visibility = Visibility.Hidden;
             }
 
-            LauncherVersionLabel.Content = "Launcher Version: " + GlobalVariables.AppVersion;
+            LauncherVersionLabel.Content = "Launcher Version: " + VersionXML.ReadAppVersion();
+            ModVersionLabel.Content = "Mod Version: " + VersionXML.ReadModVersion();
         }
 
 
@@ -78,13 +86,52 @@ namespace EC_Launcher
             //MessageBox.Show(progressBar1.Value.ToString());
         }
 
+        private void CheckUpdates()
+        {
+            try
+            {
+                if (File.Exists("launcher.update") && new Version(FileVersionInfo.GetVersionInfo("launcher.update").FileVersion) > new Version(GlobalVariables.AppVersion))
+                {
+                    Process.Start("Updater.exe", "launcher.update \"" + Process.GetCurrentProcess().ProcessName + "\"");
+                    Process.GetCurrentProcess().CloseMainWindow();
+                }
+                else
+                {
+                    if (File.Exists("launcher.update"))
+                    {
+                        File.Delete("launcher.update");
+                    }
+                    Download();
+                }
+            }
+            catch (Exception)
+            {
+                if (File.Exists("launcher.update"))
+                {
+                    File.Delete("launcher.update");
+                }
+                Download();
+            }
+        }
+
+        private void Download()
+        {
+            string ServerVersionFile = "https://mysite.com/Version.xml";
+
+            XDocument doc = new XDocument(XDocument.Load(ServerVersionFile));
+            string remoteAppVersion = VersionXML.ReadAppVersion(ServerVersionFile);
+            string reomteModVersion = VersionXML.ReadModVersion(ServerVersionFile);
+
+        }
+
         private void CheckUpdateButton_Click(object sender, RoutedEventArgs e)
         {
             WebClient client = new WebClient();
-            client.BaseAddress = "https://www.dropbox.com/sh/a3l30yu2ale22f6/AABOtNXGvsk6UYUzhNtfrmiba?dl=0";
-            
+            Uri uri = new Uri("https://yadi.sk/i/Qu4uWh-E3Up9Ju");
+            client.DownloadFileAsync(uri, "photo.txt");
+
             //client.DownloadFile("http://gitlab.ecrisis.su/nc/ec/tree/master/", "ec.jpg");
-            
+
         }
 
         public void ProgressBar_Change()
@@ -142,7 +189,8 @@ namespace EC_Launcher
 
         private void SteamButton_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start("https://www.steam.com");
+            //Process.Start("https://www.steam.com");
+            
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)

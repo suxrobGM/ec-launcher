@@ -12,6 +12,7 @@ namespace EC_Launcher
         public static string MOD_DIR = @"";
         public static string GAME_DIR = @"";
         public static string AppVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        public static string ModVersion = "0.6.3";
         public static bool DevMode = false;
     }
 }
