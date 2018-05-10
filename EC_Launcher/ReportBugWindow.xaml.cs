@@ -34,6 +34,18 @@ namespace EC_Launcher
 
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
+            if(Name_TBox.Text == "")
+            {
+                MessageBox.Show("Please set your name");
+                return;
+            }
+
+            if (Body_TBox.Text == "")
+            {
+                MessageBox.Show("Please write about bug");
+                return;
+            }
+
             string to = "suxrobGM@gmail.com";
             string from = "DedSec94@mail.ru";
             string p = "suxrobbek";
