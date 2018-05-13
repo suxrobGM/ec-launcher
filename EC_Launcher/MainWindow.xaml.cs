@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -139,13 +140,13 @@ namespace EC_Launcher
             ProgressBar1.Maximum = 100;
 
             Action incPgBar = () => { ProgressBar1.Value++; };
-            var task = new Task(
+            Task task = new Task(
                 () => 
                 {
                     for (var i = 0; i < 10000; i++)
                     {
                         ProgressBar1.Dispatcher.Invoke(incPgBar);                        
-                        System.Threading.Thread.Sleep(100);
+                        Thread.Sleep(100);
                     }
                 }
                 );
