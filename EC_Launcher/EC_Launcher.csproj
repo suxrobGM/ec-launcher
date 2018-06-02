@@ -105,7 +105,7 @@
     </Compile>
     <Compile Include="SettingsXML.cs" />
     <Compile Include="VersionXML.cs" />
-    <Page Include="ButtonStyle.xaml">
+    <Page Include="resources\ButtonStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
