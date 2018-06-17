@@ -17,6 +17,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Net;
 using System.Xml.Linq;
+using System.Security.Cryptography;
 
 namespace EC_Launcher
 {
@@ -137,27 +138,23 @@ namespace EC_Launcher
 
         public void ProgressBar_Change()
         {
-            ProgressBar1.Maximum = 100;
+            ProgressBar1.Maximum = 1000;
 
-            Action incPgBar = () => { ProgressBar1.Value++; };
-            Task task = new Task(
-                () => 
+            Action incPgBar = new Action(() => { ProgressBar1.Value++; });
+            Task task = new Task(() => {
+                for (var i = 0; i < 1000; i++)
                 {
-                    for (var i = 0; i < 10000; i++)
-                    {
-                        ProgressBar1.Dispatcher.Invoke(incPgBar);                        
-                        Thread.Sleep(100);
-                    }
+                    ProgressBar1.Dispatcher.Invoke(incPgBar);                        
+                    Thread.Sleep(100);
                 }
-                );
+            });
             task.Start();
             ProgressBar1.Value = 0;
         }
 
         private void GenerateHashButton_Click(object sender, RoutedEventArgs e)
-        {
-            HashFile.GetGameFileHashes();
-            ProgressBar_Change();
+        {           
+            HashFile.GetGameFileHashesAsync();           
         }
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)

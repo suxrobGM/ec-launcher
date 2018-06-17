@@ -5,37 +5,67 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Security.Cryptography;
+using System.Threading;
 
 namespace EC_Launcher
 {
     class HashFile
     {
+        //список хеши файлов
+        public static List<KeyValuePair<string, string>> HashDict = new List<KeyValuePair<string, string>>();
 
-        //словарь хранить себя хеши
-        //public static Dictionary<string, string> HashDict = new Dictionary<string, string>();
+        public static async void GetGameFileHashesAsync()
+        {          
+            //получить польный список файлов(где-то 17-18к шт.)
+            string[] files = Directory.GetFiles(GlobalVariables.MOD_DIR, "*", SearchOption.AllDirectories);
 
-        public static void GetGameFileHashes()
+            HashDict = await GetHashListAsync(files);
+
+            //Запись данные в файле Client_Mod_Hashes.txt
+            await WriteHashListAsync("Client_Mod_Hashes.txt", HashDict);
+        }
+
+        private static async Task WriteHashListAsync(string file_name, List<KeyValuePair<string, string>> HashList)
         {
-            FileStream hash_file = new FileStream("Client_Mod_Hashes.txt", FileMode.Truncate);
+            FileStream hash_file = new FileStream(file_name, FileMode.Truncate);
             StreamWriter writer = new StreamWriter(hash_file);
 
-            //получить польный список файлов(где-то 17-18к шт.)
-            string[] files = Directory.GetFiles(GlobalVariables.MOD_DIR, "*", SearchOption.AllDirectories); 
-
-            foreach (var file in files)
+            Action action = new Action(() =>
             {
-                if (!file.Contains(".git")) //не счытивать файлы гита
+                foreach (var item in HashList)
                 {
-                    string file_name = file.ToString().Remove(0, GlobalVariables.MOD_DIR.Length);
-                    using (var stream = File.OpenRead(file))
-                    {
-                        writer.WriteLine(GetHash_MD5(stream).ToString() + " - " + file_name); //записать на файле                      
-                        //HashDict.Add(file_name, GetHash_MD5(stream).ToString());
-                    }
+                    writer.WriteLine(item.Value + " - " + item.Key);
                 }
-                    
-            }
+            });
+
+            await Task.Run(action);
             writer.Close();
+        }
+
+        private static async Task<List<KeyValuePair<string, string>>> GetHashListAsync(string[] files_dir)
+        {            
+            List<KeyValuePair<string, string>> HashList = new List<KeyValuePair<string, string>>();
+
+            //Многопоточный режим
+            Action action = new Action(() => {
+                Parallel.ForEach(files_dir, (file) => {
+                    Thread.CurrentThread.Priority = ThreadPriority.Highest;
+
+                    if (!file.Contains(".git") && !file.Contains("GenerateHash.exe") && !file.Contains("EC_Launcher.exe")) //не счытивать файлы гита
+                    {
+                        string file_name = Path.GetFileName(file);
+                        using (var stream = File.OpenRead(file))
+                        {
+                            KeyValuePair<string, string> keyValuePair = new KeyValuePair<string, string>(file_name, GetHash_MD5(stream).ToString());
+                            HashList.Add(keyValuePair);
+                        }
+                    }
+                });
+            });          
+            await Task.Run(action);
+
+            HashList = HashList.OrderBy(pair => pair.Key).ToList();
+            return HashList;
         }
 
         //получить md5 хеша
