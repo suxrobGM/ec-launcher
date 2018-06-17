@@ -176,7 +176,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icons\facebook.png" />
-    <Resource Include="icons\steam.png" />
     <Resource Include="icons\youtube.png" />
   </ItemGroup>
   <ItemGroup>
@@ -197,6 +196,21 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icons\cancel_button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\youtube-black.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\facebook-black.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\vk-black.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\discord-black.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\steam-black.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

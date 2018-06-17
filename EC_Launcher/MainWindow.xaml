@@ -97,7 +97,7 @@
                 Margin="0,3,0,0" 
                 Click="GenerateHashButton_Click"/>
         </StackPanel>
-        
+
         <ProgressBar x:Name="ProgressBar1" x:FieldModifier="public" HorizontalAlignment="Left" Height="20" Margin="10,358,0,0" VerticalAlignment="Top" Width="222"/>
         <TextBlock x:Name="PgBar_TextBlock" Visibility="Hidden" Text="{Binding ElementName=ProgressBar1, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="133,290,642,113" />
 
@@ -118,7 +118,7 @@
             </Label.Foreground>
         </Label>
         <Label x:Name="DeveloperMode_Label" Content="Developer Mode" HorizontalAlignment="Left" Margin="678,455,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFF30000" FontWeight="Bold"/>
-        <Label Content="Follow us: " HorizontalAlignment="Left" Margin="10,382,0,0" VerticalAlignment="Top" FontWeight="Bold">
+        <Label Content="Follow us: " HorizontalAlignment="Left" Margin="10,386,0,0" VerticalAlignment="Top" FontWeight="Bold">
             <Label.Foreground>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Black" Offset="0"/>
@@ -128,30 +128,60 @@
         </Label>
 
         <!-- Social community buttons -->
-        <StackPanel HorizontalAlignment="Left" Height="30" Margin="80,378,0,0" VerticalAlignment="Top" Width="206" Orientation="Horizontal">
-            <Button x:Name="FacebookButton" Content="" Width="30" BorderBrush="{x:Null}" Height="30" VerticalAlignment="Top" Click="FacebookButton_Click">
+        <StackPanel HorizontalAlignment="Left" Height="30" Margin="80,382,0,0" VerticalAlignment="Top" Width="206" Orientation="Horizontal">
+            <Button x:Name="FacebookButton" Content="" Width="30" Height="30" VerticalAlignment="Top" Click="FacebookButton_Click">
+                <Button.BorderBrush>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="#FFFDA100" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.BorderBrush>
                 <Button.Background>
-                    <ImageBrush ImageSource="icons/facebook.png"/>
+                    <ImageBrush ImageSource="icons/facebook-black.png"/>
                 </Button.Background>
             </Button>
-            <Button x:Name="VKButton" Content="" Width="30" BorderBrush="{x:Null}" Click="VKButton_Click">
+            <Button x:Name="VKButton" Content="" Width="30" Click="VKButton_Click">
+                <Button.BorderBrush>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="#FFFDA100" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.BorderBrush>
                 <Button.Background>
-                    <ImageBrush ImageSource="icons/vk.png"/>
+                    <ImageBrush ImageSource="icons/vk-black.png"/>
                 </Button.Background>
             </Button>
-            <Button x:Name="YouTubeButton" Content="" Width="30" BorderBrush="{x:Null}" Click="YouTubeButton_Click">
+            <Button x:Name="YouTubeButton" Content="" Width="30" Click="YouTubeButton_Click">
+                <Button.BorderBrush>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="#FFFDA100" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.BorderBrush>
                 <Button.Background>
-                    <ImageBrush ImageSource="icons/youtube.png"/>
+                    <ImageBrush ImageSource="icons/youtube-black.png"/>
                 </Button.Background>
             </Button>
-            <Button x:Name="DiscordButton" Content="" Width="30" BorderBrush="{x:Null}" Click="DiscordButton_Click" IsTabStop="False">
+            <Button x:Name="DiscordButton" Content="" Width="30" Click="DiscordButton_Click" IsTabStop="False">
+                <Button.BorderBrush>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="#FFFDA100" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.BorderBrush>
                 <Button.Background>
-                    <ImageBrush ImageSource="icons/discord.png"/>
+                    <ImageBrush ImageSource="icons/discord-black.png"/>
                 </Button.Background>
             </Button>
-            <Button x:Name="SteamButton" Content="" Width="30" BorderBrush="{x:Null}" Click="SteamButton_Click">
+            <Button x:Name="SteamButton" Content="" Width="30" Click="SteamButton_Click">
+                <Button.BorderBrush>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="#FFFDA100" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.BorderBrush>
                 <Button.Background>
-                    <ImageBrush ImageSource="icons/steam.png"/>
+                    <ImageBrush ImageSource="icons/steam-black.png"/>
                 </Button.Background>
             </Button>
         </StackPanel>
