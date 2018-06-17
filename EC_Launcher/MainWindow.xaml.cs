@@ -33,12 +33,11 @@ namespace EC_Launcher
         public MainWindow()
         {
             InitializeComponent();
+            WBrowser.Navigate("https://vk.com/ec_hoi_mod");
         }
 
         private void Window_Activated(object sender, EventArgs e)
-        {
-            WBrowser.Navigate("https://vk.com/ec_hoi_mod");
-
+        {       
             if (!File.Exists("Client_Mod_Hashes.txt"))
             {
                 File.Create("Client_Mod_Hashes.txt").Close();
@@ -153,8 +152,9 @@ namespace EC_Launcher
         }
 
         private void GenerateHashButton_Click(object sender, RoutedEventArgs e)
-        {           
-            HashFile.GetGameFileHashesAsync();           
+        {
+            HashFile hashFile = new HashFile();
+            hashFile.GetGameFileHashesAsync();           
         }
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)

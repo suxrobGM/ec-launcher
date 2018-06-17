@@ -9,12 +9,12 @@ using System.Threading;
 
 namespace EC_Launcher
 {
-    class HashFile
+    public class HashFile
     {
         //список хеши файлов
-        public static List<KeyValuePair<string, string>> HashDict = new List<KeyValuePair<string, string>>();
+        public List<KeyValuePair<string, string>> HashDict = new List<KeyValuePair<string, string>>();
 
-        public static async void GetGameFileHashesAsync()
+        public async void GetGameFileHashesAsync()
         {          
             //получить польный список файлов(где-то 17-18к шт.)
             string[] files = Directory.GetFiles(GlobalVariables.MOD_DIR, "*", SearchOption.AllDirectories);
@@ -25,7 +25,7 @@ namespace EC_Launcher
             await WriteHashListAsync("Client_Mod_Hashes.txt", HashDict);
         }
 
-        private static async Task WriteHashListAsync(string file_name, List<KeyValuePair<string, string>> HashList)
+        private async Task WriteHashListAsync(string file_name, List<KeyValuePair<string, string>> HashList)
         {
             FileStream hash_file = new FileStream(file_name, FileMode.Truncate);
             StreamWriter writer = new StreamWriter(hash_file);
@@ -36,13 +36,13 @@ namespace EC_Launcher
                 {
                     writer.WriteLine(item.Value + " - " + item.Key);
                 }
+                writer.Close();
             });
 
-            await Task.Run(action);
-            writer.Close();
+            await Task.Run(action);        
         }
 
-        private static async Task<List<KeyValuePair<string, string>>> GetHashListAsync(string[] files_dir)
+        private async Task<List<KeyValuePair<string, string>>> GetHashListAsync(string[] files_dir)
         {            
             List<KeyValuePair<string, string>> HashList = new List<KeyValuePair<string, string>>();
 
@@ -61,15 +61,16 @@ namespace EC_Launcher
                         }
                     }
                 });
-            });          
-            await Task.Run(action);
 
-            HashList = HashList.OrderBy(pair => pair.Key).ToList();
+                HashList = HashList.OrderBy(pair => pair.Key).ToList();
+            });
+            
+            await Task.Run(action);
             return HashList;
         }
 
         //получить md5 хеша
-        public static string GetHash_MD5(Stream stream)
+        public string GetHash_MD5(Stream stream)
         {
             byte[] bytes;
             using (var md5 = new MD5CryptoServiceProvider())

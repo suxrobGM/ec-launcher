@@ -10,7 +10,7 @@
         Title="Hearts of Iron IV: Economic Crisis Launcher" Height="500" Width="800" Activated="Window_Activated">
 
     <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="10" ResizeBorderThickness="5" />
+        <WindowChrome CaptionHeight="26" ResizeBorderThickness="5" />
     </WindowChrome.WindowChrome>
 
     <Grid>
@@ -201,7 +201,7 @@
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-        <Button x:Name="CloseButton" Content="" HorizontalAlignment="Left" Margin="758,0,0,0" VerticalAlignment="Top" Width="32" Height="32" BorderBrush="{x:Null}" Click="CloseButton_Click">
+        <Button x:Name="CloseButton" Content="" HorizontalAlignment="Left" Margin="758,30,0,0" VerticalAlignment="Top" Width="32" Height="32" BorderBrush="{x:Null}" Click="CloseButton_Click">
             <Button.Background>
                 <ImageBrush ImageSource="icons/cancel_button.png"/>
             </Button.Background>
