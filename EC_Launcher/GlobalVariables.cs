@@ -7,12 +7,18 @@ using System.Threading.Tasks;
 
 namespace EC_Launcher
 {
-    class GlobalVariables
+    public static class GlobalVariables
     {
-        public static string MOD_DIR = @"";
-        public static string GAME_DIR = @"";
-        public static string AppVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        public static string ModVersion = "0.6.3";
-        public static bool DevMode = false;
+        private static string modDir;
+        private static string gameDir;
+        private static Version appVersion = Assembly.GetExecutingAssembly().GetName().Version;
+        private static Version modVersion = new Version("0.6.3.0"); //default start version
+        private static bool devMode = false;
+
+        public static string ModDirectory  { get => modDir; set => modDir = value; }
+        public static string GameDirectory { get => gameDir; set => gameDir = value; }
+        public static bool DevMode { get => devMode; set => devMode = value; }
+        public static Version ApplicationVersion { get => appVersion; }
+        public static Version ModVersion { get => modVersion; set => modVersion = value; }
     }
 }

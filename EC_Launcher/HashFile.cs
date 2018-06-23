@@ -17,7 +17,7 @@ namespace EC_Launcher
         public async void GetGameFileHashesAsync()
         {          
             //получить польный список файлов(где-то 17-18к шт.)
-            string[] files = Directory.GetFiles(GlobalVariables.MOD_DIR, "*", SearchOption.AllDirectories);
+            string[] files = Directory.GetFiles(GlobalVariables.ModDirectory, "*", SearchOption.AllDirectories);
 
             HashDict = await GetHashListAsync(files);
 

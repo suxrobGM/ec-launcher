@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStyle="None"
         ResizeMode="NoResize"
-        Title="Hearts of Iron IV: Economic Crisis Launcher" Height="500" Width="800" Activated="Window_Activated">
+        Title="Hearts of Iron IV: Economic Crisis Launcher" Height="500" Width="800">
 
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="26" ResizeBorderThickness="5" />

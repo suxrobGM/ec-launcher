@@ -34,10 +34,7 @@ namespace EC_Launcher
         {
             InitializeComponent();
             WBrowser.Navigate("https://vk.com/ec_hoi_mod");
-        }
 
-        private void Window_Activated(object sender, EventArgs e)
-        {       
             if (!File.Exists("Client_Mod_Hashes.txt"))
             {
                 File.Create("Client_Mod_Hashes.txt").Close();
@@ -47,15 +44,15 @@ namespace EC_Launcher
             if (!File.Exists("Settings.xml"))
             {
                 File.Create("Settings.xml").Close();
-                SettingsXML.SetDefaultSettings(GlobalVariables.GAME_DIR, GlobalVariables.MOD_DIR);
+                SettingsXML.SetDefaultSettings(GlobalVariables.GameDirectory, GlobalVariables.ModDirectory);
             }
             //Загрузить данные из xml файла
             SettingsWind.SetUIValues(SettingsXML.ReadGamePath(), SettingsXML.ReadModPath(), SettingsXML.ReadAppLanguage());
 
-            if(!File.Exists("Version.xml"))
+            if (!File.Exists("Version.xml"))
             {
                 File.Create("Version.xml").Close();
-                VersionXML.SetDefaultVersion(GlobalVariables.ModVersion, GlobalVariables.AppVersion);
+                VersionXML.SetDefaultVersion(GlobalVariables.ModVersion.ToString(), GlobalVariables.ApplicationVersion.ToString());
             }
 
             if (!GlobalVariables.DevMode)
@@ -71,7 +68,7 @@ namespace EC_Launcher
 
         private void OpenGameButton_Click(object sender, RoutedEventArgs e)
         {
-            string exePath = GlobalVariables.GAME_DIR + @"\hoi4.exe";
+            string exePath = GlobalVariables.GameDirectory + @"\hoi4.exe";
             //string arguments = @"-mod=mod\EC2013.mod";
             try
             {
@@ -91,7 +88,7 @@ namespace EC_Launcher
         {
             try
             {
-                if (File.Exists("launcher.update") && new Version(FileVersionInfo.GetVersionInfo("launcher.update").FileVersion) > new Version(GlobalVariables.AppVersion))
+                if (File.Exists("launcher.update") && new Version(FileVersionInfo.GetVersionInfo("launcher.update").FileVersion) > GlobalVariables.ApplicationVersion)
                 {
                     Process.Start("Updater.exe", "launcher.update \"" + Process.GetCurrentProcess().ProcessName + "\"");
                     Process.GetCurrentProcess().CloseMainWindow();

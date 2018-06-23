@@ -28,10 +28,10 @@ namespace EC_Launcher
         public void SetUIValues(string GamePath, string ModPath, string Language)
         {
             GameDir_TBox.Text = GamePath;
-            GlobalVariables.GAME_DIR = GamePath;
+            GlobalVariables.GameDirectory = GamePath;
 
             ModDir_TBox.Text = ModPath;
-            GlobalVariables.MOD_DIR = ModPath;
+            GlobalVariables.ModDirectory = ModPath;
 
             if (Language == "English")
             {
@@ -62,9 +62,9 @@ namespace EC_Launcher
             using (var dialog = new FolderBrowserDialog())
             {
                 DialogResult result = dialog.ShowDialog();
-                GlobalVariables.GAME_DIR = dialog.SelectedPath;
-                SettingsXML.SetGamePathValue(GlobalVariables.GAME_DIR);
-                GameDir_TBox.Text = GlobalVariables.GAME_DIR;
+                GlobalVariables.GameDirectory = dialog.SelectedPath;
+                SettingsXML.SetGamePathValue(GlobalVariables.GameDirectory);
+                GameDir_TBox.Text = GlobalVariables.GameDirectory;
             }         
         }
 
@@ -73,9 +73,9 @@ namespace EC_Launcher
             using (var dialog = new FolderBrowserDialog())
             {
                 DialogResult result = dialog.ShowDialog();
-                GlobalVariables.MOD_DIR = dialog.SelectedPath;
-                SettingsXML.SetModPathValue(GlobalVariables.MOD_DIR);
-                ModDir_TBox.Text = GlobalVariables.MOD_DIR;
+                GlobalVariables.ModDirectory = dialog.SelectedPath;
+                SettingsXML.SetModPathValue(GlobalVariables.ModDirectory);
+                ModDir_TBox.Text = GlobalVariables.ModDirectory;
             }
         }
 
