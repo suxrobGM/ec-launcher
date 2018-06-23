@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Forms;
+using System.IO;
 
 namespace EC_Launcher
 {
@@ -61,7 +52,9 @@ namespace EC_Launcher
         {
             using (var dialog = new FolderBrowserDialog())
             {
-                DialogResult result = dialog.ShowDialog();
+                dialog.Description = "Please set the right directory of the game";                             
+                dialog.ShowDialog();
+
                 GlobalVariables.GameDirectory = dialog.SelectedPath;
                 SettingsXML.SetGamePathValue(GlobalVariables.GameDirectory);
                 GameDir_TBox.Text = GlobalVariables.GameDirectory;
@@ -72,7 +65,20 @@ namespace EC_Launcher
         {
             using (var dialog = new FolderBrowserDialog())
             {
-                DialogResult result = dialog.ShowDialog();
+                dialog.Description = "Please set the right directory of the mod";
+                string DefaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod");
+                DirectoryInfo HoiModDir = new DirectoryInfo(DefaultPath);               
+
+                if (HoiModDir.Exists)
+                {
+                    dialog.SelectedPath = HoiModDir.ToString();                   
+                }
+                else
+                {
+                    dialog.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                }
+                dialog.ShowDialog();
+
                 GlobalVariables.ModDirectory = dialog.SelectedPath;
                 SettingsXML.SetModPathValue(GlobalVariables.ModDirectory);
                 ModDir_TBox.Text = GlobalVariables.ModDirectory;
