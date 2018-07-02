@@ -34,7 +34,7 @@ namespace EC_Launcher
                 SettingsXML.SetDefaultSettings(GlobalVariables.GameDirectory, GlobalVariables.ModDirectory);
             }
             //Загрузить данные из xml файла
-            SettingsWind.SetUIValues(SettingsXML.ReadGamePath(), SettingsXML.ReadModPath(), SettingsXML.ReadAppLanguage());
+            SettingsWind.SetUIValues(SettingsXML.GamePath, SettingsXML.ModPath, SettingsXML.AppLanguage);
 
             if (!File.Exists("Version.xml"))
             {
@@ -48,8 +48,8 @@ namespace EC_Launcher
                 DeveloperMode_Label.Visibility = Visibility.Hidden;
             }
 
-            LauncherVersionLabel.Content = "Launcher Version: " + VersionXML.ReadAppVersion();
-            ModVersionLabel.Content = "Mod Version: " + VersionXML.ReadModVersion();
+            LauncherVersionLabel.Content = "Launcher Version: " + VersionXML.AppVersion;
+            ModVersionLabel.Content = "Mod Version: " + VersionXML.ModVersion;
         }
 
 
@@ -101,12 +101,8 @@ namespace EC_Launcher
 
         private void Download()
         {
-            string ServerVersionFile = "https://mysite.com/Version.xml";
-
-            XDocument doc = new XDocument(XDocument.Load(ServerVersionFile));
-            string remoteAppVersion = VersionXML.ReadAppVersion(ServerVersionFile);
-            string reomteModVersion = VersionXML.ReadModVersion(ServerVersionFile);
-
+            //string ServerVersionFile = "https://mysite.com/Version.xml";
+            //XDocument XDoc = XDocument.Load(ServerVersionFile);      
         }
 
         private void CheckUpdateButton_Click(object sender, RoutedEventArgs e)

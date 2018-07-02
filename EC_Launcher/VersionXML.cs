@@ -5,75 +5,46 @@ namespace EC_Launcher
 {
     public static class VersionXML
     {
-        //Getters
-        public static string ReadModVersion()
+        private static string versionXML = "Version.xml";
+        private static XDocument versionDoc = XDocument.Load(versionXML);
+        public static string ModVersion
         {
-            XDocument VersionDoc = XDocument.Load("Version.xml");
-
-            var ModVersion = VersionDoc.Element("Version").Element("Mod_Version").Value;
-
-            return ModVersion.ToString();
+            get
+            {
+                var modVersion = versionDoc.Element("Version").Element("Mod_Version").Value;
+                return modVersion;
+            }
+            set
+            {
+                versionDoc.Element("Version").Element("Mod_Version").Value = value;
+                versionDoc.Save(versionXML);
+            }
         }
 
-        public static string ReadModVersion(string Remote_VersionXML_File)
+        public static string AppVersion
         {
-            XDocument VersionDoc = XDocument.Load(Remote_VersionXML_File);
-
-            var ModVersion = VersionDoc.Element("Version").Element("Mod_Version").Value;
-
-            return ModVersion.ToString();
-        }
-
-        public static string ReadAppVersion()
-        {
-            XDocument VersionDoc = XDocument.Load("Version.xml");
-
-            var AppVersion = VersionDoc.Element("Version").Element("App_Version").Value;
-
-            return AppVersion.ToString();
-        }
-
-        public static string ReadAppVersion(string Remote_VersionXML_File)
-        {
-            XDocument VersionDoc = XDocument.Load(Remote_VersionXML_File);
-
-            var AppVersion = VersionDoc.Element("Version").Element("App_Version").Value;
-
-            return AppVersion.ToString();
-        }
-
-
-
-        //Setters
-        public static void SetModVersion(string ModVersion)
-        {
-            XDocument VersionDoc = XDocument.Load("Version.xml");
-
-            VersionDoc.Element("Version").Element("Mod_Version").Value = ModVersion;
-
-            VersionDoc.Save("Version.xml");
-        }
-
-        public static void SetAppVersion(string AppVersion)
-        {
-            XDocument VersionDoc = XDocument.Load("Version.xml");
-
-            VersionDoc.Element("Version").Element("App_Version").Value = AppVersion;
-
-            VersionDoc.Save("Version.xml");
-        }
+            get
+            {
+                var appVersion = versionDoc.Element("Version").Element("App_Version").Value;
+                return appVersion;
+            }
+            set
+            {
+                versionDoc.Element("Version").Element("App_Version").Value = value;
+                versionDoc.Save(versionXML);
+            }
+        } 
 
         public static void SetDefaultVersion(string ModVersion, string AppVersion)
         {
             XDocument VersionDoc = new XDocument(
-                                            new XElement("Version",
-                                                new XComment("Do not change these strings!!!"),
-                                                new XElement("Mod_Version", ModVersion),
-                                                new XElement("App_Version", AppVersion)
+                                        new XElement("Version",
+                                            new XComment("Do not change these strings!!!"),
+                                            new XElement("Mod_Version", ModVersion),
+                                            new XElement("App_Version", AppVersion)
                                             )
                                         );
-
-            VersionDoc.Save("Version.xml");
+            VersionDoc.Save(versionXML);
         }
     }
 }

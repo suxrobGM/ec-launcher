@@ -39,11 +39,11 @@ namespace EC_Launcher
         {
             if (Language_CBox.SelectedIndex == 0)
             {
-                SettingsXML.SetAppLanguageValue("English");
+                SettingsXML.AppLanguage = "English";
             }
             else if(Language_CBox.SelectedIndex == 1)
             {
-                SettingsXML.SetAppLanguageValue("Russian");
+                SettingsXML.AppLanguage = "Russian";
             }
             
         }
@@ -56,7 +56,7 @@ namespace EC_Launcher
                 dialog.ShowDialog();
 
                 GlobalVariables.GameDirectory = dialog.SelectedPath;
-                SettingsXML.SetGamePathValue(GlobalVariables.GameDirectory);
+                SettingsXML.GamePath = GlobalVariables.GameDirectory;
                 GameDir_TBox.Text = GlobalVariables.GameDirectory;
             }         
         }
@@ -80,7 +80,7 @@ namespace EC_Launcher
                 dialog.ShowDialog();
 
                 GlobalVariables.ModDirectory = dialog.SelectedPath;
-                SettingsXML.SetModPathValue(GlobalVariables.ModDirectory);
+                SettingsXML.ModPath = GlobalVariables.ModDirectory;
                 ModDir_TBox.Text = GlobalVariables.ModDirectory;
             }
         }

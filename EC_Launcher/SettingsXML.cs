@@ -10,71 +10,49 @@ namespace EC_Launcher
 {
     public static class SettingsXML
     {
+        private static string settingsXML = "Settings.xml";
+        private static XDocument SettingsDoc = XDocument.Load(settingsXML);
+
+        public static string GamePath
+        {
+            get
+            {
+                var gamePath = SettingsDoc.Element("General_Settings").Element("Game_Path").Value;
+                return gamePath;
+            }
+            set
+            {
+                SettingsDoc.Element("General_Settings").Element("Game_Path").Value = value;         
+                SettingsDoc.Save(settingsXML);
+            }
+        }
+        public static string ModPath
+        {
+            get
+            {
+                var modPath = SettingsDoc.Element("General_Settings").Element("Mod_Path").Value;
+                return modPath;
+            }
+            set
+            {
+                SettingsDoc.Element("General_Settings").Element("Mod_Path").Value = value;
+                SettingsDoc.Save(settingsXML);
+            }
+        }
+        public static string AppLanguage
+        {
+            get
+            {
+                var language = SettingsDoc.Element("General_Settings").Element("Language").Value;
+                return language;
+            }
+            set
+            {
+                SettingsDoc.Element("General_Settings").Element("Language").Value = value;
+                SettingsDoc.Save(settingsXML);
+            }
+        }
         
-        //Getters
-        public static string ReadGamePath()
-        {            
-            XDocument SettingsDoc = XDocument.Load("Settings.xml");
-
-            var GamePath = SettingsDoc.Element("General_Settings").Element("Game_Path").Value;
-
-            return GamePath.ToString();
-        }
-
-        public static string ReadModPath()
-        {
-            XDocument SettingsDoc = XDocument.Load("Settings.xml");
-
-            var ModPath = SettingsDoc.Element("General_Settings").Element("Mod_Path").Value;
-           
-            return ModPath.ToString();
-        }
-
-        public static string ReadAppLanguage()
-        {
-            XDocument SettingsDoc = XDocument.Load("Settings.xml");
-
-            var Language = SettingsDoc.Element("General_Settings").Element("Language").Value;
-
-            return Language.ToString();
-        }
-
-       
-
-
-
-        //Setters
-        public static void SetGamePathValue(string GamePath)
-        {
-            XDocument SettingsDoc = XDocument.Load("Settings.xml");
-
-            SettingsDoc.Element("General_Settings").Element("Game_Path").Value = GamePath;
-
-            SettingsDoc.Save("Settings.xml");
-
-        }
-
-        public static void SetModPathValue(string ModPath)
-        {
-            XDocument SettingsDoc = XDocument.Load("Settings.xml");            
-
-            SettingsDoc.Element("General_Settings").Element("Mod_Path").Value = ModPath;
-
-            SettingsDoc.Save("Settings.xml");
-        }
-
-        public static void SetAppLanguageValue(string Language)
-        {
-            XDocument SettingsDoc = XDocument.Load("Settings.xml");
-
-            SettingsDoc.Element("General_Settings").Element("Language").Value = Language;
-
-            SettingsDoc.Save("Settings.xml");
-        }
-
-
-        
-
         public static void SetDefaultSettings(string GamePath, string ModPath, string Language = "English")
         {
             XDocument SettingsDoc = new XDocument(
@@ -84,21 +62,7 @@ namespace EC_Launcher
                                                 new XElement("Language", Language)
                                             )
                                         );
-
-             
-            /*var VersionSection = new XElement("Version",
-                                       new XComment("Do not change these strings!!!"),
-                                       new XElement("Mod_Version", ModVersion),
-                                       new XElement("App_Version", AppVersion)
-                                   );
-            
-            SettingsDoc.Root.AddFirst(GeneralSection);
-            SettingsDoc.Root.Add(VersionSection);
-            SettingsDoc.Descendants("Root").First().Add(GeneralSection);
-            SettingsDoc.Descendants("Root").Last().Add(VersionSection);
-            */
-
-            SettingsDoc.Save("Settings.xml");
+            SettingsDoc.Save(settingsXML);
         }
     }
 }
