@@ -1,23 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.IO;
 using System.Diagnostics;
-using System.Net;
 using System.Xml.Linq;
-using System.Security.Cryptography;
 
 namespace EC_Launcher
 {
@@ -33,11 +20,11 @@ namespace EC_Launcher
         public MainWindow()
         {
             InitializeComponent();
-            WBrowser.Navigate("https://vk.com/ec_hoi_mod");
+            WBrowser.Navigate("https://vk.com/ec_hoi_mod");            
 
-            if (!File.Exists("Client_Mod_Hashes.txt"))
+            if (!File.Exists("Client.md5"))
             {
-                File.Create("Client_Mod_Hashes.txt").Close();
+                File.Create("Client.md5").Close();
             }
 
             //если не существует файл, то создать файл и запольнить 
@@ -124,11 +111,7 @@ namespace EC_Launcher
 
         private void CheckUpdateButton_Click(object sender, RoutedEventArgs e)
         {
-            WebClient client = new WebClient();
-            Uri uri = new Uri("https://yadi.sk/i/Qu4uWh-E3Up9Ju");
-            client.DownloadFileAsync(uri, "photo.txt");
-
-            //client.DownloadFile("http://gitlab.ecrisis.su/nc/ec/tree/master/", "ec.jpg");
+            
 
         }
 
@@ -164,7 +147,7 @@ namespace EC_Launcher
 
         private void FacebookButton_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start("https://www.facebook.com/groups/HOI.Economic.Crisis");
+            Process.Start("https://www.facebook.com/HOI.Economic.Crisis");
         }
 
         private void VKButton_Click(object sender, RoutedEventArgs e)
@@ -184,8 +167,7 @@ namespace EC_Launcher
 
         private void SteamButton_Click(object sender, RoutedEventArgs e)
         {
-            //Process.Start("https://www.steam.com");
-            
+            //Process.Start("https://www.steam.com");          
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)

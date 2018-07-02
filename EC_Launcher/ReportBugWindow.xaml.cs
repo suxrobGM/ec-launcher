@@ -1,16 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Net.Mail;
 using System.Net;
 
@@ -62,7 +51,7 @@ namespace EC_Launcher
                     sc.UseDefaultCredentials = false;
                     sc.Credentials = new NetworkCredential(from, p);
                     sc.Send(mm);
-                    MessageBox.Show("Your message was successfully sent to suxrobGM@gmail.com \nThanks for reported bug, we will fix it ;)");
+                    MessageBox.Show("Your message was successfully sent to suxrobGM@gmail.com \nThanks for reported bug, we will fix it soon ;)");
                 }
             }
             
