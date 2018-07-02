@@ -53,7 +53,8 @@ namespace EC_Launcher
 
                     if (!file.Contains(".git") && !file.Contains("GenerateHash.exe") && !file.Contains("EC_Launcher.exe")) //не счытивать файлы гита
                     {
-                        string file_name = Path.GetFileName(file);
+                        string file_name = file.Remove(0, GlobalVariables.ModDirectory.Length);
+
                         using (var stream = File.OpenRead(file))
                         {
                             KeyValuePair<string, string> keyValuePair = new KeyValuePair<string, string>(file_name, GetHash_MD5(stream).ToString());
