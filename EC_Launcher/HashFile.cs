@@ -22,7 +22,7 @@ namespace EC_Launcher
             HashDict = await GetHashListAsync(files);
 
             //Запись данные в файле Client.md5
-            await WriteHashListAsync("Client.md5", HashDict);
+            await WriteHashListAsync("HashList.md5", HashDict);
         }
 
         private async Task WriteHashListAsync(string file_name, List<KeyValuePair<string, string>> HashList)

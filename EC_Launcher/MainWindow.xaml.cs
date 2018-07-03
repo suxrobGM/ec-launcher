@@ -24,9 +24,9 @@ namespace EC_Launcher
             SettingsWind = new SettingsWindow();
             ReportBugWind = new ReportBugWindow();          
 
-            if (!File.Exists("Client.md5"))
+            if (!File.Exists("HashList.md5"))
             {
-                File.Create("Client.md5").Close();
+                File.Create("HashList.md5").Close();
             }
 
             //если не существует файл, то создать файл и запольнить 

@@ -39,22 +39,28 @@ namespace EC_Launcher
             string from = "DedSec94@mail.ru";
             string p = "suxrobbek";
 
-            using (MailMessage mm = new MailMessage(from, to))
+            try
             {
-                mm.Subject = "Reported Bug From @" + Name_TBox.Text;
-                mm.Body = Body_TBox.Text;
-                mm.IsBodyHtml = false;
-                using (SmtpClient sc = new SmtpClient("smtp.mail.ru", 25))
+                using (MailMessage mm = new MailMessage(from, to))
                 {
-                    sc.EnableSsl = true;
-                    sc.DeliveryMethod = SmtpDeliveryMethod.Network;
-                    sc.UseDefaultCredentials = false;
-                    sc.Credentials = new NetworkCredential(from, p);
-                    sc.Send(mm);
-                    MessageBox.Show("Your message was successfully sent to suxrobGM@gmail.com \nThanks for reported bug, we will fix it soon ;)");
+                    mm.Subject = "Reported Bug From @" + Name_TBox.Text;
+                    mm.Body = Body_TBox.Text;
+                    mm.IsBodyHtml = false;
+                    using (SmtpClient sc = new SmtpClient("smtp.mail.ru", 25))
+                    {
+                        sc.EnableSsl = true;
+                        sc.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        sc.UseDefaultCredentials = false;
+                        sc.Credentials = new NetworkCredential(from, p);
+                        sc.Send(mm);
+                        MessageBox.Show("Your message was successfully sent to suxrobGM@gmail.com \nThanks for reported bug, we will fix it soon ;)");
+                    }
                 }
             }
-            
+            catch(Exception)
+            {
+                MessageBox.Show(this, $"Network connection error, please check the network conection", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
