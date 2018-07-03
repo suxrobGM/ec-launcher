@@ -4,7 +4,6 @@ using System.Threading;
 using System.Windows;
 using System.IO;
 using System.Diagnostics;
-using System.Xml.Linq;
 
 namespace EC_Launcher
 {
@@ -13,14 +12,17 @@ namespace EC_Launcher
     /// </summary>
     public partial class MainWindow : Window
     {
-
-        SettingsWindow SettingsWind = new SettingsWindow(); //Новая окна Settings
-        ReportBugWindow ReportBugWind = new ReportBugWindow();
+        SettingsWindow SettingsWind; //Новая окна Settings
+        ReportBugWindow ReportBugWind;
+        UpdateClient client;
 
         public MainWindow()
         {
             InitializeComponent();
-            WBrowser.Navigate("https://vk.com/ec_hoi_mod");            
+            WBrowser.Navigate("https://vk.com/ec_hoi_mod");
+
+            SettingsWind = new SettingsWindow();
+            ReportBugWind = new ReportBugWindow();          
 
             if (!File.Exists("Client.md5"))
             {
@@ -65,50 +67,37 @@ namespace EC_Launcher
             {
                 MessageBox.Show("ERROR:<"+ex.Message+ "> Please set right directory of game in the settings");
             }
-            
-            //progressBar1.Maximum = Process.Start(exePath).StartTime.Second;
-            //progressBar1.Value = Process.Start(exePath).;
-            //MessageBox.Show(progressBar1.Value.ToString());
         }
 
-        private void CheckUpdates()
-        {
-            try
-            {
-                if (File.Exists("launcher.update") && new Version(FileVersionInfo.GetVersionInfo("launcher.update").FileVersion) > GlobalVariables.ApplicationVersion)
-                {
-                    Process.Start("Updater.exe", "launcher.update \"" + Process.GetCurrentProcess().ProcessName + "\"");
-                    Process.GetCurrentProcess().CloseMainWindow();
-                }
-                else
-                {
-                    if (File.Exists("launcher.update"))
-                    {
-                        File.Delete("launcher.update");
-                    }
-                    Download();
-                }
-            }
-            catch (Exception)
-            {
-                if (File.Exists("launcher.update"))
-                {
-                    File.Delete("launcher.update");
-                }
-                Download();
-            }
-        }
-
-        private void Download()
-        {
-            //string ServerVersionFile = "https://mysite.com/Version.xml";
-            //XDocument XDoc = XDocument.Load(ServerVersionFile);      
-        }
+        
 
         private void CheckUpdateButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            try
+            {
+                client = new UpdateClient();
+                if (client.CheckAppUpdate())
+                {
+                    MessageBox.Show(this, $"Available update for launcher. New version is  {client.RemoteAppVersion}.\nDo you want to download the update?", "Available update for launcher!", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show(this, "You are using the last version of launcher", "No update for launcher", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
 
+                if (client.CheckModUpdate())
+                {
+                    MessageBox.Show(this, $"Available update for mod. New version is  {client.RemoteModVersion}.\nDo you want to download the update?", "Available update for mod!", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show(this, "You are using the last version of mod", "No update for mod", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch(Exception)
+            {
+                MessageBox.Show(this, $"Network connection error, please check the network conection", "ERROR" , MessageBoxButton.OK, MessageBoxImage.Error);
+            }     
         }
 
         public void ProgressBar_Change()
