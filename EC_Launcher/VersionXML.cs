@@ -33,7 +33,16 @@ namespace EC_Launcher
                 versionDoc.Element("Version").Element("App_Version").Value = value;
                 versionDoc.Save(versionXML);
             }
-        } 
+        }
+        
+        public static Version ParseAppVersion(XDocument serverVersionXML)
+        {
+            return Version.Parse(serverVersionXML.Element("Version").Element("Mod_Version").Value);
+        }
+        public static Version ParseModVersion(XDocument serverVersionXML)
+        {
+            return Version.Parse(serverVersionXML.Element("Version").Element("Mod_Version").Value);
+        }
 
         public static void SetDefaultVersion(string ModVersion, string AppVersion)
         {
