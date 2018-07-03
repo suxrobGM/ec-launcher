@@ -9,7 +9,7 @@ namespace EC_Launcher
     /// <summary>
     /// Update Class used Dropbox API
     /// </summary>
-    public class UpdateClient
+    public class UpdaterClient
     {
         private string tokenDropbox = "JCFYioFBHBAAAAAAAAAAFq4g6p6ZhtsYZJktjnNb_JFknLnJjKEMyASiPO7kKKK5";
         private DropboxClient dbx;
@@ -20,7 +20,7 @@ namespace EC_Launcher
         public Version RemoteAppVersion { get => VersionXML.ParseAppVersion(remoteVersionXML); }
         public Version RemoteModVersion { get => VersionXML.ParseModVersion(remoteVersionXML); }
 
-        public UpdateClient()
+        public UpdaterClient()
         {
             dbx = new DropboxClient(tokenDropbox);
             var streamXML = dbx.Files.DownloadAsync(rootFolder + "/" + versionXMLFile).Result.GetContentAsStreamAsync().Result;

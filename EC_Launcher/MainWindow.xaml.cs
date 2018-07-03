@@ -14,7 +14,7 @@ namespace EC_Launcher
     {
         SettingsWindow SettingsWind; //Новая окна Settings
         ReportBugWindow ReportBugWind;
-        UpdateClient client;
+        UpdaterClient client;
 
         public MainWindow()
         {
@@ -75,7 +75,7 @@ namespace EC_Launcher
         {
             try
             {
-                client = new UpdateClient();
+                client = new UpdaterClient();
                 if (client.CheckAppUpdate())
                 {
                     MessageBox.Show(this, $"Available update for launcher. New version is  {client.RemoteAppVersion}.\nDo you want to download the update?", "Available update for launcher!", MessageBoxButton.OKCancel, MessageBoxImage.Information);
