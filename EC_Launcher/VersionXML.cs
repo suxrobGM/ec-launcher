@@ -37,7 +37,7 @@ namespace EC_Launcher
         
         public static Version ParseAppVersion(XDocument serverVersionXML)
         {
-            return Version.Parse(serverVersionXML.Element("Version").Element("Mod_Version").Value);
+            return Version.Parse(serverVersionXML.Element("Version").Element("App_Version").Value);
         }
         public static Version ParseModVersion(XDocument serverVersionXML)
         {
