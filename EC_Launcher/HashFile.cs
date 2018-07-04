@@ -69,14 +69,15 @@ namespace EC_Launcher
                         using (var stream = File.OpenRead(file))
                         {
                             KeyValuePair<string, string> keyValuePair = new KeyValuePair<string, string>(file_name, GetHash_MD5(stream).ToString());                          
-                            HashList.Add(keyValuePair);
-                            checkedFile++;
-                            ProgressPercent = GetPercentage(checkedFile, MaxFiles);
+                            HashList.Add(keyValuePair);                          
 
                             if (progress != null)
                             {
                                 progress.Report(ProgressPercent);
-                            }                            
+                            }
+
+                            checkedFile++;
+                            ProgressPercent = GetPercentage(checkedFile, MaxFiles);
                         }
                     }
                 });
@@ -104,6 +105,25 @@ namespace EC_Launcher
             }
 
             return buffer.ToString();
+        }
+
+        public static List<KeyValuePair<string, string>> GetHashListFromFile(FileStream HashListFile)
+        {
+            StreamReader reader = new StreamReader(HashListFile);
+            List<KeyValuePair<string, string>> HashList = new List<KeyValuePair<string, string>>();
+
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                string key = line.Remove(0, line.IndexOf("-") + 1).Trim();
+                string value = line.Substring(0, line.IndexOf("-")).Trim();
+                if (key != String.Empty || value != String.Empty)
+                {
+                    HashList.Add(new KeyValuePair<string, string>(key, value));
+                }
+            }
+
+            return HashList;
         }
 
         private static int GetPercentage(int current, int max)

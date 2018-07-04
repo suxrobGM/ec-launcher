@@ -98,7 +98,7 @@
                 Click="GenerateHashButton_Click"/>
         </StackPanel>
 
-        <ProgressBar x:Name="ProgressBar1" x:FieldModifier="public" HorizontalAlignment="Left" Height="20" Margin="10,358,0,0" VerticalAlignment="Top" Width="222"/>
+        <ProgressBar x:Name="ProgressBar1" x:FieldModifier="public" HorizontalAlignment="Left" Height="23" Margin="10,355,0,0" VerticalAlignment="Top" Width="222"/>
         <TextBlock x:Name="PgBar_TextBlock" Visibility="Hidden" Text="{Binding ElementName=ProgressBar1, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="133,290,642,113" />
 
         <Label x:Name="ModVersionLabel" Content="Mod Version: " HorizontalAlignment="Left" Margin="291,358,0,0" VerticalAlignment="Top" FontWeight="Bold" Background="{x:Null}">
@@ -218,6 +218,7 @@
             </Label.Effect>
         </Label>
         <Label Content="Developed by SuxrobGM" HorizontalAlignment="Left" Margin="10,455,0,0" VerticalAlignment="Top" Foreground="White" FontStyle="Italic"/>
+        <TextBox Text="{Binding ElementName=ProgressBar1, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Left" Height="23" Margin="96,355,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="46" Background="{x:Null}" BorderBrush="{x:Null}"/>
 
 
     </Grid>

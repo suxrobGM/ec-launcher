@@ -107,7 +107,7 @@ namespace EC_Launcher
         {           
             hashFile = new HashFile();
             //Обновление ProgressBar1 с асинхронного потока
-            progress = new Progress<int>(value => { ProgressBar1.Dispatcher.Invoke(() => { ProgressBar1.Value = value; }); });        
+            progress = new Progress<int>(value => { ProgressBar1.Dispatcher.Invoke(() => { ProgressBar1.Value = ++value; }); });        
             hashFile.GetGameFileHashesAsync(progress);
         }      
         
