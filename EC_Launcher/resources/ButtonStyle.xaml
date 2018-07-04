@@ -26,5 +26,5 @@
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="FontSize" Value="14"/>
     </Style>
-    
+
 </ResourceDictionary>

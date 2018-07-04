@@ -113,6 +113,10 @@
     <Compile Include="SettingsXML.cs" />
     <Compile Include="UpdaterClient.cs" />
     <Compile Include="VersionXML.cs" />
+    <Page Include="resources\ButtonBackgroundImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="resources\ButtonStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
