@@ -73,7 +73,7 @@
                 VerticalAlignment="Top" 
                 Width="158" 
                 Height="28"                
-                Margin="0,3,0,0"/>
+                Margin="0,3,0,0" Click="DonateButton_Click"/>
 
             <Button 
                 x:Name="SettingsButton" 

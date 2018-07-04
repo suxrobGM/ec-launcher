@@ -12,22 +12,32 @@ namespace EC_Launcher
     public class HashFile
     {
         //список хеши файлов
-        public List<KeyValuePair<string, string>> HashDict = new List<KeyValuePair<string, string>>();
+        private List<KeyValuePair<string, string>> HashDict;
+        public int ProgressPercent;
+        public int MaxFiles;      
 
-        public async void GetGameFileHashesAsync()
+        public HashFile()
+        {
+            this.ProgressPercent = 0;
+            this.MaxFiles = 0;
+            this.HashDict = new List<KeyValuePair<string, string>>();            
+        }
+
+        public async void GetGameFileHashesAsync(IProgress<int> progress)
         {          
             //получить польный список файлов(где-то 17-18к шт.)
             string[] files = Directory.GetFiles(GlobalVariables.ModDirectory, "*", SearchOption.AllDirectories);
+            MaxFiles = Directory.GetFiles(GlobalVariables.ModDirectory, "*", SearchOption.AllDirectories).Count((file) => { return !file.Contains(".git") ? true : false; });
 
-            HashDict = await GetHashListAsync(files);
-
+            HashDict =  await GetHashListAsync(files, progress);
+            
             //Запись данные в файле Client.md5
-            await WriteHashListAsync("HashList.md5", HashDict);
+            WriteHashListAsync("HashList.md5", HashDict);
         }
 
-        private async Task WriteHashListAsync(string file_name, List<KeyValuePair<string, string>> HashList)
+        private async void WriteHashListAsync(string file_name, List<KeyValuePair<string, string>> HashList)
         {
-            FileStream hash_file = new FileStream(file_name, FileMode.Truncate);
+            FileStream hash_file = new FileStream(file_name, FileMode.Create);
             StreamWriter writer = new StreamWriter(hash_file);
 
             Action action = new Action(() =>
@@ -42,9 +52,10 @@ namespace EC_Launcher
             await Task.Run(action);        
         }
 
-        private async Task<List<KeyValuePair<string, string>>> GetHashListAsync(string[] files_dir)
+        private async Task<List<KeyValuePair<string, string>>> GetHashListAsync(string[] files_dir, IProgress<int> progress)
         {            
             List<KeyValuePair<string, string>> HashList = new List<KeyValuePair<string, string>>();
+            int checkedFile = 0;           
 
             //Многопоточный режим
             Action action = new Action(() => {
@@ -57,16 +68,22 @@ namespace EC_Launcher
 
                         using (var stream = File.OpenRead(file))
                         {
-                            KeyValuePair<string, string> keyValuePair = new KeyValuePair<string, string>(file_name, GetHash_MD5(stream).ToString());
+                            KeyValuePair<string, string> keyValuePair = new KeyValuePair<string, string>(file_name, GetHash_MD5(stream).ToString());                          
                             HashList.Add(keyValuePair);
+                            checkedFile++;
+                            ProgressPercent = GetPercentage(checkedFile, MaxFiles);
+
+                            if (progress != null)
+                            {
+                                progress.Report(ProgressPercent);
+                            }                            
                         }
                     }
                 });
 
                 HashList = HashList.OrderBy(pair => pair.Key).ToList();
-            });
-            
-            await Task.Run(action);
+            });           
+            await Task.Run(action);           
             return HashList;
         }
 
@@ -87,6 +104,11 @@ namespace EC_Launcher
             }
 
             return buffer.ToString();
+        }
+
+        private static int GetPercentage(int current, int max)
+        {
+            return (current * 100) / max;
         }
     }
 }

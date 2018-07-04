@@ -4,6 +4,7 @@ using System.Threading;
 using System.Windows;
 using System.IO;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace EC_Launcher
 {
@@ -15,6 +16,8 @@ namespace EC_Launcher
         SettingsWindow SettingsWind; //Новая окна Settings
         ReportBugWindow ReportBugWind;
         UpdaterClient client;
+        HashFile hashFile;       
+        Progress<int> progress;
 
         public MainWindow()
         {
@@ -100,27 +103,16 @@ namespace EC_Launcher
             }     
         }
 
-        public void ProgressBar_Change()
-        {
-            ProgressBar1.Maximum = 1000;
-
-            Action incPgBar = new Action(() => { ProgressBar1.Value++; });
-            Task task = new Task(() => {
-                for (var i = 0; i < 1000; i++)
-                {
-                    ProgressBar1.Dispatcher.Invoke(incPgBar);                        
-                    Thread.Sleep(100);
-                }
-            });
-            task.Start();
-            ProgressBar1.Value = 0;
-        }
-
         private void GenerateHashButton_Click(object sender, RoutedEventArgs e)
-        {
-            HashFile hashFile = new HashFile();
-            hashFile.GetGameFileHashesAsync();           
-        }
+        {           
+            hashFile = new HashFile();
+            //Обновление ProgressBar1 с асинхронного потока
+            progress = new Progress<int>(value => { ProgressBar1.Dispatcher.Invoke(() => { ProgressBar1.Value = value; }); });        
+            hashFile.GetGameFileHashesAsync(progress);
+        }      
+        
+
+
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -128,7 +120,16 @@ namespace EC_Launcher
             SettingsWind.ShowDialog();           
         }
 
-        
+        private void ReportBugButton_Click(object sender, RoutedEventArgs e)
+        {
+            ReportBugWind.Owner = this;
+            ReportBugWind.ShowDialog();
+        }
+
+        private void DonateButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(hashFile.ProgressPercent.ToString());
+        }
 
         private void FacebookButton_Click(object sender, RoutedEventArgs e)
         {
@@ -158,12 +159,6 @@ namespace EC_Launcher
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Environment.Exit(0);
-        }
-
-        private void ReportBugButton_Click(object sender, RoutedEventArgs e)
-        {
-            ReportBugWind.Owner = this;
-            ReportBugWind.ShowDialog();
-        }
+        }      
     }
 }

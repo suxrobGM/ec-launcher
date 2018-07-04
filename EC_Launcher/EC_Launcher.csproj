@@ -111,7 +111,7 @@
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SettingsXML.cs" />
-    <Compile Include="UpdateClient.cs" />
+    <Compile Include="UpdaterClient.cs" />
     <Compile Include="VersionXML.cs" />
     <Page Include="resources\ButtonStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
