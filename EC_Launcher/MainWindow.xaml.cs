@@ -25,7 +25,12 @@ namespace EC_Launcher
             WBrowser.Navigate("https://vk.com/ec_hoi_mod");
 
             SettingsWind = new SettingsWindow();
-            ReportBugWind = new ReportBugWindow();          
+            ReportBugWind = new ReportBugWindow();
+
+            if (!Directory.Exists(GlobalVariables.CacheFolder + @"\Economic_Crisis\launcher"))
+            {
+                Directory.CreateDirectory(GlobalVariables.CacheFolder + @"\Economic_Crisis\launcher");
+            }
 
             if (!File.Exists("HashList.md5"))
             {
@@ -66,9 +71,9 @@ namespace EC_Launcher
             {
                 Process.Start(exePath);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
-                MessageBox.Show("ERROR:<"+ex.Message+ "> Please set right directory of game in the settings");
+                MessageBox.Show(this, "Please set right directory of game in the settings", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);                
             }
         }
 
@@ -81,7 +86,13 @@ namespace EC_Launcher
                 client = new UpdaterClient();
                 if (client.CheckAppUpdate())
                 {
-                    MessageBox.Show(this, $"Available update for launcher. New version is  {client.RemoteAppVersion}.\nDo you want to download the update?", "Available update for launcher!", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                    var mboxResult = MessageBox.Show(this, $"Available update for launcher. New version is  {client.RemoteAppVersion}.\nDo you want to download the update?", "Available update for launcher!", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                    if(mboxResult == MessageBoxResult.OK)
+                    {
+
+
+                        VersionXML.AppVersion = client.RemoteAppVersion.ToString();
+                    }
                 }
                 else
                 {
@@ -90,29 +101,40 @@ namespace EC_Launcher
 
                 if (client.CheckModUpdate())
                 {
-                    MessageBox.Show(this, $"Available update for mod. New version is  {client.RemoteModVersion}.\nDo you want to download the update?", "Available update for mod!", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                    var mboxResult = MessageBox.Show(this, $"Available update for mod. New version is  {client.RemoteModVersion}.\nDo you want to download the update?", "Available update for mod!", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                    if (mboxResult == MessageBoxResult.OK)
+                    {
+                        statusText.Text = "Updating mod...";
+                        progress = new Progress<int>(value => ProgressBar1.Dispatcher.Invoke(() => ProgressBar1.Value = ++value));
+                        client.DownloadModUpdate(progress);                       
+                    }
                 }
                 else
                 {
                     MessageBox.Show(this, "You are using the last version of mod", "No update for mod", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
-            catch(Exception)
+            catch(Exception ex)
             {
-                MessageBox.Show(this, $"Network connection error, please check the network conection", "ERROR" , MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(this, ex.Message, "ERROR" , MessageBoxButton.OK, MessageBoxImage.Error);
             }     
         }
 
         private void GenerateHashButton_Click(object sender, RoutedEventArgs e)
-        {           
-            hashFile = new HashFile();
-            //Обновление ProgressBar1 с асинхронного потока
-            progress = new Progress<int>(value => { ProgressBar1.Dispatcher.Invoke(() => { ProgressBar1.Value = ++value; }); });        
-            hashFile.GetGameFileHashesAsync(progress);
-        }      
-        
-
-
+        {
+            try
+            {
+                hashFile = new HashFile();
+                //Обновление ProgressBar1 из асинхронного потока
+                statusText.Text = "Generating hash file...";
+                progress = new Progress<int>(value => ProgressBar1.Dispatcher.Invoke(() => ProgressBar1.Value = ++value));
+                hashFile.GetGameFileHashesAsync(progress);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }                                   
+        }                  
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -158,7 +180,20 @@ namespace EC_Launcher
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            Environment.Exit(0);
-        }      
+            if (Directory.Exists(GlobalVariables.CacheFolder))
+            {
+                Directory.Delete(GlobalVariables.CacheFolder, true);             
+            }
+            Environment.Exit(0);           
+        }        
+
+        private void ProgressBar1_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (ProgressBar1.Value == ProgressBar1.Maximum)
+            {   
+                ProgressBar1.Value = 0;
+                statusText.Text = String.Empty;
+            }
+        }
     }
 }

@@ -100,7 +100,7 @@
                 Click="GenerateHashButton_Click"/>
         </StackPanel>
 
-        <ProgressBar x:Name="ProgressBar1" x:FieldModifier="public" HorizontalAlignment="Left" Height="23" Margin="10,355,0,0" VerticalAlignment="Top" Width="222"/>
+        <ProgressBar x:Name="ProgressBar1" x:FieldModifier="public" HorizontalAlignment="Left" Height="23" Margin="10,355,0,0" VerticalAlignment="Top" Width="222" ValueChanged="ProgressBar1_ValueChanged"/>
         <TextBlock x:Name="PgBar_TextBlock" Visibility="Hidden" Text="{Binding ElementName=ProgressBar1, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="133,290,642,113" />
 
         <Label x:Name="ModVersionLabel" Content="Mod Version: " HorizontalAlignment="Left" Margin="291,358,0,0" VerticalAlignment="Top" FontWeight="Bold" Background="{x:Null}">
@@ -258,7 +258,8 @@
             </Label.Effect>
         </Label>
         <Label Content="Developed by SuxrobGM" HorizontalAlignment="Left" Margin="10,455,0,0" VerticalAlignment="Top" Foreground="White" FontStyle="Italic"/>
-        <TextBlock Text="{Binding ElementName=ProgressBar1, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Left" Height="23" Margin="96,355,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="46" Background="{x:Null}" FontWeight="Bold" FontStyle="Italic"/>
+        <TextBlock Text="{Binding ElementName=ProgressBar1, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Left" Height="23" Margin="108,355,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="46" Background="{x:Null}" FontWeight="Bold" FontStyle="Italic"/>
+        <TextBlock x:Name="statusText" HorizontalAlignment="Left" Margin="80,334,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="White" FontStyle="Italic"/>
 
 
     </Grid>

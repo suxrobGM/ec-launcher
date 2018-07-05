@@ -62,7 +62,8 @@ namespace EC_Launcher
                 Parallel.ForEach(files_dir, (file) => {
                     Thread.CurrentThread.Priority = ThreadPriority.Highest;
 
-                    if (!file.Contains(".git") && !file.Contains("GenerateHash.exe") && !file.Contains("EC_Launcher.exe")) //не счытивать файлы гита
+                    //не счытивать файлы гита и лаунчера
+                    if (!file.Contains(".git") && !file.Contains("launcher") && !file.Contains("EC_Launcher.exe")) 
                     {
                         string file_name = file.Remove(0, GlobalVariables.ModDirectory.Length);
 
