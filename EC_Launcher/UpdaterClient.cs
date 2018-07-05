@@ -32,7 +32,7 @@ namespace EC_Launcher
                 dbx = new DropboxClient(tokenDropbox);
                 var streamXML = dbx.Files.DownloadAsync(rootFolder + "/" + versionXMLFile).Result.GetContentAsStreamAsync().Result;
                 this.remoteVersionXML = XDocument.Load(streamXML);
-                this.remoteVersionXML.Save(GlobalVariables.CacheFolder + @"\Economic_Crisis\" + versionXMLFile);
+                this.remoteVersionXML.Save(GlobalVariables.CacheFolder + @"\Economic_Crisis\launcher\Version.xml");
                 this.hasAppUpdate = false;
                 this.hasModUpdate = false;
             }
