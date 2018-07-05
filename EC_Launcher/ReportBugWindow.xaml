@@ -6,7 +6,10 @@
         xmlns:local="clr-namespace:EC_Launcher"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="Report Bug" Height="330.667" Width="457.333" Closing="Window_Closing">
+        Title="Report Bug"
+        Height="330.667" 
+        Width="457.333" 
+        Closing="Window_Closing">
     <Grid>
         <Grid.Background>
             <RadialGradientBrush>

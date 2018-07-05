@@ -15,6 +15,7 @@ namespace EC_Launcher
     {
         SettingsWindow SettingsWind; //Новая окна Settings
         ReportBugWindow ReportBugWind;
+        DonateWindow donateWindow;
         UpdaterClient client;
         HashFile hashFile;       
         Progress<int> progress;
@@ -26,6 +27,7 @@ namespace EC_Launcher
 
             SettingsWind = new SettingsWindow();
             ReportBugWind = new ReportBugWindow();
+            donateWindow = new DonateWindow();
 
             if (!Directory.Exists(GlobalVariables.CacheFolder + @"\Economic_Crisis\launcher"))
             {
@@ -149,8 +151,9 @@ namespace EC_Launcher
         }
 
         private void DonateButton_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show(hashFile.ProgressPercent.ToString());
+        {          
+            donateWindow.Owner = this;
+            donateWindow.ShowDialog();
         }
 
         private void FacebookButton_Click(object sender, RoutedEventArgs e)

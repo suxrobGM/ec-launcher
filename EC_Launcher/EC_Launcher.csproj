@@ -104,6 +104,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DonateWindow.xaml.cs">
+      <DependentUpon>DonateWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ReportBugWindow.xaml.cs">
       <DependentUpon>ReportBugWindow.xaml</DependentUpon>
     </Compile>
@@ -113,6 +116,10 @@
     <Compile Include="SettingsXML.cs" />
     <Compile Include="UpdaterClient.cs" />
     <Compile Include="VersionXML.cs" />
+    <Page Include="DonateWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="resources\ButtonBackgroundImage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
