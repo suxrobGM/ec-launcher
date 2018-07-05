@@ -32,7 +32,7 @@ namespace EC_Launcher
                 dbx = new DropboxClient(tokenDropbox);
                 var streamXML = dbx.Files.DownloadAsync(rootFolder + "/" + versionXMLFile).Result.GetContentAsStreamAsync().Result;
                 this.remoteVersionXML = XDocument.Load(streamXML);
-                this.remoteVersionXML.Save(GlobalVariables.CacheFolder + @"\Economic_Crisis\launcher\Version.xml");
+                this.remoteVersionXML.Save(GlobalVariables.CacheFolder + @"\launcher\Version.xml");
                 this.hasAppUpdate = false;
                 this.hasModUpdate = false;
             }
@@ -67,7 +67,7 @@ namespace EC_Launcher
                 this.hasModUpdate = true;
                 return true;
             }
-            //MoveFile(GlobalVariables.CacheFolder + @"\Economic_Crisis\launcher\Version.xml", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            //MoveFile(GlobalVariables.CacheFolder + @"\launcher\Version.xml", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
             return false;
         }
         
@@ -104,7 +104,7 @@ namespace EC_Launcher
 
                 foreach (var file in ChangedFilesList)
                 {
-                    await DownloadModFileFromDbx(rootFolder, file);
+                    await DownloadFromDbx(rootFolder, file);
 
                     if (progress != null)
                     {
@@ -116,7 +116,7 @@ namespace EC_Launcher
               
                 foreach (var file in NewFilesList)
                 {
-                    await DownloadModFileFromDbx(rootFolder, file);
+                    await DownloadFromDbx(rootFolder, file);
 
                     if (progress != null)
                     {
@@ -130,10 +130,8 @@ namespace EC_Launcher
                 {
                     string fileNameWindows = file.Replace("/", "\\");
                     //File.Delete(GlobalVariables.ModDirectory + fileNameWindows);
-                    File.Create(GlobalVariables.CacheFolder + @"\Economic_Crisis" + fileNameWindows + "_deleted");
-                }
-
-                //Directory.Move(GlobalVariables.CacheFolder + @"\Economic_Crisis\" + versionXMLFile, Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+                    File.Create(GlobalVariables.CacheFolder + fileNameWindows + "_deleted");
+                }             
             }
             catch(Exception)
             {
@@ -141,13 +139,13 @@ namespace EC_Launcher
             }
         }
 
-        private async Task DownloadModFileFromDbx(string rootFolder, string file)
+        private async Task DownloadFromDbx(string rootFolder, string file)
         {
             using (var response = await dbx.Files.DownloadAsync(rootFolder + "/"+ file))
             {              
                 byte[] data = await response.GetContentAsByteArrayAsync();
                 string fileNameWindows = file.Replace("/", "\\");            
-                File.WriteAllBytes(GlobalVariables.CacheFolder + @"\Economic_Crisis" + fileNameWindows, data);
+                File.WriteAllBytes(GlobalVariables.CacheFolder + fileNameWindows, data);
             }
         }
 
@@ -159,7 +157,7 @@ namespace EC_Launcher
         private void MoveFile(string sourceFileFromCacheFolder, string destDirName)
         {           
             int fullLength = sourceFileFromCacheFolder.Length;
-            int cacheFolderLength = (GlobalVariables.CacheFolder + @"\Economic_Crisis").Length;
+            int cacheFolderLength = GlobalVariables.CacheFolder.Length;
 
             string fileName = sourceFileFromCacheFolder.Remove(0, cacheFolderLength);
             string dirName = Path.GetDirectoryName(fileName);

@@ -11,7 +11,7 @@ namespace EC_Launcher
         private static Version appVersion = Assembly.GetExecutingAssembly().GetName().Version;
         private static Version modVersion = new Version("0.6.3.0"); //default start version
         private static bool devMode = false;
-        private static string cacheFolder = "_cache";
+        private static string cacheFolder = "_cache\\Economic_Crisis";
 
         //Свойства
         public static string ModDirectory  { get => modDir; set => modDir = value; }

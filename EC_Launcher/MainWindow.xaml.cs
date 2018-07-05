@@ -29,9 +29,9 @@ namespace EC_Launcher
             ReportBugWind = new ReportBugWindow();
             donateWindow = new DonateWindow();
 
-            if (!Directory.Exists(GlobalVariables.CacheFolder + @"\Economic_Crisis\launcher"))
+            if (!Directory.Exists(GlobalVariables.CacheFolder + @"\launcher"))
             {
-                Directory.CreateDirectory(GlobalVariables.CacheFolder + @"\Economic_Crisis\launcher");
+                Directory.CreateDirectory(GlobalVariables.CacheFolder + @"\launcher");
             }
 
             if (!File.Exists("HashList.md5"))
@@ -183,9 +183,9 @@ namespace EC_Launcher
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Directory.Exists(GlobalVariables.CacheFolder))
+            if (Directory.Exists("_cache"))
             {
-                Directory.Delete(GlobalVariables.CacheFolder, true);             
+                Directory.Delete("_cache", true);             
             }
             Environment.Exit(0);           
         }        
