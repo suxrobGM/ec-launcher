@@ -63,7 +63,7 @@ namespace EC_Launcher
                     Thread.CurrentThread.Priority = ThreadPriority.Highest;
 
                     //не счытивать файлы гита и лаунчера
-                    if (!file.Contains(".git") && !file.Contains("launcher") && !file.Contains("EC_Launcher.exe")) 
+                    if (!file.Contains(".git") && !file.Contains(".xml") && !file.Contains("HashList.md5") && !file.Contains("EC_Launcher.exe")) 
                     {
                         string file_name = file.Remove(0, GlobalVariables.ModDirectory.Length);
 

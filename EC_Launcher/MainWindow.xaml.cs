@@ -15,10 +15,7 @@ namespace EC_Launcher
     {
         SettingsWindow SettingsWind; //Новая окна Settings
         ReportBugWindow ReportBugWind;
-        DonateWindow donateWindow;
-        UpdaterClient client;
-        HashFile hashFile;       
-        Progress<int> progress;
+        DonateWindow donateWindow;                    
 
         public MainWindow()
         {
@@ -85,15 +82,15 @@ namespace EC_Launcher
         {
             try
             {
-                client = new UpdaterClient();
+                var client = new UpdaterClient();
                 if (client.CheckAppUpdate())
                 {
-                    var mboxResult = MessageBox.Show(this, $"Available update for launcher. New version is  {client.RemoteAppVersion}.\nDo you want to download the update?", "Available update for launcher!", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                    var mboxResult = MessageBox.Show(this, $"Available update for launcher. New version is  {client.RemoteAppVersion}.\nDo you want to download the update?", "Available update for launcher!", MessageBoxButton.OKCancel, MessageBoxImage.Question);
                     if(mboxResult == MessageBoxResult.OK)
                     {
-
-
-                        VersionXML.AppVersion = client.RemoteAppVersion.ToString();
+                        statusText.Text = "Updating EC_Launcher.exe ...";
+                        var progress = new Progress<int>(value => ProgressBar1.Dispatcher.Invoke(() => ProgressBar1.Value = ++value));
+                        client.DownloadAppUpdateAsync(progress);
                     }
                 }
                 else
@@ -103,12 +100,12 @@ namespace EC_Launcher
 
                 if (client.CheckModUpdate())
                 {
-                    var mboxResult = MessageBox.Show(this, $"Available update for mod. New version is  {client.RemoteModVersion}.\nDo you want to download the update?", "Available update for mod!", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                    var mboxResult = MessageBox.Show(this, $"Available update for mod. New version is  {client.RemoteModVersion}.\nDo you want to download the update?", "Available update for mod!", MessageBoxButton.OKCancel, MessageBoxImage.Question);
                     if (mboxResult == MessageBoxResult.OK)
                     {
                         statusText.Text = "Updating mod...";
-                        progress = new Progress<int>(value => ProgressBar1.Dispatcher.Invoke(() => ProgressBar1.Value = ++value));
-                        client.DownloadModUpdate(progress);                       
+                        var progress = new Progress<int>(value => ProgressBar1.Dispatcher.Invoke(() => ProgressBar1.Value = ++value));
+                        client.DownloadModUpdateAsync(progress);                       
                     }
                 }
                 else
@@ -126,10 +123,10 @@ namespace EC_Launcher
         {
             try
             {
-                hashFile = new HashFile();
+                var hashFile = new HashFile();
                 //Обновление ProgressBar1 из асинхронного потока
                 statusText.Text = "Generating hash file...";
-                progress = new Progress<int>(value => ProgressBar1.Dispatcher.Invoke(() => ProgressBar1.Value = ++value));
+                var  progress = new Progress<int>(value => ProgressBar1.Dispatcher.Invoke(() => ProgressBar1.Value = ++value));
                 hashFile.GetGameFileHashesAsync(progress);
             }
             catch (Exception ex)
@@ -183,11 +180,18 @@ namespace EC_Launcher
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Directory.Exists("_cache"))
+            try
             {
-                Directory.Delete("_cache", true);             
+                if (Directory.Exists("_cache"))
+                {
+                    Directory.Delete("_cache", true);
+                }
+                Environment.Exit(0);
             }
-            Environment.Exit(0);           
+            catch(Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }        
 
         private void ProgressBar1_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

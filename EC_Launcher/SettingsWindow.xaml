@@ -14,17 +14,17 @@
                 <GradientStop Color="#FF212020" Offset="1"/>
             </RadialGradientBrush>
         </Grid.Background>
-        <Label Content="Game Directory:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="White"/>
+        <Label Content="{DynamicResource m_GameDirLabel}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="White"/>
         <TextBox x:Name="GameDir_TBox" HorizontalAlignment="Left" Height="27" Margin="10,36,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="481" IsHitTestVisible="True" IsEnabled="False" FontSize="10" FontWeight="Bold"/>
-        <Label Content="Mod Directory:" HorizontalAlignment="Left" Margin="10,68,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="White"/>
+        <Label Content="{DynamicResource m_ModDirLabel}" HorizontalAlignment="Left" Margin="10,68,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="White"/>
         <TextBox x:Name="ModDir_TBox" HorizontalAlignment="Left" Height="27" Margin="10,94,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="481" IsEnabled="False" FontSize="10" FontWeight="Bold"/>
         <ComboBox x:Name="Language_CBox" HorizontalAlignment="Left" Margin="10,175,0,0" VerticalAlignment="Top" Width="123" SelectionChanged="Language_CBox_SelectionChanged">
             <ListBoxItem Content="English"/>
             <ListBoxItem Content="Russian"/>
         </ComboBox>
-        <Label Content="Language:" HorizontalAlignment="Left" Margin="10,144,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="White"/>
-        <Button x:Name="GameDir_Button" Content="" HorizontalAlignment="Left" Margin="491,36,0,0" VerticalAlignment="Top" Width="29" Height="27" Click="GameDir_Button_Click"/>
-        <Button x:Name="ModDir_Button" Content="" HorizontalAlignment="Left" Margin="491,94,0,0" VerticalAlignment="Top" Width="29" Height="27" Click="ModDir_Button_Click"/>
+        <Label Content="{DynamicResource m_LanguageLabel}" HorizontalAlignment="Left" Margin="10,144,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="White"/>
+        <Button x:Name="GameDir_Button" Content="..." HorizontalAlignment="Left" Margin="491,36,0,0" VerticalAlignment="Top" Width="29" Height="27" Click="GameDir_Button_Click" FontWeight="Bold"/>
+        <Button x:Name="ModDir_Button" Content="..." HorizontalAlignment="Left" Margin="491,94,0,0" VerticalAlignment="Top" Width="29" Height="27" Click="ModDir_Button_Click" FontWeight="Bold"/>
 
     </Grid>
 </Window>

@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.IO;
+using System.Globalization;
 
 namespace EC_Launcher
 {
@@ -13,8 +14,8 @@ namespace EC_Launcher
     {
         public SettingsWindow()
         {
-            InitializeComponent();
-        }
+            InitializeComponent();           
+        }       
 
         public void SetUIValues(string GamePath, string ModPath, string Language)
         {
@@ -40,10 +41,13 @@ namespace EC_Launcher
             if (Language_CBox.SelectedIndex == 0)
             {
                 SettingsXML.AppLanguage = "English";
+                App.Language = App.Languages[0]; //en-US           
+
             }
             else if(Language_CBox.SelectedIndex == 1)
             {
-                SettingsXML.AppLanguage = "Russian";
+                SettingsXML.AppLanguage = "Russian";               
+                App.Language = App.Languages[1]; //ru-RU
             }
             
         }

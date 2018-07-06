@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 
 namespace Updater
@@ -11,33 +12,29 @@ namespace Updater
         {
             try
             {
-                string process = args[1].Replace(".exe", "");
-
-                Console.WriteLine("Terminate process!");
-                while (Process.GetProcessesByName(process).Length > 0)
+                foreach(var arg in args)
                 {
-                    Process[] myProcesses2 = Process.GetProcessesByName(process);
-                    for (int i = 1; i < myProcesses2.Length; i++)
-                    {
-                        myProcesses2[i].Kill();
-                    }
-
-                    Thread.Sleep(300);
+                    Console.WriteLine(arg);
                 }
+                string programmFromCache = args[0];
+                string pocessName = Path.GetFileNameWithoutExtension(args[0]);
+                string exeFileName = Path.GetFileName(args[0]);
+                Process[] myProcesses = Process.GetProcessesByName(pocessName);
+                Console.WriteLine(myProcesses.Length);
 
-                if (File.Exists(args[1]))
+                for (int i = 0; i < myProcesses.Length; i++)
                 {
-                    File.Delete(args[1]);
+                    myProcesses[i].Kill();
+                    Thread.Sleep(2000);
                 }
+                Console.WriteLine(myProcesses.Length);
 
-                File.Move(args[1], args[0]);
-
-                Console.WriteLine("Starting " + args[1]);
-                Process.Start(args[1]);
+                File.Copy(programmFromCache, Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\" + exeFileName, true);                
+                Process.Start(exeFileName);                               
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.Message);                
             }
         }
     }

@@ -19,7 +19,7 @@
         </Grid.Background>
         <TextBox x:Name="Body_TBox" HorizontalAlignment="Left" Height="145" Margin="10,104,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="424"/>
 
-        <Button x:Name="SendButton" Content="Send" HorizontalAlignment="Left" Margin="359,264,0,0" FontWeight="Bold" FontSize="14" FontFamily="Stencil" VerticalAlignment="Top" Width="75" Click="SendButton_Click">
+        <Button x:Name="SendButton" Content="{DynamicResource m_SendButton}" HorizontalAlignment="Left" Margin="359,264,0,0" FontWeight="Bold" FontSize="14" FontFamily="Stencil" VerticalAlignment="Top" Width="75" Click="SendButton_Click">
             <Button.BorderBrush>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Black" Offset="0"/>
@@ -34,7 +34,7 @@
             </Button.Foreground>
         </Button>
         <TextBox x:Name="Name_TBox" HorizontalAlignment="Left" Height="23" Margin="10,37,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Your Name: " HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" Width="120" FontWeight="Bold" Foreground="#FFFFFDFD" FontStyle="Italic"/>
-        <Label Content="Write about bug: " HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" Width="120" FontWeight="Bold" Foreground="#FFFFFDFD" FontStyle="Italic"/>
+        <Label Content="{DynamicResource m_YourNameLabel}" HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" Width="120" FontWeight="Bold" Foreground="#FFFFFDFD" FontStyle="Italic"/>
+        <Label Content="{DynamicResource m_WriteAboutBugLabel}" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" Width="120" FontWeight="Bold" Foreground="#FFFFFDFD" FontStyle="Italic"/>
     </Grid>
 </Window>

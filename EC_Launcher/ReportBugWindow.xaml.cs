@@ -61,6 +61,6 @@ namespace EC_Launcher
             {
                 MessageBox.Show(this, $"Network connection error, please check the network conection", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
+        }      
     }
 }
