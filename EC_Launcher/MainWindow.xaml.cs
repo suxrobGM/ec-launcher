@@ -37,16 +37,32 @@ namespace EC_Launcher
 
         private void OpenGameButton_Click(object sender, RoutedEventArgs e)
         {
-            string exePath = App.globalVars.GameDirectory + @"\hoi4.exe";
-            //string arguments = @"-mod=mod\EC2013.mod";
-            try
+            if(App.globalVars.IsSteamVersion)
             {
-                Process.Start(exePath);
+                try
+                {
+                    string steamPath = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Valve\Steam", "InstallPath", String.Empty).ToString() + "\\steam.exe";                
+                    string steamArguments = "-applaunch 394360"; //id лицензионный версия хои из стима
+                    Process.Start(steamPath, steamArguments);
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(this, ex.Message, this.FindResource("m_ERROR").ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
-            catch(Exception)
+            else
             {
-                MessageBox.Show(this, this.FindResource("m_InvalidGamePath").ToString(), this.FindResource("m_ERROR").ToString(), MessageBoxButton.OK, MessageBoxImage.Error);                
-            }
+                string exePath = App.globalVars.GameDirectory + @"\hoi4.exe";
+                //string arguments = @"-mod=mod\EC2013.mod";
+                try
+                {
+                    Process.Start(exePath);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show(this, this.FindResource("m_InvalidGamePath").ToString(), this.FindResource("m_ERROR").ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }           
         }
 
         

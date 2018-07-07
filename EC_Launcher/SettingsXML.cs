@@ -17,7 +17,7 @@ namespace EC_Launcher
             if (!File.Exists("Settings.xml") || File.ReadAllText("Settings.xml") == String.Empty)
             {
                 File.Create("Settings.xml").Close();
-                this.SetDefaultSettings(App.globalVars.GameDirectory, App.globalVars.ModDirectory);
+                this.SetDefaultSettings(App.globalVars.GameDirectory, App.globalVars.ModDirectory, App.globalVars.IsSteamVersion);
             }
             xDoc = XDocument.Load(settingsXML_File);
         }
@@ -61,13 +61,43 @@ namespace EC_Launcher
                 xDoc.Save(settingsXML_File);
             }
         }
-        
-        private void SetDefaultSettings(string GamePath, string ModPath, string Language = "English")
+
+        public bool IsSteamVersion
         {
+            get
+            {
+                var value = xDoc.Element("General_Settings").Element("Is_Steam_Version").Value;
+                if(value=="True")
+                {
+                    return true;
+                }
+                return false;
+            }
+            set
+            {
+                string SteamVersion_TF = "False";
+                if (value==true)
+                {
+                    SteamVersion_TF = "True";
+                }
+                xDoc.Element("General_Settings").Element("Is_Steam_Version").Value = SteamVersion_TF;
+                xDoc.Save(settingsXML_File);
+            }
+        }
+        
+        private void SetDefaultSettings(string GamePath, string ModPath, bool isSteamVersion, string Language = "English")
+        {
+            string SteamVersion_TF = "False";
+            if (isSteamVersion)
+            {
+                SteamVersion_TF = "True";
+            }
+
             XDocument SettingsDoc = new XDocument(
                                             new XElement("General_Settings",
                                                 new XElement("Game_Path", GamePath),
                                                 new XElement("Mod_Path", ModPath),
+                                                new XElement("Is_Steam_Version", SteamVersion_TF),
                                                 new XElement("Language", Language)
                                             )
                                         );

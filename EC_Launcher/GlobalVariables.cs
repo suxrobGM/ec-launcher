@@ -14,22 +14,26 @@ namespace EC_Launcher
         private Version appVersion;
         private Version modVersion;
         private bool devMode;
-        private string cacheFolder;             
+        private string cacheFolder;
+        private bool isSteamVersion;
 
         public GlobalVariables()
         {
             appVersion = Assembly.GetExecutingAssembly().GetName().Version;
             modVersion = new Version("0.6.3.0"); //default start version
             devMode = false;
+            isSteamVersion = false;
             cacheFolder = "_cache\\Economic_Crisis";
 
             string steamPath = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Valve\Steam", "InstallPath", String.Empty).ToString();
-            string gamePath = steamPath + @"\steamapps\common\Hearts of Iron IV";
-            string modPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod", "Economic_Crisis");
+            string gameSteamPath = steamPath + @"\steamapps\common\Hearts of Iron IV";
+            string modPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod", "Economic_Crisis");           
 
-            if (Directory.Exists(gamePath) && (!File.Exists("Settings.XML") || File.ReadAllText("Settings.XML") == String.Empty))
+            //First application launch
+            if (Directory.Exists(gameSteamPath) && (!File.Exists("Settings.XML") || File.ReadAllText("Settings.XML") == String.Empty))
             {
-                gameDir = gamePath;
+                gameDir = gameSteamPath;
+                isSteamVersion = true;
             }           
 
             if(Directory.Exists(modPath) && (!File.Exists("Settings.XML") || File.ReadAllText("Settings.XML") == String.Empty))
@@ -63,6 +67,19 @@ namespace EC_Launcher
         public Version ApplicationVersion { get => appVersion; }
         public Version ModVersion { get => modVersion; set => modVersion = value; }
         public string CacheFolder { get => cacheFolder; set => cacheFolder = value; }
+        public bool IsSteamVersion
+        {
+            get => isSteamVersion;
+            set
+            {
+                isSteamVersion = value;
+                if (App.settingsXML != null)
+                {
+                    App.settingsXML.IsSteamVersion = value;
+                }
+                RaisePropertyChanged("IsSteamVersion");
+            }
+        }
         public string ModDirectory
         {
             get

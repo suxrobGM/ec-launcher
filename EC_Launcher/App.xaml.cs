@@ -76,6 +76,7 @@ namespace EC_Launcher
             globalVars.ModVersion = new Version(versionXML.ModVersion);
             globalVars.ModDirectory = settingsXML.ModPath;
             globalVars.GameDirectory = settingsXML.GamePath;
+            globalVars.IsSteamVersion = settingsXML.IsSteamVersion;
 
             m_Languages.Clear();
             m_Languages.Add(new CultureInfo("en-US")); //Нейтральная культура для этого проекта

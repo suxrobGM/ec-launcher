@@ -19,6 +19,7 @@
     <v:String x:Key="m_GameDirLabel">Game Directory:</v:String>
     <v:String x:Key="m_ModDirLabel">Mod Directory:</v:String>
     <v:String x:Key="m_LanguageLabel">Language:</v:String>
+    <v:String x:Key="m_SteamVersionChkBox">Steam version (original game)</v:String>
     
     <!--Report Bug Window-->
     <v:String x:Key="m_YourNameLabel">Your Name:</v:String>
@@ -43,6 +44,7 @@
     <v:String x:Key="m_SetDescText">Please write about bug</v:String>
     <v:String x:Key="m_MessageSuccessfullySentText">Your message was successfully sent to suxrobGM@gmail.com \nThanks for reported bug, we will fix it soon ;)</v:String>
     <v:String x:Key="m_NetworkErrorText">Network connection error, please check the network connection</v:String>
+    <v:String x:Key="m_HaveNotSteamVersion">You do not have a steam version of the original game</v:String>
     
     <!--Progress Bar Status Texts-->
     <v:String x:Key="m_UpdatingLauncher">Updating EC_Launcher.exe ...</v:String>

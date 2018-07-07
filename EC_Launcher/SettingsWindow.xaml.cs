@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.IO;
+using Microsoft.Win32;
 
 namespace EC_Launcher
 {
@@ -76,6 +77,30 @@ namespace EC_Launcher
         {
             e.Cancel = true;
             this.Visibility = Visibility.Hidden;
+        }
+
+        private void SteamVer_ChkBox_Checked(object sender, RoutedEventArgs e)
+        {
+            string steamPath = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Valve\Steam", "InstallPath", String.Empty).ToString();
+            string gameSteamPath = steamPath + @"\steamapps\common\Hearts of Iron IV";
+
+            if (SteamVersion_ChkBox.IsChecked.Value)
+            {
+                if(!Directory.Exists(gameSteamPath))
+                {
+                    System.Windows.MessageBox.Show(this, this.FindResource("m_HaveNotSteamVersion").ToString(), this.FindResource("m_ERROR").ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
+                    SteamVersion_ChkBox.IsChecked = false;
+                    App.globalVars.IsSteamVersion = false;
+                }
+                else
+                {
+                    App.globalVars.IsSteamVersion = true;
+                }
+            }
+            else
+            {
+                App.globalVars.IsSteamVersion = false;
+            }
         }
     }
 }
