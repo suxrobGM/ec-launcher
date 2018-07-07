@@ -3,6 +3,8 @@ using System.Windows;
 using System.IO;
 using System.Diagnostics;
 using Microsoft.Win32;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace EC_Launcher
 {
@@ -37,7 +39,16 @@ namespace EC_Launcher
 
         private void OpenGameButton_Click(object sender, RoutedEventArgs e)
         {
-            if(App.globalVars.IsSteamVersion)
+            try
+            {
+                SetLastModInGameSettings();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, this.FindResource("m_ERROR").ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            if (App.globalVars.IsSteamVersion)
             {
                 try
                 {
@@ -65,7 +76,42 @@ namespace EC_Launcher
             }           
         }
 
-        
+        private void SetLastModInGameSettings()
+        {
+            string gameSettingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV");
+            string gameSettingsFile = gameSettingsPath + "\\settings.txt";
+
+            if (File.Exists(gameSettingsFile))
+            {
+                var buffer = new List<string>(File.ReadAllLines(gameSettingsFile).ToList());
+                string[] lastModRows =
+                {
+                    "last_mods={",
+                    "\t\"mod/EC2013.mod\"",
+                    "}"
+                };
+                int count = 0;
+
+                for (var i = 0; i < buffer.Count; i++)
+                {
+                    if (buffer[i].Contains("last_mods"))
+                    {
+                        while (!buffer[i].Contains("}"))
+                        {
+                            count++;
+                            i++;
+                        }
+                        break;
+                    }
+                }
+                if (buffer.Contains("last_mods={") && count > 0)
+                {
+                    buffer.RemoveRange(buffer.IndexOf("last_mods={"), count+1);
+                }
+                buffer.AddRange(lastModRows);
+                File.WriteAllLines(gameSettingsFile, buffer);
+            }
+        }
 
         private void CheckUpdateButton_Click(object sender, RoutedEventArgs e)
         {
