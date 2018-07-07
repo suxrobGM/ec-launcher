@@ -2,6 +2,7 @@
 using System.Windows;
 using System.IO;
 using System.Diagnostics;
+using Microsoft.Win32;
 
 namespace EC_Launcher
 {
@@ -9,10 +10,10 @@ namespace EC_Launcher
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
-        SettingsWindow SettingsWind; //Новая окна Settings
-        ReportBugWindow ReportBugWind;
-        DonateWindow donateWindow;                    
+    {      
+        private SettingsWindow SettingsWind; //Новая окна Settings
+        private ReportBugWindow ReportBugWind;
+        private DonateWindow donateWindow;                    
 
         public MainWindow()
         {
@@ -21,47 +22,22 @@ namespace EC_Launcher
 
             SettingsWind = new SettingsWindow();
             ReportBugWind = new ReportBugWindow();
-            donateWindow = new DonateWindow();
+            donateWindow = new DonateWindow();                                                                     
 
-            if (!Directory.Exists(GlobalVariables.CacheFolder + @"\launcher"))
-            {
-                Directory.CreateDirectory(GlobalVariables.CacheFolder + @"\launcher");
-            }
-
-            if (!File.Exists("HashList.md5"))
-            {
-                File.Create("HashList.md5").Close();
-            }
-
-            //если не существует файл, то создать файл и запольнить 
-            if (!File.Exists("Settings.xml"))
-            {
-                File.Create("Settings.xml").Close();
-                SettingsXML.SetDefaultSettings(GlobalVariables.GameDirectory, GlobalVariables.ModDirectory);
-            }
-            //Загрузить данные из xml файла
-            SettingsWind.SetUIValues(SettingsXML.GamePath, SettingsXML.ModPath, SettingsXML.AppLanguage);
-
-            if (!File.Exists("Version.xml"))
-            {
-                File.Create("Version.xml").Close();
-                VersionXML.SetDefaultVersion(GlobalVariables.ModVersion.ToString(), GlobalVariables.ApplicationVersion.ToString());
-            }
-
-            if (!GlobalVariables.DevMode)
+            if (!App.globalVars.DevMode)
             {
                 GenerateHashButton.Visibility = Visibility.Hidden;
                 DeveloperMode_Label.Visibility = Visibility.Hidden;
             }
 
-            LauncherVersionLabel.Content = $"{this.FindResource("m_LauncherVersionLabel")} {VersionXML.AppVersion}";
-            ModVersionLabel.Content = $"{this.FindResource("m_ModVersionLabel")} {VersionXML.ModVersion}" ;
+            LauncherVersionLabel.Content = $"{this.FindResource("m_LauncherVersionLabel")} {App.globalVars.ApplicationVersion}";
+            ModVersionLabel.Content = $"{this.FindResource("m_ModVersionLabel")} {App.globalVars.ModVersion}" ;
         }
 
 
         private void OpenGameButton_Click(object sender, RoutedEventArgs e)
         {
-            string exePath = GlobalVariables.GameDirectory + @"\hoi4.exe";
+            string exePath = App.globalVars.GameDirectory + @"\hoi4.exe";
             //string arguments = @"-mod=mod\EC2013.mod";
             try
             {

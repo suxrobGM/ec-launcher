@@ -13,37 +13,31 @@ namespace EC_Launcher
     {
         public SettingsWindow()
         {
-            InitializeComponent();           
-        }       
+            InitializeComponent();
+            DataContext = App.globalVars;
 
-        public void SetUIValues(string GamePath, string ModPath, string Language)
-        {
-            GameDir_TBox.Text = GamePath;
-            GlobalVariables.GameDirectory = GamePath;
-
-            ModDir_TBox.Text = ModPath;
-            GlobalVariables.ModDirectory = ModPath;
-
-            if (Language == "English")
-            {
-                Language_CBox.SelectedIndex = 0;
-            }               
-            else if(Language == "Russian")
+            string Language = App.settingsXML.AppLanguage;
+            if (Language == "Russian")
             {
                 Language_CBox.SelectedIndex = 1;
-            }                            
-        }        
+            }
+            else //Language == "English"
+            {
+                Language_CBox.SelectedIndex = 0;
+            }
+            
+        }                
 
         private void Language_CBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (Language_CBox.SelectedIndex == 0)
             {
-                SettingsXML.AppLanguage = "English";
+                App.settingsXML.AppLanguage = "English";
                 App.Language = App.Languages[0]; //en-US           
             }
             else if(Language_CBox.SelectedIndex == 1)
             {
-                SettingsXML.AppLanguage = "Russian";               
+                App.settingsXML.AppLanguage = "Russian";               
                 App.Language = App.Languages[1]; //ru-RU
             }            
         }
@@ -54,10 +48,7 @@ namespace EC_Launcher
             {
                 dialog.Description = this.FindResource("m_SetGameDirDesc").ToString();                             
                 dialog.ShowDialog();
-
-                GlobalVariables.GameDirectory = dialog.SelectedPath;
-                SettingsXML.GamePath = GlobalVariables.GameDirectory;
-                GameDir_TBox.Text = GlobalVariables.GameDirectory;
+                App.globalVars.GameDirectory = dialog.SelectedPath;                               
             }         
         }
 
@@ -66,22 +57,18 @@ namespace EC_Launcher
             using (var dialog = new FolderBrowserDialog())
             {
                 dialog.Description = this.FindResource("m_SetModDirDesc").ToString();
-                string DefaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod");
-                DirectoryInfo HoiModDir = new DirectoryInfo(DefaultPath);               
+                string defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod");                              
 
-                if (HoiModDir.Exists)
+                if (Directory.Exists(defaultPath))
                 {
-                    dialog.SelectedPath = HoiModDir.ToString();                   
+                    dialog.SelectedPath = defaultPath.ToString();                   
                 }
                 else
                 {
                     dialog.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 }
                 dialog.ShowDialog();
-
-                GlobalVariables.ModDirectory = dialog.SelectedPath;
-                SettingsXML.ModPath = GlobalVariables.ModDirectory;
-                ModDir_TBox.Text = GlobalVariables.ModDirectory;
+                App.globalVars.ModDirectory = dialog.SelectedPath;                               
             }
         }
 

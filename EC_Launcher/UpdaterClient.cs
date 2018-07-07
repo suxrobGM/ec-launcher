@@ -5,7 +5,6 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Windows;
 using System.Diagnostics;
 
@@ -32,7 +31,7 @@ namespace EC_Launcher
                 dbx = new DropboxClient(tokenDropbox);
                 var streamXML = dbx.Files.DownloadAsync(rootFolder + "/" + versionXMLFile).Result.GetContentAsStreamAsync().Result;
                 this.remoteVersionXML = XDocument.Load(streamXML);
-                this.remoteVersionXML.Save(GlobalVariables.CacheFolder + @"\launcher\Version.xml");              
+                this.remoteVersionXML.Save(App.globalVars.CacheFolder + @"\launcher\Version.xml");              
             }
             catch(Exception)
             {
@@ -46,7 +45,7 @@ namespace EC_Launcher
         /// <returns>returns true if application has an update otherwise false</returns>
         public bool CheckAppUpdate()
         {          
-            if (GlobalVariables.ApplicationVersion > RemoteAppVersion)
+            if (App.globalVars.ApplicationVersion > RemoteAppVersion)
             {              
                 return true;
             }
@@ -59,11 +58,11 @@ namespace EC_Launcher
         /// <returns>returns true if mod has an update otherwise false</returns>
         public bool CheckModUpdate()
         {
-            if (GlobalVariables.ModVersion > RemoteModVersion)
+            if (App.globalVars.ModVersion > RemoteModVersion)
             {               
                 return true;
             }
-            //MoveFile(GlobalVariables.CacheFolder + @"\launcher\Version.xml", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            //MoveFile(App.globalVars.CacheFolder + @"\launcher\Version.xml", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
             return false;
         }
         
@@ -77,18 +76,22 @@ namespace EC_Launcher
                     var localHashList = new List<KeyValuePair<string, string>>();
 
                     var streamRemoteHashFile = dbx.Files.DownloadAsync(rootFolder + "/launcher/HashList.md5").Result.GetContentAsStreamAsync().Result;
-                    var streamLocalHashFile = new FileStream("HashList.md5", FileMode.Open);
+                    var streamLocalHashFile = new FileStream("HashList.md5", FileMode.Open);                  
 
                     remoteHashList = HashFile.GetHashListFromFile((FileStream)streamRemoteHashFile);
                     localHashList = HashFile.GetHashListFromFile(streamLocalHashFile);
 
-                    // UNIX style file path '/'
-                    // Windows style file path '\\'
+                    // UNIX path separator '/'
+                    // Windows path separator '\\'
+                    // All files convert to UNIX path separator
                     var ChangedFilesList = localHashList.Except(remoteHashList).Select(item => item.Key.Replace("\\", "/")).ToList();
                     var LocalFilesList = (from item in localHashList select item.Key.Replace("\\", "/")).ToList();
                     var RemoteFilesList = (from item in remoteHashList select item.Key.Replace("\\", "/")).ToList();
                     var NewFilesList = RemoteFilesList.Except(LocalFilesList).ToList();
                     var DeletedFilesList = LocalFilesList.Except(RemoteFilesList).ToList();
+
+                    // Add new HashList.md5 to downloading queue
+                    NewFilesList.Add("/launcher/HashList.md5");                  
 
                     int maxDownloadedFiles = ChangedFilesList.Count + NewFilesList.Count;
 
@@ -122,8 +125,20 @@ namespace EC_Launcher
                     foreach (var file in DeletedFilesList)
                     {
                         string fileNameWindows = file.Replace("/", "\\");
-                        //File.Delete(GlobalVariables.ModDirectory + fileNameWindows);
-                        File.Create(GlobalVariables.CacheFolder + fileNameWindows + "_deleted");
+                        File.Delete(App.globalVars.ModDirectory + fileNameWindows);
+                        //File.Create(App.globalVars.CacheFolder + fileNameWindows + "_deleted");
+                    }
+
+                    //получаем список скачанных файлов в папке кеша
+                    string[] cacheFiles = Directory.GetFiles(App.globalVars.CacheFolder, "*", SearchOption.AllDirectories);
+
+                    //перемещаем файлы из папка кеша в папку мода
+                    foreach (var file in cacheFiles)
+                    {
+                        if(!file.Contains("EC_Launcher.exe") && !file.Contains("Settings.xml"))
+                        {
+                            MoveFile(file, App.globalVars.ModDirectory);
+                        }
                     }
                 }
                 catch (Exception)
@@ -147,7 +162,7 @@ namespace EC_Launcher
                         
                         using (var stream = await response.GetContentAsStreamAsync())
                         {
-                            using (var file = new FileStream(GlobalVariables.CacheFolder + @"\launcher\EC_Launcher.exe", FileMode.OpenOrCreate))
+                            using (var file = new FileStream(App.globalVars.CacheFolder + @"\launcher\EC_Launcher.exe", FileMode.OpenOrCreate))
                             {
                                 var length = stream.Read(buffer, 0, bufferSize);
 
@@ -180,7 +195,7 @@ namespace EC_Launcher
             {              
                 byte[] data = await response.GetContentAsByteArrayAsync();
                 string fileNameWindows = file.Replace("/", "\\");            
-                File.WriteAllBytes(GlobalVariables.CacheFolder + fileNameWindows, data);
+                File.WriteAllBytes(App.globalVars.CacheFolder + fileNameWindows, data);
             }
         }
 
@@ -192,7 +207,7 @@ namespace EC_Launcher
         private void MoveFile(string sourceFileFromCacheFolder, string destDirName)
         {           
             int fullLength = sourceFileFromCacheFolder.Length;
-            int cacheFolderLength = GlobalVariables.CacheFolder.Length;
+            int cacheFolderLength = App.globalVars.CacheFolder.Length;
 
             string fileName = sourceFileFromCacheFolder.Remove(0, cacheFolderLength);
             string dirName = Path.GetDirectoryName(fileName);
@@ -208,7 +223,7 @@ namespace EC_Launcher
         private void MessageToUserAndClose()
         {
             MessageBox.Show("The application update has successfully downloaded, please press OK for continue", "Downloaded", MessageBoxButton.OK, MessageBoxImage.Information);
-            string arguments = GlobalVariables.CacheFolder + @"\launcher\EC_Launcher.exe";
+            string arguments = App.globalVars.CacheFolder + @"\launcher\EC_Launcher.exe";
             Process.Start("Updater.exe", arguments);
         }
     }

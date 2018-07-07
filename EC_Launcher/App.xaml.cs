@@ -12,6 +12,11 @@ namespace EC_Launcher
     /// </summary>
     public partial class App : Application
     {
+        //Глобальный переменный содержить себя основные данные и используется во всех файлы проекта
+        public static GlobalVariables globalVars;
+        public static SettingsXML settingsXML;
+        public static VersionXML versionXML;
+
         private static List<CultureInfo> m_Languages = new List<CultureInfo>();
         //Евент для оповещения всех окон приложения
         //public static event EventHandler LanguageChanged;
@@ -63,9 +68,18 @@ namespace EC_Launcher
         }
         public App()
         {
+            globalVars = new GlobalVariables();
+            settingsXML = new SettingsXML();
+            versionXML = new VersionXML();
+
+            //Load config from XML file
+            globalVars.ModVersion = new Version(versionXML.ModVersion);
+            globalVars.ModDirectory = settingsXML.ModPath;
+            globalVars.GameDirectory = settingsXML.GamePath;
+
             m_Languages.Clear();
             m_Languages.Add(new CultureInfo("en-US")); //Нейтральная культура для этого проекта
-            m_Languages.Add(new CultureInfo("ru-RU"));
+            m_Languages.Add(new CultureInfo("ru-RU"));          
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)
@@ -74,7 +88,7 @@ namespace EC_Launcher
             {
                 if(arg == "-dev_mode") //аргумент -dev_mode включает режим разработчика
                 {
-                    GlobalVariables.DevMode = true;
+                    globalVars.DevMode = true;
                 }
             }    
         }

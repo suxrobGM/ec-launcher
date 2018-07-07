@@ -26,8 +26,8 @@ namespace EC_Launcher
         public async void GetGameFileHashesAsync(IProgress<int> progress)
         {          
             //получить польный список файлов(где-то 17-18к шт.)
-            string[] files = Directory.GetFiles(GlobalVariables.ModDirectory, "*", SearchOption.AllDirectories);
-            MaxFiles = Directory.GetFiles(GlobalVariables.ModDirectory, "*", SearchOption.AllDirectories).Count((file) => { return !file.Contains(".git") ? true : false; });
+            string[] files = Directory.GetFiles(App.globalVars.ModDirectory, "*", SearchOption.AllDirectories);
+            MaxFiles = Directory.GetFiles(App.globalVars.ModDirectory, "*", SearchOption.AllDirectories).Count((file) => { return !file.Contains(".git") ? true : false; });
 
             HashDict =  await GetHashListAsync(files, progress);
             
@@ -65,7 +65,7 @@ namespace EC_Launcher
                     //не счытивать файлы гита и лаунчера
                     if (!file.Contains(".git") && !file.Contains(".xml") && !file.Contains("HashList.md5") && !file.Contains("EC_Launcher.exe")) 
                     {
-                        string file_name = file.Remove(0, GlobalVariables.ModDirectory.Length);
+                        string file_name = file.Remove(0, App.globalVars.ModDirectory.Length);
 
                         using (var stream = File.OpenRead(file))
                         {

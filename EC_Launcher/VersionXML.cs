@@ -1,37 +1,51 @@
 ﻿using System;
+using System.IO;
 using System.Xml.Linq;
 
 namespace EC_Launcher
 {
-    public static class VersionXML
+    public class VersionXML
     {
-        private static string versionXML = "Version.xml";
-        private static XDocument versionDoc = XDocument.Load(versionXML);
-        public static string ModVersion
+        private string versionXML_File;
+        private XDocument xDoc;
+
+        public VersionXML()
+        {
+            versionXML_File = "Version.xml";           
+
+            if (!File.Exists("Version.xml") || File.ReadAllText("Version.xml") == String.Empty)
+            {
+                File.Create("Version.xml").Close();
+                this.SetDefaultVersion(App.globalVars.ModVersion.ToString(), App.globalVars.ApplicationVersion.ToString());
+            }
+            xDoc = XDocument.Load(versionXML_File);
+        }
+
+        public string ModVersion
         {
             get
             {
-                var modVersion = versionDoc.Element("Version").Element("Mod_Version").Value;
+                var modVersion = xDoc.Element("Version").Element("Mod_Version").Value;
                 return modVersion;
             }
             set
             {
-                versionDoc.Element("Version").Element("Mod_Version").Value = value;
-                versionDoc.Save(versionXML);
+                xDoc.Element("Version").Element("Mod_Version").Value = value;
+                xDoc.Save(versionXML_File);
             }
         }
 
-        public static string AppVersion
+        public string AppVersion
         {
             get
             {
-                var appVersion = versionDoc.Element("Version").Element("App_Version").Value;
+                var appVersion = xDoc.Element("Version").Element("App_Version").Value;
                 return appVersion;
             }
             set
             {
-                versionDoc.Element("Version").Element("App_Version").Value = value;
-                versionDoc.Save(versionXML);
+                xDoc.Element("Version").Element("App_Version").Value = value;
+                xDoc.Save(versionXML_File);
             }
         }
         
@@ -44,7 +58,7 @@ namespace EC_Launcher
             return Version.Parse(serverVersionXML.Element("Version").Element("Mod_Version").Value);
         }
 
-        public static void SetDefaultVersion(string ModVersion, string AppVersion)
+        private void SetDefaultVersion(string ModVersion, string AppVersion)
         {
             XDocument VersionDoc = new XDocument(
                                         new XElement("Version",
@@ -53,7 +67,7 @@ namespace EC_Launcher
                                             new XElement("App_Version", AppVersion)
                                             )
                                         );
-            VersionDoc.Save(versionXML);
+            VersionDoc.Save(versionXML_File);
         }
     }
 }

@@ -1,54 +1,68 @@
 ﻿using System;
+using System.IO;
 using System.Xml.Linq;
 
 namespace EC_Launcher
 {
-    public static class SettingsXML
+    public class SettingsXML
     {
-        private static string settingsXML = "Settings.xml";
-        private static XDocument SettingsDoc = XDocument.Load(settingsXML);
+        private string settingsXML_File;
+        private XDocument xDoc;
 
-        public static string GamePath
+        public SettingsXML()
+        {
+            settingsXML_File = "Settings.xml";
+
+            //если не существует файл, то создать файл и запольнить 
+            if (!File.Exists("Settings.xml") || File.ReadAllText("Settings.xml") == String.Empty)
+            {
+                File.Create("Settings.xml").Close();
+                this.SetDefaultSettings(App.globalVars.GameDirectory, App.globalVars.ModDirectory);
+            }
+            xDoc = XDocument.Load(settingsXML_File);
+        }
+
+        public string GamePath
         {
             get
             {
-                var gamePath = SettingsDoc.Element("General_Settings").Element("Game_Path").Value;
+                var gamePath = xDoc.Element("General_Settings").Element("Game_Path").Value;
                 return gamePath;
             }
             set
-            {
-                SettingsDoc.Element("General_Settings").Element("Game_Path").Value = value;         
-                SettingsDoc.Save(settingsXML);
+            {               
+                xDoc.Element("General_Settings").Element("Game_Path").Value = value;
+                xDoc.Save(settingsXML_File);
             }
         }
-        public static string ModPath
+        public string ModPath
         {
             get
             {
-                var modPath = SettingsDoc.Element("General_Settings").Element("Mod_Path").Value;
+                var modPath = xDoc.Element("General_Settings").Element("Mod_Path").Value;
                 return modPath;
             }
             set
             {
-                SettingsDoc.Element("General_Settings").Element("Mod_Path").Value = value;
-                SettingsDoc.Save(settingsXML);
+                xDoc.Element("General_Settings").Element("Mod_Path").Value = value;
+                xDoc.Save(settingsXML_File);
             }
         }
-        public static string AppLanguage
+        public string AppLanguage
         {
             get
             {
-                var language = SettingsDoc.Element("General_Settings").Element("Language").Value;
+                var language = xDoc.Element("General_Settings").Element("Language").Value;
                 return language;
             }
             set
             {
-                SettingsDoc.Element("General_Settings").Element("Language").Value = value;
-                SettingsDoc.Save(settingsXML);
+                xDoc.Element("General_Settings").Element("Language").Value = value;
+                xDoc.Save(settingsXML_File);
             }
         }
         
-        public static void SetDefaultSettings(string GamePath, string ModPath, string Language = "English")
+        private void SetDefaultSettings(string GamePath, string ModPath, string Language = "English")
         {
             XDocument SettingsDoc = new XDocument(
                                             new XElement("General_Settings",
@@ -57,7 +71,7 @@ namespace EC_Launcher
                                                 new XElement("Language", Language)
                                             )
                                         );
-            SettingsDoc.Save(settingsXML);
+            SettingsDoc.Save(settingsXML_File);
         }
     }
 }
