@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EC_Launcher"
         mc:Ignorable="d"
-        Title="DonateWindow" 
+        Title="Donate" 
         Height="330.667" 
         Width="457.333" 
         Closing="Window_Closing">

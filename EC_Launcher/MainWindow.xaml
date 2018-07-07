@@ -26,7 +26,7 @@
             </WebBrowser.Effect>
         </WebBrowser>
 
-        <StackPanel HorizontalAlignment="Left" Height="186" Margin="10,140,0,0" VerticalAlignment="Top" Width="158">
+        <StackPanel HorizontalAlignment="Left" Height="186" Margin="10,140,0,0" VerticalAlignment="Top" Width="176">
             <StackPanel.Background>
                 <RadialGradientBrush>
                     <GradientStop Color="Black"/>
@@ -37,13 +37,12 @@
             <Button 
                 x:Name="OpenGameButton"
                 Content="{DynamicResource m_OpenGame}"
-                Style="{StaticResource CustomButton}"                
-                HorizontalAlignment="Left" 
+                Style="{StaticResource CustomButton}" 
                 VerticalAlignment="Top" 
-                Width="158" 
+                Width="176" 
                 Height="28"                 
                 Margin="0" 
-                Click="OpenGameButton_Click"/>
+                Click="OpenGameButton_Click" HorizontalAlignment="Left"/>
 
             <Button 
                 x:Name="CheckUpdateButton" 
@@ -51,18 +50,18 @@
                 Style="{StaticResource CustomButton}" 
                 HorizontalAlignment="Left" 
                 VerticalAlignment="Top" 
-                Width="158" 
+                Width="176" 
                 Height="28"                
                 Margin="0,3,0,0" 
                 Click="CheckUpdateButton_Click"/>
 
             <Button 
                 x:Name="ReportBugButton" 
-                Content="{DynamicResource m_CheckUpdate}" 
+                Content="{DynamicResource m_ReportBug}" 
                 Style="{StaticResource CustomButton}"
                 HorizontalAlignment="Left" 
                 VerticalAlignment="Top" 
-                Width="158" 
+                Width="176" 
                 Height="27"               
                 Margin="0,3,0,0" 
                 Click="ReportBugButton_Click"/>
@@ -73,7 +72,7 @@
                 Style="{StaticResource CustomButton}"
                 HorizontalAlignment="Left" 
                 VerticalAlignment="Top" 
-                Width="158" 
+                Width="176" 
                 Height="28"                
                 Margin="0,3,0,0" Click="DonateButton_Click"/>
 
@@ -83,7 +82,7 @@
                 Style="{StaticResource CustomButton}"
                 HorizontalAlignment="Left" 
                 VerticalAlignment="Top" 
-                Width="158" 
+                Width="176" 
                 Height="28" 
                 Margin="0,3,0,0" 
                 Click="SettingsButton_Click"/>
@@ -94,7 +93,7 @@
                 Style="{StaticResource CustomButton}"
                 HorizontalAlignment="Left" 
                 VerticalAlignment="Top" 
-                Width="158"
+                Width="176"
                 Height="27" 
                 Margin="0,3,0,0" 
                 Click="GenerateHashButton_Click"/>
@@ -119,8 +118,8 @@
                 </LinearGradientBrush>
             </Label.Foreground>
         </Label>
-        <Label x:Name="DeveloperMode_Label" Content="{DynamicResource m_DevMode}" HorizontalAlignment="Left" Margin="678,455,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFF30000" FontWeight="Bold"/>
-        <Label Content="{DynamicResource m_FollowUsLabel}" HorizontalAlignment="Left" Margin="10,386,0,0" VerticalAlignment="Top" FontWeight="Bold">
+        <Label x:Name="DeveloperMode_Label" Content="{DynamicResource m_DevMode}" HorizontalAlignment="Left" Margin="632,455,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFF30000" FontWeight="Bold"/>
+        <Label Content="{DynamicResource m_FollowUsLabel}" HorizontalAlignment="Left" Margin="10,383,0,0" VerticalAlignment="Top" FontWeight="Bold">
             <Label.Foreground>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Black" Offset="0"/>
@@ -130,7 +129,7 @@
         </Label>
 
         <!-- Social community buttons -->
-        <StackPanel HorizontalAlignment="Left" Height="30" Margin="80,382,0,0" VerticalAlignment="Top" Width="206" Orientation="Horizontal">
+        <StackPanel HorizontalAlignment="Left" Height="30" Margin="85,382,0,0" VerticalAlignment="Top" Width="206" Orientation="Horizontal">
             <Button 
                 x:Name="FacebookButton"
                 Style="{StaticResource ButtonBackgroundImageShow}"
@@ -260,7 +259,5 @@
         <Label Content="{DynamicResource m_Author}" HorizontalAlignment="Left" Margin="10,455,0,0" VerticalAlignment="Top" Foreground="White" FontStyle="Italic"/>
         <TextBlock Text="{Binding ElementName=ProgressBar1, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Left" Height="23" Margin="108,355,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="46" Background="{x:Null}" FontWeight="Bold" FontStyle="Italic"/>
         <TextBlock x:Name="statusText" HorizontalAlignment="Left" Margin="64,334,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="White" FontStyle="Italic"/>
-
-
     </Grid>
 </Window>

@@ -35,6 +35,6 @@
         </Button>
         <TextBox x:Name="Name_TBox" HorizontalAlignment="Left" Height="23" Margin="10,37,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
         <Label Content="{DynamicResource m_YourNameLabel}" HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" Width="120" FontWeight="Bold" Foreground="#FFFFFDFD" FontStyle="Italic"/>
-        <Label Content="{DynamicResource m_WriteAboutBugLabel}" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" Width="120" FontWeight="Bold" Foreground="#FFFFFDFD" FontStyle="Italic"/>
+        <Label Content="{DynamicResource m_WriteAboutBugLabel}" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" Width="156" FontWeight="Bold" Foreground="#FFFFFDFD" FontStyle="Italic"/>
     </Grid>
 </Window>

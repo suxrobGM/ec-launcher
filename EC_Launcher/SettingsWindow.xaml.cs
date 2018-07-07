@@ -3,7 +3,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.IO;
-using System.Globalization;
 
 namespace EC_Launcher
 {
@@ -32,8 +31,7 @@ namespace EC_Launcher
             else if(Language == "Russian")
             {
                 Language_CBox.SelectedIndex = 1;
-            }
-                            
+            }                            
         }        
 
         private void Language_CBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -42,21 +40,19 @@ namespace EC_Launcher
             {
                 SettingsXML.AppLanguage = "English";
                 App.Language = App.Languages[0]; //en-US           
-
             }
             else if(Language_CBox.SelectedIndex == 1)
             {
                 SettingsXML.AppLanguage = "Russian";               
                 App.Language = App.Languages[1]; //ru-RU
-            }
-            
+            }            
         }
 
         private void GameDir_Button_Click(object sender, RoutedEventArgs e)
         {
             using (var dialog = new FolderBrowserDialog())
             {
-                dialog.Description = "Please set the right directory of the game";                             
+                dialog.Description = this.FindResource("m_SetGameDirDesc").ToString();                             
                 dialog.ShowDialog();
 
                 GlobalVariables.GameDirectory = dialog.SelectedPath;
@@ -69,7 +65,7 @@ namespace EC_Launcher
         {
             using (var dialog = new FolderBrowserDialog())
             {
-                dialog.Description = "Please set the right directory of the mod";
+                dialog.Description = this.FindResource("m_SetModDirDesc").ToString();
                 string DefaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod");
                 DirectoryInfo HoiModDir = new DirectoryInfo(DefaultPath);               
 

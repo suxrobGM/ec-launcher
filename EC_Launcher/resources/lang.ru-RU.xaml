@@ -9,10 +9,10 @@
     <v:String x:Key="m_Donate">Пожертвовать!</v:String>
     <v:String x:Key="m_Settings">Настройки</v:String>
     <v:String x:Key="m_GenerateHash">Сгенерировать хэш</v:String>
-    <v:String x:Key="m_FollowUsLabel">Подписывайтесь на нас:</v:String>
+    <v:String x:Key="m_FollowUsLabel">Новости:</v:String>
     <v:String x:Key="m_ModVersionLabel">Версия мода:</v:String>
     <v:String x:Key="m_LauncherVersionLabel">Версия лаунчера:</v:String>
-    <v:String x:Key="m_Author">Разработано SuxrobGM</v:String>
+    <v:String x:Key="m_Author">Автор: SuxrobGM</v:String>
     <v:String x:Key="m_DevMode">Режим разработчика</v:String>
 
     <!--Settings Window-->
@@ -26,4 +26,30 @@
     <v:String x:Key="m_SendButton">Отправить</v:String>
 
     <!--Donate Window-->
+
+    <!--Message Box Texts-->
+    <v:String x:Key="m_ERROR">ОШИБКА</v:String>
+    <v:String x:Key="m_InvalidGamePath">Укажите правильный путь к игры в настройках лаунчера</v:String>
+    <v:String x:Key="m_AvailableModUpdateCaption">Доступное обновление для мод!</v:String>
+    <v:String x:Key="m_AvailableAppUpdateCaption">Доступное обновление для лаунчера!</v:String>
+    <v:String x:Key="m_NoAppUpdateCaption">Нет обновления для лаунчера</v:String>
+    <v:String x:Key="m_NoModUpdateCaption">Нет обновления для мода</v:String>
+    <v:String x:Key="m_NoAppUpdateText">Вы используете последнюю версию приложения</v:String>
+    <v:String x:Key="m_NoModUpdateText">Вы используете последнюю версию мода</v:String>
+    <v:String x:Key="m_AvailableModUpdateText">Доступное обновление для мода. Новая версия</v:String>
+    <v:String x:Key="m_AvailableAppUpdateText">Доступное обновление для приложения. Новая версия</v:String>
+    <v:String x:Key="m_DownloadChooseOptionText">Вы хотите загрузить обновление?</v:String>
+    <v:String x:Key="m_SetNameText">Укажите свое имя</v:String>
+    <v:String x:Key="m_SetDescText">Пожалуйста, напишите об ошибке</v:String>
+    <v:String x:Key="m_MessageSuccessfullySentText">Ваше сообщение было успешно отправлено на suxrobGM@gmail.com \nСпасибо за сообщение об ошибке, мы скоро исправим его ;)</v:String>
+    <v:String x:Key="m_NetworkErrorText">Ошибка сетевого подключения, проверьте подключение к сети</v:String>
+
+    <!--Progress Bar Status Texts-->
+    <v:String x:Key="m_UpdatingLauncher">Скачивается обновление EC_Launcher.exe ...</v:String>
+    <v:String x:Key="m_UpdatingMod">Скачивается обновление мода...</v:String>
+    <v:String x:Key="m_GeneratingHash">Генерирование хеш-файла...</v:String>
+
+    <!--Dialog Description-->
+    <v:String x:Key="m_SetModDirDesc">Укажите правильный путь мода</v:String>
+    <v:String x:Key="m_SetGameDirDesc">Укажите правильный путь к игре</v:String>
 </ResourceDictionary>

@@ -25,13 +25,13 @@ namespace EC_Launcher
         {
             if(Name_TBox.Text == "")
             {
-                MessageBox.Show("Please set your name");
+                MessageBox.Show(this.FindResource("m_SetNameText").ToString());
                 return;
             }
 
             if (Body_TBox.Text == "")
             {
-                MessageBox.Show("Please write about bug");
+                MessageBox.Show(this.FindResource("m_SetDescText").ToString());
                 return;
             }
 
@@ -53,13 +53,13 @@ namespace EC_Launcher
                         sc.UseDefaultCredentials = false;
                         sc.Credentials = new NetworkCredential(from, p);
                         sc.Send(mm);
-                        MessageBox.Show("Your message was successfully sent to suxrobGM@gmail.com \nThanks for reported bug, we will fix it soon ;)");
+                        MessageBox.Show(this.FindResource("m_MessageSuccessfullySentText").ToString());
                     }
                 }
             }
             catch(Exception)
             {
-                MessageBox.Show(this, $"Network connection error, please check the network conection", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(this, this.FindResource("m_NetworkErrorText").ToString(), this.FindResource("m_ERROR").ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }      
     }

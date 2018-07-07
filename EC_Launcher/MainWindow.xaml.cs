@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Threading.Tasks;
-using System.Threading;
 using System.Windows;
 using System.IO;
 using System.Diagnostics;
-using System.ComponentModel;
 
 namespace EC_Launcher
 {
@@ -57,8 +54,8 @@ namespace EC_Launcher
                 DeveloperMode_Label.Visibility = Visibility.Hidden;
             }
 
-            LauncherVersionLabel.Content = "Launcher Version: " + VersionXML.AppVersion;
-            ModVersionLabel.Content = "Mod Version: " + VersionXML.ModVersion;
+            LauncherVersionLabel.Content = $"{this.FindResource("m_LauncherVersionLabel")} {VersionXML.AppVersion}";
+            ModVersionLabel.Content = $"{this.FindResource("m_ModVersionLabel")} {VersionXML.ModVersion}" ;
         }
 
 
@@ -72,7 +69,7 @@ namespace EC_Launcher
             }
             catch(Exception)
             {
-                MessageBox.Show(this, "Please set right directory of game in the settings", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);                
+                MessageBox.Show(this, this.FindResource("m_InvalidGamePath").ToString(), this.FindResource("m_ERROR").ToString(), MessageBoxButton.OK, MessageBoxImage.Error);                
             }
         }
 
@@ -85,37 +82,38 @@ namespace EC_Launcher
                 var client = new UpdaterClient();
                 if (client.CheckAppUpdate())
                 {
-                    var mboxResult = MessageBox.Show(this, $"Available update for launcher. New version is  {client.RemoteAppVersion}.\nDo you want to download the update?", "Available update for launcher!", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+                    var mboxResult = MessageBox.Show(this, $"{this.FindResource("m_AvailableAppUpdateText").ToString()}  {client.RemoteAppVersion}.\n{this.FindResource("m_DownloadChooseOptionText").ToString()}", this.FindResource("m_AvailableAppUpdateCaption").ToString(), MessageBoxButton.OKCancel, MessageBoxImage.Question);
                     if(mboxResult == MessageBoxResult.OK)
                     {
-                        statusText.Text = "Updating EC_Launcher.exe ...";
+                        statusText.Text = this.FindResource("m_UpdatingLauncher").ToString(); ;
                         var progress = new Progress<int>(value => ProgressBar1.Dispatcher.Invoke(() => ProgressBar1.Value = ++value));
                         client.DownloadAppUpdateAsync(progress);
                     }
                 }
-                else
+                /*else
                 {
-                    MessageBox.Show(this, "You are using the last version of launcher", "No update for launcher", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(this, this.FindResource("m_NoAppUpdateText").ToString(), this.FindResource("m_NoAppUpdateCaption").ToString(), MessageBoxButton.OK, MessageBoxImage.Information);
                 }
+                */
 
                 if (client.CheckModUpdate())
                 {
-                    var mboxResult = MessageBox.Show(this, $"Available update for mod. New version is  {client.RemoteModVersion}.\nDo you want to download the update?", "Available update for mod!", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+                    var mboxResult = MessageBox.Show(this, $"{this.FindResource("m_AvailableModUpdateText").ToString()}  {client.RemoteModVersion}.\n{this.FindResource("m_DownloadChooseOptionText").ToString()}", this.FindResource("m_AvailableModUpdateCaption").ToString(), MessageBoxButton.OKCancel, MessageBoxImage.Question);
                     if (mboxResult == MessageBoxResult.OK)
                     {
-                        statusText.Text = "Updating mod...";
+                        statusText.Text = this.FindResource("m_UpdatingMod").ToString();
                         var progress = new Progress<int>(value => ProgressBar1.Dispatcher.Invoke(() => ProgressBar1.Value = ++value));
                         client.DownloadModUpdateAsync(progress);                       
                     }
                 }
                 else
                 {
-                    MessageBox.Show(this, "You are using the last version of mod", "No update for mod", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(this, this.FindResource("m_NoModUpdateText").ToString(), this.FindResource("m_NoModUpdateCaption").ToString(), MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch(Exception ex)
             {
-                MessageBox.Show(this, ex.Message, "ERROR" , MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(this, ex.Message, this.FindResource("m_ERROR").ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
             }     
         }
 
@@ -125,13 +123,13 @@ namespace EC_Launcher
             {
                 var hashFile = new HashFile();
                 //Обновление ProgressBar1 из асинхронного потока
-                statusText.Text = "Generating hash file...";
+                statusText.Text = this.FindResource("m_GeneratingHash").ToString();
                 var  progress = new Progress<int>(value => ProgressBar1.Dispatcher.Invoke(() => ProgressBar1.Value = ++value));
                 hashFile.GetGameFileHashesAsync(progress);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(this, ex.Message, this.FindResource("m_ERROR").ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
             }                                   
         }                  
 
@@ -190,7 +188,7 @@ namespace EC_Launcher
             }
             catch(Exception ex)
             {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(this, ex.Message, this.FindResource("m_ERROR").ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }        
 
