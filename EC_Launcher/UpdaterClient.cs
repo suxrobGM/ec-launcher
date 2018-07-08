@@ -91,8 +91,7 @@ namespace EC_Launcher
                     var DeletedFilesList = LocalFilesList.Except(RemoteFilesList).ToList();
 
                     // Add new HashList.md5 to downloading queue
-                    NewFilesList.Add("/launcher/HashList.md5");
-                    NewFilesList.Add("/launcher/Economic_Crisis.mod"); //for avoiding future game update compatibility
+                    NewFilesList.Add("/launcher/HashList.md5");                    
 
                     int maxDownloadedFiles = ChangedFilesList.Count + NewFilesList.Count;
 
