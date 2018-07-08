@@ -62,8 +62,8 @@ namespace EC_Launcher
                 Parallel.ForEach(files_dir, (file) => {
                     Thread.CurrentThread.Priority = ThreadPriority.Highest;
 
-                    //не счытивать файлы гита и лаунчера
-                    if (!file.Contains(".git") && !file.Contains(".xml") && !file.Contains("HashList.md5") && !file.Contains("EC_Launcher.exe")) 
+                    //не счытивать файлы гита, EC_Launcher.exe, конфиг и кеш файлы
+                    if (!file.Contains(".git") && !file.Contains(".xml") && !file.Contains("HashList.md5") && !file.Contains("EC_Launcher.exe") && !file.Contains("_cache")) 
                     {
                         string file_name = file.Remove(0, App.globalVars.ModDirectory.Length);
 
