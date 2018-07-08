@@ -30,8 +30,8 @@ namespace EC_Launcher
             MaxFiles = Directory.GetFiles(App.globalVars.ModDirectory, "*", SearchOption.AllDirectories).Count((file) => { return !file.Contains(".git") ? true : false; });
 
             HashDict =  await GetHashListAsync(files, progress);
-            
-            //Запись данные в файле Client.md5
+
+            //Записать данные в файле HashList.md5
             WriteHashListAsync("HashList.md5", HashDict);
         }
 
@@ -55,39 +55,35 @@ namespace EC_Launcher
         private async Task<List<KeyValuePair<string, string>>> GetHashListAsync(string[] files_dir, IProgress<int> progress)
         {            
             List<KeyValuePair<string, string>> HashList = new List<KeyValuePair<string, string>>();
-            int checkedFile = 0;           
+            int checkedFile = 0;
 
             //Многопоточный режим
-            Action action = new Action(() => {
-                Parallel.ForEach(files_dir, (file) => {
-                    Thread.CurrentThread.Priority = ThreadPriority.Highest;
+            await Task.Run(() =>
+            {
+                //Использование PLINQ
+                HashList = files_dir.AsParallel()
+                .AsOrdered()
+                .Where(file => !file.Contains(".git") && !file.Contains(".xml") && !file.Contains("HashList.md5") && !file.Contains("EC_Launcher.exe") && !file.Contains("_cache"))
+                .Select(file =>
+                {
+                    var stream = File.OpenRead(file);
+                    string file_name = file.Remove(0, App.globalVars.ModDirectory.Length);
+                    string md5Value = GetHash_MD5(stream);
+                    KeyValuePair<string, string> keyValuePair = new KeyValuePair<string, string>(file_name, md5Value);
 
-                    //не счытивать файлы гита, EC_Launcher.exe, конфиг и кеш файлы
-                    if (!file.Contains(".git") && !file.Contains(".xml") && !file.Contains("HashList.md5") && !file.Contains("EC_Launcher.exe") && !file.Contains("_cache")) 
+                    if (progress != null)
                     {
-                        string file_name = file.Remove(0, App.globalVars.ModDirectory.Length);
-
-                        using (var stream = File.OpenRead(file))
-                        {
-                            string md5Value = GetHash_MD5(stream);
-                            KeyValuePair<string, string> keyValuePair = new KeyValuePair<string, string>(file_name, md5Value);                          
-                            HashList.Add(keyValuePair);                          
-
-                            if (progress != null)
-                            {
-                                progress.Report(ProgressPercent);
-                            }
-
-                            checkedFile++;
-                            ProgressPercent = GetPercentage(checkedFile, MaxFiles);
-                        }
+                        progress.Report(ProgressPercent);
                     }
-                });
 
-                HashList = HashList.OrderBy(pair => pair.Key).ToList();
-            });           
-            await Task.Run(action);           
-            return HashList;
+                    checkedFile++;
+                    ProgressPercent = GetPercentage(checkedFile, MaxFiles);
+                    return keyValuePair;
+                })
+                .OrderBy(pair => pair.Key)
+                .ToList();              
+            });                                                       
+            return HashList;          
         }
 
         //получить md5 хеша
@@ -109,6 +105,7 @@ namespace EC_Launcher
             return buffer.ToString();
         }
 
+        //Read hash data from HashList file
         public static List<KeyValuePair<string, string>> GetHashListFromFile(FileStream HashListFile)
         {
             StreamReader reader = new StreamReader(HashListFile);
