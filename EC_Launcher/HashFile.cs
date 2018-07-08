@@ -69,7 +69,8 @@ namespace EC_Launcher
 
                         using (var stream = File.OpenRead(file))
                         {
-                            KeyValuePair<string, string> keyValuePair = new KeyValuePair<string, string>(file_name, GetHash_MD5(stream).ToString());                          
+                            string md5Value = GetHash_MD5(stream);
+                            KeyValuePair<string, string> keyValuePair = new KeyValuePair<string, string>(file_name, md5Value);                          
                             HashList.Add(keyValuePair);                          
 
                             if (progress != null)
