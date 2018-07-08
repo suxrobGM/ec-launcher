@@ -239,5 +239,8 @@
   <ItemGroup>
     <Resource Include="icons\steam-black.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\moddb-black.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

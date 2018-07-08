@@ -129,7 +129,7 @@
         </Label>
 
         <!-- Social community buttons -->
-        <StackPanel HorizontalAlignment="Left" Height="30" Margin="85,382,0,0" VerticalAlignment="Top" Width="206" Orientation="Horizontal">
+        <StackPanel HorizontalAlignment="Left" Height="30" Margin="85,382,0,0" VerticalAlignment="Top" Width="218" Orientation="Horizontal">
             <Button 
                 x:Name="FacebookButton"
                 Style="{StaticResource ButtonBackgroundImageShow}"
@@ -211,6 +211,21 @@
                 </Button.BorderBrush>
                 <Button.Background>
                     <ImageBrush ImageSource="icons/steam-black.png"/>
+                </Button.Background>
+            </Button>
+            <Button 
+                x:Name="ModdbButton"
+                Style="{StaticResource ButtonBackgroundImageShow}"
+                Content="" 
+                Width="68" Click="ModdbButton_Click">
+                <Button.BorderBrush>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="#FFFDA100" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.BorderBrush>
+                <Button.Background>
+                    <ImageBrush ImageSource="icons/moddb-black.png"/>
                 </Button.Background>
             </Button>
         </StackPanel>

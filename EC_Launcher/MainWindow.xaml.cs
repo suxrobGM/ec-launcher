@@ -208,6 +208,11 @@ namespace EC_Launcher
             //Process.Start("https://www.steam.com");          
         }
 
+        private void ModdbButton_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://www.moddb.com/mods/hearts-of-iron-iv-economic-crisis");
+        }
+
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -232,5 +237,7 @@ namespace EC_Launcher
                 statusText.Text = String.Empty;
             }
         }
+
+        
     }
 }
