@@ -91,7 +91,8 @@ namespace EC_Launcher
                     var DeletedFilesList = LocalFilesList.Except(RemoteFilesList).ToList();
 
                     // Add new HashList.md5 to downloading queue
-                    NewFilesList.Add("/launcher/HashList.md5");                  
+                    NewFilesList.Add("/launcher/HashList.md5");
+                    NewFilesList.Add("/launcher/Economic_Crisis.mod"); //for avoiding future game update compatibility
 
                     int maxDownloadedFiles = ChangedFilesList.Count + NewFilesList.Count;
 
@@ -131,13 +132,21 @@ namespace EC_Launcher
 
                     //получаем список скачанных файлов в папке кеша
                     string[] cacheFiles = Directory.GetFiles(App.globalVars.CacheFolder, "*", SearchOption.AllDirectories);
+                    string modsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod");
 
                     //перемещаем файлы из папка кеша в папку мода
                     foreach (var file in cacheFiles)
                     {
                         if(!file.Contains("EC_Launcher.exe") && !file.Contains("Settings.xml"))
                         {
-                            MoveFile(file, App.globalVars.ModDirectory);
+                            if(file.Contains("Economic_Crisis.mod")) //перемещать файл .mod в MyDocuments/Paradox Interacive/Hearts of Iron IV/mod
+                            {
+                                MoveFile(file, modsFolder);
+                            }
+                            else
+                            {
+                                MoveFile(file, App.globalVars.ModDirectory);
+                            }                           
                         }
                     }
                 }

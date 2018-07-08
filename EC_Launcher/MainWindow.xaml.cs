@@ -38,7 +38,7 @@ namespace EC_Launcher
 
 
         private void OpenGameButton_Click(object sender, RoutedEventArgs e)
-        {
+        {            
             try
             {
                 SetLastModInGameSettings();
@@ -64,7 +64,7 @@ namespace EC_Launcher
             else
             {
                 string exePath = App.globalVars.GameDirectory + @"\hoi4.exe";
-                //string arguments = @"-mod=mod\EC2013.mod";
+                //string arguments = @"-mod=mod\Economic_Crisis.mod";
                 try
                 {
                     Process.Start(exePath);
@@ -87,27 +87,21 @@ namespace EC_Launcher
                 string[] lastModRows =
                 {
                     "last_mods={",
-                    "\t\"mod/EC2013.mod\"",
+                    "\t\"mod/Economic_Crisis.mod\"",
                     "}"
                 };
                 int count = 0;
 
-                for (var i = 0; i < buffer.Count; i++)
+                if(buffer.Contains("last_mods={"))
                 {
-                    if (buffer[i].Contains("last_mods"))
+                    int i = buffer.IndexOf("last_mods={");
+                    while (!buffer[i].Contains("}"))
                     {
-                        while (!buffer[i].Contains("}"))
-                        {
-                            count++;
-                            i++;
-                        }
-                        break;
+                        count++;
+                        i++;
                     }
-                }
-                if (buffer.Contains("last_mods={") && count > 0)
-                {
-                    buffer.RemoveRange(buffer.IndexOf("last_mods={"), count+1);
-                }
+                    buffer.RemoveRange(buffer.IndexOf("last_mods={"), count + 1);
+                }              
                 buffer.AddRange(lastModRows);
                 File.WriteAllLines(gameSettingsFile, buffer);
             }
