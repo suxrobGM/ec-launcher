@@ -6,7 +6,7 @@
     <v:String x:Key="m_OpenGame">Открыть Игру</v:String>
     <v:String x:Key="m_CheckUpdate">Проверять Обновление</v:String>
     <v:String x:Key="m_ReportBug">Сообщить Ошибку</v:String>
-    <v:String x:Key="m_Donate">Пожертвовать!</v:String>
+    <v:String x:Key="m_Donate">Donate!</v:String>
     <v:String x:Key="m_Settings">Настройки</v:String>
     <v:String x:Key="m_GenerateHash">Сгенерировать хэш</v:String>
     <v:String x:Key="m_FollowUsLabel">Новости:</v:String>
@@ -20,7 +20,7 @@
     <v:String x:Key="m_GameDirLabel">Путь к игре:</v:String>
     <v:String x:Key="m_ModDirLabel">Путь к моде:</v:String>
     <v:String x:Key="m_LanguageLabel">Язык приложения:</v:String>
-    <v:String x:Key="m_SteamVersionChkBox">Steam версия (ванилла)</v:String>
+    <v:String x:Key="m_SteamVersionChkBox">Steam версия (лицензионная копия)</v:String>
 
     <!--Report Bug Window-->
     <v:String x:Key="m_YourNameLabel">Ваше имя:</v:String>
@@ -43,7 +43,7 @@
     <v:String x:Key="m_DownloadChooseOptionText">Вы хотите загрузить обновление?</v:String>
     <v:String x:Key="m_SetNameText">Укажите свое имя</v:String>
     <v:String x:Key="m_SetDescText">Пожалуйста, напишите об ошибке</v:String>
-    <v:String x:Key="m_MessageSuccessfullySentText">Ваше сообщение было успешно отправлено на suxrobGM@gmail.com \nСпасибо за сообщение об ошибке, мы скоро исправим его ;)</v:String>
+    <v:String x:Key="m_MessageSuccessfullySentText">Ваше сообщение было успешно отправлено на suxrobGM@gmail.com Спасибо за сообщение об ошибке, мы скоро исправим его ;)</v:String>
     <v:String x:Key="m_NetworkErrorText">Ошибка сетевого подключения, проверьте подключение к сети</v:String>
 
     <!--Progress Bar Status Texts-->
