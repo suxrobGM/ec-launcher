@@ -273,6 +273,6 @@
         </Label>
         <Label Content="{DynamicResource m_Author}" HorizontalAlignment="Left" Margin="10,455,0,0" VerticalAlignment="Top" Foreground="White" FontStyle="Italic"/>
         <TextBlock Text="{Binding ElementName=ProgressBar1, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Left" Height="23" Margin="108,355,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="46" Background="{x:Null}" FontWeight="Bold" FontStyle="Italic"/>
-        <TextBlock x:Name="statusText" HorizontalAlignment="Left" Margin="64,334,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="White" FontStyle="Italic"/>
+        <TextBlock x:Name="statusText" HorizontalAlignment="Left" Margin="44,334,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="White" FontStyle="Italic"/>
     </Grid>
 </Window>

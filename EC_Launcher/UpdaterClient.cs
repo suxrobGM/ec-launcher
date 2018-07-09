@@ -61,8 +61,7 @@ namespace EC_Launcher
             if (App.globalVars.ModVersion > RemoteModVersion)
             {               
                 return true;
-            }
-            //MoveFile(App.globalVars.CacheFolder + @"\launcher\Version.xml", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            }        
             return false;
         }
         
@@ -101,25 +100,25 @@ namespace EC_Launcher
                     foreach (var file in ChangedFilesList)
                     {
                         await DownloadFromDbx(rootFolder, file);
+                        checkedFile++;
+                        progressPercent = GetPercentage(checkedFile, maxDownloadedFiles);
 
                         if (progress != null)
                         {
                             progress.Report(progressPercent);
-                        }
-                        checkedFile++;
-                        progressPercent = GetPercentage(checkedFile, maxDownloadedFiles);
+                        }                      
                     }
 
                     foreach (var file in NewFilesList)
                     {
                         await DownloadFromDbx(rootFolder, file);
+                        checkedFile++;
+                        progressPercent = GetPercentage(checkedFile, maxDownloadedFiles);
 
                         if (progress != null)
                         {
                             progress.Report(progressPercent);
-                        }
-                        checkedFile++;
-                        progressPercent = GetPercentage(checkedFile, maxDownloadedFiles);
+                        }                        
                     }
 
                     foreach (var file in DeletedFilesList)
@@ -199,10 +198,17 @@ namespace EC_Launcher
 
         private async Task DownloadFromDbx(string rootFolder, string file)
         {
-            using (var response = await dbx.Files.DownloadAsync(rootFolder + "/"+ file))
+            using (var response = await dbx.Files.DownloadAsync(rootFolder + file))
             {              
                 byte[] data = await response.GetContentAsByteArrayAsync();
-                string fileNameWindows = file.Replace("/", "\\");            
+                string fileNameWindows = file.Replace("/", "\\");
+
+                //если не существует такой каталог, тогда создаем новый каталог
+                if (!Directory.Exists(App.globalVars.CacheFolder + Path.GetDirectoryName(fileNameWindows)))
+                {
+                    Directory.CreateDirectory(App.globalVars.CacheFolder + Path.GetDirectoryName(fileNameWindows));
+                }
+
                 File.WriteAllBytes(App.globalVars.CacheFolder + fileNameWindows, data);
             }
         }
