@@ -184,9 +184,7 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icon_EC.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    <Resource Include="Icon_EC.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.1">
