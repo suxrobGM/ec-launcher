@@ -3,9 +3,9 @@
                     xmlns:local="clr-namespace:EC_Launcher"
                     xmlns:v="clr-namespace:System;assembly=mscorlib">
     <!--Main Window-->
-    <v:String x:Key="m_OpenGame">Открыть Игру</v:String>
-    <v:String x:Key="m_CheckUpdate">Проверять Обновление</v:String>
-    <v:String x:Key="m_ReportBug">Сообщить Ошибку</v:String>
+    <v:String x:Key="m_OpenGame">Запустить игру</v:String>
+    <v:String x:Key="m_CheckUpdate">Проверить обновления</v:String>
+    <v:String x:Key="m_ReportBug">Сообщить об ошибке</v:String>
     <v:String x:Key="m_Donate">Donate!</v:String>
     <v:String x:Key="m_Settings">Настройки</v:String>
     <v:String x:Key="m_GenerateHash">Сгенерировать хэш</v:String>
@@ -14,13 +14,13 @@
     <v:String x:Key="m_LauncherVersionLabel">Версия лаунчера:</v:String>
     <v:String x:Key="m_Author">Автор: SuxrobGM</v:String>
     <v:String x:Key="m_DevMode">Режим разработчика</v:String>
-    <v:String x:Key="m_HaveNotSteamVersion">У вас нет steam версии оригинальной игры</v:String>
+    <v:String x:Key="m_HaveNotSteamVersion">У вас нет steam-версии оригинальной игры</v:String>
 
     <!--Settings Window-->
     <v:String x:Key="m_GameDirLabel">Путь к игре:</v:String>
-    <v:String x:Key="m_ModDirLabel">Путь к моде:</v:String>
+    <v:String x:Key="m_ModDirLabel">Путь к моду:</v:String>
     <v:String x:Key="m_LanguageLabel">Язык приложения:</v:String>
-    <v:String x:Key="m_SteamVersionChkBox">Steam версия (лицензионная копия)</v:String>
+    <v:String x:Key="m_SteamVersionChkBox">Steam-версия (лицензионная копия)</v:String>
 
     <!--Report Bug Window-->
     <v:String x:Key="m_YourNameLabel">Ваше имя:</v:String>
@@ -32,8 +32,8 @@
     <!--Message Box Texts-->
     <v:String x:Key="m_ERROR">ОШИБКА</v:String>
     <v:String x:Key="m_InvalidGamePath">Укажите правильный путь к игры в настройках лаунчера</v:String>
-    <v:String x:Key="m_AvailableModUpdateCaption">Доступное обновление для мод!</v:String>
-    <v:String x:Key="m_AvailableAppUpdateCaption">Доступное обновление для лаунчера!</v:String>
+    <v:String x:Key="m_AvailableModUpdateCaption">Доступно обновление для мода!</v:String>
+    <v:String x:Key="m_AvailableAppUpdateCaption">Доступно обновление для лаунчера!</v:String>
     <v:String x:Key="m_NoAppUpdateCaption">Нет обновления для лаунчера</v:String>
     <v:String x:Key="m_NoModUpdateCaption">Нет обновления для мода</v:String>
     <v:String x:Key="m_NoAppUpdateText">Вы используете последнюю версию приложения</v:String>
@@ -41,9 +41,9 @@
     <v:String x:Key="m_AvailableModUpdateText">Доступное обновление для мода. Новая версия</v:String>
     <v:String x:Key="m_AvailableAppUpdateText">Доступное обновление для приложения. Новая версия</v:String>
     <v:String x:Key="m_DownloadChooseOptionText">Вы хотите загрузить обновление?</v:String>
-    <v:String x:Key="m_SetNameText">Укажите свое имя</v:String>
+    <v:String x:Key="m_SetNameText">Укажите своё имя</v:String>
     <v:String x:Key="m_SetDescText">Пожалуйста, напишите об ошибке</v:String>
-    <v:String x:Key="m_MessageSuccessfullySentText">Ваше сообщение было успешно отправлено на suxrobGM@gmail.com Спасибо за сообщение об ошибке, мы скоро исправим его ;)</v:String>
+    <v:String x:Key="m_MessageSuccessfullySentText">Ваше сообщение было успешно отправлено на suxrobGM@gmail.com Спасибо за сообщение об ошибке, мы скоро исправим её ;)</v:String>
     <v:String x:Key="m_NetworkErrorText">Ошибка сетевого подключения, проверьте подключение к сети</v:String>
 
     <!--Progress Bar Status Texts-->
