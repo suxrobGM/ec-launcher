@@ -8,7 +8,7 @@
         WindowStyle="None"
         ResizeMode="NoResize"
         Title="Hearts of Iron IV: Economic Crisis Launcher" 
-        Height="500" 
+        Height="532" 
         Width="800">
 
     <WindowChrome.WindowChrome>
@@ -20,7 +20,7 @@
             <ImageBrush ImageSource="Background.bmp"/>
         </Grid.Background>
 
-        <WebBrowser x:Name="WBrowser" HorizontalAlignment="Left" Height="275" Margin="232,71,0,0" VerticalAlignment="Top" Width="558">
+        <WebBrowser x:Name="WBrowser" HorizontalAlignment="Left" Height="307" Margin="237,71,0,0" VerticalAlignment="Top" Width="553">
             <WebBrowser.Effect>
                 <DropShadowEffect BlurRadius="50" Direction="100" RenderingBias="Quality" ShadowDepth="10"/>
             </WebBrowser.Effect>
@@ -102,7 +102,7 @@
         <ProgressBar x:Name="ProgressBar1" x:FieldModifier="public" HorizontalAlignment="Left" Height="23" Margin="10,355,0,0" VerticalAlignment="Top" Width="222" ValueChanged="ProgressBar1_ValueChanged"/>
         <TextBlock x:Name="PgBar_TextBlock" Visibility="Hidden" Text="{Binding ElementName=ProgressBar1, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="133,290,642,113" />
 
-        <Label x:Name="ModVersionLabel" Content="{DynamicResource m_ModVersionLabel}" HorizontalAlignment="Left" Margin="291,358,0,0" VerticalAlignment="Top" FontWeight="Bold" Background="{x:Null}">
+        <Label x:Name="ModVersionLabel" Content="{DynamicResource m_ModVersionLabel}" HorizontalAlignment="Left" Margin="237,409,0,0" VerticalAlignment="Top" FontWeight="Bold" Background="{x:Null}">
             <Label.Foreground>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Black" Offset="0"/>
@@ -110,7 +110,7 @@
                 </LinearGradientBrush>
             </Label.Foreground>
         </Label>
-        <Label x:Name="LauncherVersionLabel" Content="{DynamicResource m_LauncherVersionLabel}" HorizontalAlignment="Left" Margin="536,358,0,0" VerticalAlignment="Top" FontWeight="Bold">
+        <Label x:Name="LauncherVersionLabel" Content="{DynamicResource m_LauncherVersionLabel}" HorizontalAlignment="Left" Margin="237,383,0,0" VerticalAlignment="Top" FontWeight="Bold">
             <Label.Foreground>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Black" Offset="0"/>
@@ -118,8 +118,8 @@
                 </LinearGradientBrush>
             </Label.Foreground>
         </Label>
-        <Label x:Name="DeveloperMode_Label" Content="{DynamicResource m_DevMode}" HorizontalAlignment="Left" Margin="632,455,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFF30000" FontWeight="Bold"/>
-        <Label Content="{DynamicResource m_FollowUsLabel}" HorizontalAlignment="Left" Margin="10,383,0,0" VerticalAlignment="Top" FontWeight="Bold">
+        <Label x:Name="DeveloperMode_Label" Content="{DynamicResource m_DevMode}" HorizontalAlignment="Left" Margin="631,485,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFF30000" FontWeight="Bold"/>
+        <Label Content="{DynamicResource m_FollowUsLabel}" HorizontalAlignment="Left" Margin="44,383,0,0" VerticalAlignment="Top" FontWeight="Bold">
             <Label.Foreground>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Black" Offset="0"/>
@@ -129,7 +129,7 @@
         </Label>
 
         <!-- Social community buttons -->
-        <StackPanel HorizontalAlignment="Left" Height="30" Margin="85,382,0,0" VerticalAlignment="Top" Width="218" Orientation="Horizontal">
+        <StackPanel HorizontalAlignment="Left" Height="30" Margin="10,409,0,0" VerticalAlignment="Top" Width="222" Orientation="Horizontal">
             <Button 
                 x:Name="FacebookButton"
                 Style="{StaticResource ButtonBackgroundImageShow}"
@@ -271,7 +271,7 @@
                 <DropShadowEffect Color="#FF0E0E0E" RenderingBias="Quality"/>
             </Label.Effect>
         </Label>
-        <Label Content="{DynamicResource m_Author}" HorizontalAlignment="Left" Margin="10,455,0,0" VerticalAlignment="Top" Foreground="White" FontStyle="Italic"/>
+        <Label Content="{DynamicResource m_Author}" HorizontalAlignment="Left" Margin="10,485,0,0" VerticalAlignment="Top" Foreground="White" FontStyle="Italic"/>
         <TextBlock Text="{Binding ElementName=ProgressBar1, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Left" Height="23" Margin="108,355,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="46" Background="{x:Null}" FontWeight="Bold" FontStyle="Italic"/>
         <TextBlock x:Name="statusText" HorizontalAlignment="Left" Margin="44,334,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="White" FontStyle="Italic"/>
     </Grid>
