@@ -42,18 +42,20 @@ namespace EC_Launcher
             try
             {
                 SetLastModInGameSettings();
+                CheckModFile();
             }
             catch(Exception ex)
             {
                 MessageBox.Show(this, ex.Message, this.FindResource("m_ERROR").ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
+            //Если имеется лиц. копия игры стим тогда запускать игру из лаунчера стима
             if (App.globalVars.IsSteamVersion)
             {
                 try
                 {
                     string steamPath = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Valve\Steam", "InstallPath", String.Empty).ToString() + "\\steam.exe";                
-                    string steamArguments = "-applaunch 394360"; //id лицензионный версия хои из стима
+                    string steamArguments = "-applaunch 394360"; //id лицензионной версии хои из стима
                     Process.Start(steamPath, steamArguments);
                 }
                 catch(Exception ex)
@@ -76,6 +78,7 @@ namespace EC_Launcher
             }           
         }
 
+        //Очистить остальные моды и добавить Economic Crisis к списке модов в файле конфиг игры settings.txt
         private void SetLastModInGameSettings()
         {
             string gameSettingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV");
@@ -104,6 +107,17 @@ namespace EC_Launcher
                 }              
                 buffer.AddRange(lastModRows);
                 File.WriteAllLines(gameSettingsFile, buffer);
+            }
+        }
+
+        //Проверка наличие файла Economic_Crisis.mod в пути Hearts of Iron IV/mod/ если нету файл тогда копировать файл
+        private void CheckModFile()
+        {
+            string gameModFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod");           
+
+            if (!File.Exists(gameModFolderPath + "\\Economic_Crisis.mod"))
+            {
+                File.Copy("Economic_Crisis.mod", gameModFolderPath + "\\Economic_Crisis.mod");
             }
         }
 
@@ -205,7 +219,7 @@ namespace EC_Launcher
 
         private void SteamButton_Click(object sender, RoutedEventArgs e)
         {
-            //Process.Start("https://www.steam.com");          
+            Process.Start("https://steamcommunity.com/groups/ec_hoi_mod");          
         }
 
         private void ModdbButton_Click(object sender, RoutedEventArgs e)
