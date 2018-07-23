@@ -136,11 +136,10 @@ namespace EC_Launcher
                         client.DownloadAppUpdateAsync(progress);
                     }
                 }
-                /*else
-                {
-                    MessageBox.Show(this, this.FindResource("m_NoAppUpdateText").ToString(), this.FindResource("m_NoAppUpdateCaption").ToString(), MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                */
+                //else
+                //{
+                //    MessageBox.Show(this, this.FindResource("m_NoAppUpdateText").ToString(), this.FindResource("m_NoAppUpdateCaption").ToString(), MessageBoxButton.OK, MessageBoxImage.Information);
+                //}                
 
                 if (client.CheckModUpdate())
                 {

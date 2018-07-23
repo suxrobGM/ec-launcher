@@ -45,7 +45,7 @@ namespace EC_Launcher
         /// <returns>returns true if application has an update otherwise false</returns>
         public bool CheckAppUpdate()
         {          
-            if (App.globalVars.ApplicationVersion > RemoteAppVersion)
+            if (App.globalVars.ApplicationVersion < RemoteAppVersion)
             {              
                 return true;
             }
@@ -55,10 +55,10 @@ namespace EC_Launcher
         /// <summary>
         /// Checks mod update in the host of DropBox
         /// </summary>
-        /// <returns>returns true if mod has an update otherwise false</returns>
+        /// <returns> true if mod has an update otherwise false</returns>
         public bool CheckModUpdate()
         {
-            if (App.globalVars.ModVersion > RemoteModVersion)
+            if (App.globalVars.ModVersion < RemoteModVersion)
             {               
                 return true;
             }        
@@ -74,10 +74,12 @@ namespace EC_Launcher
                     var remoteHashList = new List<KeyValuePair<string, string>>();
                     var localHashList = new List<KeyValuePair<string, string>>();
 
-                    var streamRemoteHashFile = dbx.Files.DownloadAsync(rootFolder + "/launcher/HashList.md5").Result.GetContentAsStreamAsync().Result;
-                    var streamLocalHashFile = new FileStream("HashList.md5", FileMode.Open);                  
+                    var streamRemoteHashFile = await dbx.Files.DownloadAsync(rootFolder + "/launcher/HashList.md5").Result.GetContentAsByteArrayAsync();
+                    var streamLocalHashFile = new FileStream("HashList.md5", FileMode.Open);
 
-                    remoteHashList = HashFile.GetHashListFromFile((FileStream)streamRemoteHashFile);
+                    File.WriteAllBytes(App.globalVars.CacheFolder + "\\launcher\\HashList.md5", streamRemoteHashFile);
+
+                    remoteHashList = HashFile.GetHashListFromFile(new FileStream(App.globalVars.CacheFolder + "\\launcher\\HashList.md5", FileMode.Open));
                     localHashList = HashFile.GetHashListFromFile(streamLocalHashFile);
 
                     // UNIX path separator '/'
@@ -87,10 +89,7 @@ namespace EC_Launcher
                     var LocalFilesList = (from item in localHashList select item.Key.Replace("\\", "/")).ToList();
                     var RemoteFilesList = (from item in remoteHashList select item.Key.Replace("\\", "/")).ToList();
                     var NewFilesList = RemoteFilesList.Except(LocalFilesList).ToList();
-                    var DeletedFilesList = LocalFilesList.Except(RemoteFilesList).ToList();
-
-                    // Add new HashList.md5 to downloading queue
-                    NewFilesList.Add("/launcher/HashList.md5");                    
+                    var DeletedFilesList = LocalFilesList.Except(RemoteFilesList).ToList();                                     
 
                     int maxDownloadedFiles = ChangedFilesList.Count + NewFilesList.Count;
 
@@ -128,16 +127,17 @@ namespace EC_Launcher
                         //File.Create(App.globalVars.CacheFolder + fileNameWindows + "_deleted");
                     }
 
-                    //получаем список скачанных файлов в папке кеша
+                    // Получаем список скачанных файлов в папке кеша
                     string[] cacheFiles = Directory.GetFiles(App.globalVars.CacheFolder, "*", SearchOption.AllDirectories);
                     string modsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod");
 
-                    //перемещаем файлы из папка кеша в папку мода
+                    // Перемещаем файлы из папке кеша на папку мода
                     foreach (var file in cacheFiles)
                     {
                         if(!file.Contains("EC_Launcher.exe") && !file.Contains("Settings.xml"))
                         {
-                            if(file.Contains("Economic_Crisis.mod")) //перемещать файл .mod в MyDocuments/Paradox Interacive/Hearts of Iron IV/mod
+                            // Перемещать файл .mod в MyDocuments/Paradox Interacive/Hearts of Iron IV/mod
+                            if (file.Contains("Economic_Crisis.mod")) 
                             {
                                 MoveFile(file, modsFolder);
                             }
