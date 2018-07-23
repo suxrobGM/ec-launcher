@@ -4,7 +4,7 @@
                     xmlns:v="clr-namespace:System;assembly=mscorlib">
     <!--Main Window-->
     <v:String x:Key="m_OpenGame">Запустить игру</v:String>
-    <v:String x:Key="m_CheckUpdate">Проверить обновления</v:String>
+    <v:String x:Key="m_CheckUpdate">Обновления</v:String>
     <v:String x:Key="m_ReportBug">Сообщить об ошибке</v:String>
     <v:String x:Key="m_Donate">Donate!</v:String>
     <v:String x:Key="m_Settings">Настройки</v:String>
