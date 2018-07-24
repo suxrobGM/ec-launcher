@@ -21,31 +21,40 @@ namespace EC_Launcher
         {
             appVersion = Assembly.GetExecutingAssembly().GetName().Version;
             modVersion = new Version("0.6.3.0"); //default start version
+            modDir = String.Empty;
+            gameDir = String.Empty;
             devMode = false;
             isSteamVersion = false;
             cacheFolder = "_cache\\Economic_Crisis";
 
-            string steamPath = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Valve\Steam", "InstallPath", String.Empty).ToString();
+            // Проверят что есть ли стим у клиента, если нету тогда строка возвращает String.Empty
+            string steamPath = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Valve\Steam", "InstallPath", String.Empty).ToString();     
             string gameSteamPath = steamPath + @"\steamapps\common\Hearts of Iron IV";
-            string modPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod", "Economic_Crisis");           
 
-            //First application launch
+            // Получаем каталог мода в виде: <My Documents>\Paradox Interactive\Hearts of Iron IV\mod\Economic_Crisis
+            string modPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod", "Economic_Crisis");
+
+            // Первый запуск приложений
+            // Проверяем что есть ли стим версия игры у клиента
             if (Directory.Exists(gameSteamPath) && (!File.Exists("Settings.XML") || File.ReadAllText("Settings.XML") == String.Empty))
             {
                 gameDir = gameSteamPath;
                 isSteamVersion = true;
-            }           
+            }
 
-            if(Directory.Exists(modPath) && (!File.Exists("Settings.XML") || File.ReadAllText("Settings.XML") == String.Empty))
+            // Проверяем что существует ли каталог мода <My Documents>\Paradox Interactive\Hearts of Iron IV\mod\Economic_Crisis
+            if (Directory.Exists(modPath) && (!File.Exists("Settings.XML") || File.ReadAllText("Settings.XML") == String.Empty))
             {
                 modDir = modPath;
-            }          
+            }
 
+            // Сразу при запуска приложений создать каталог кеша: _cache\Economic_Crisis\launcher
             if (!Directory.Exists(CacheFolder + @"\launcher"))
             {
                 Directory.CreateDirectory(CacheFolder + @"\launcher");
             }
 
+            // Если не существует хеш файл тогда создаем пустой хеш файл
             if (!File.Exists("HashList.md5"))
             {
                 File.Create("HashList.md5").Close();

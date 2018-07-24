@@ -109,6 +109,7 @@
     <Compile Include="DonateWindow.xaml.cs">
       <DependentUpon>DonateWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ProgressData.cs" />
     <Compile Include="ReportBugWindow.xaml.cs">
       <DependentUpon>ReportBugWindow.xaml</DependentUpon>
     </Compile>

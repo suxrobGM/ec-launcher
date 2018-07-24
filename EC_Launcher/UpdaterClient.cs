@@ -18,7 +18,7 @@ namespace EC_Launcher
         private string tokenDropbox = "JCFYioFBHBAAAAAAAAAAFq4g6p6ZhtsYZJktjnNb_JFknLnJjKEMyASiPO7kKKK5";
         private DropboxClient dbx;
         private XDocument remoteVersionXML;
-        private string rootFolder = "/EC_Server_Files";
+        private string rootFolder = "/EC_Server_Files"; //Корневой папка сервера
         private string versionXMLFile = "launcher/Version.xml";                      
 
         public Version RemoteAppVersion { get => VersionXML.ParseAppVersion(remoteVersionXML); }
@@ -42,7 +42,7 @@ namespace EC_Launcher
         /// <summary>
         /// Checks application update in the host of DropBox
         /// </summary>
-        /// <returns>returns true if application has an update otherwise false</returns>
+        /// <returns> true if application has an update otherwise false</returns>
         public bool CheckAppUpdate()
         {          
             if (App.globalVars.ApplicationVersion < RemoteAppVersion)
@@ -65,7 +65,8 @@ namespace EC_Launcher
             return false;
         }
         
-        public async void DownloadModUpdateAsync(IProgress<int> progress)
+        // Скачать обновление, сначала скачается хеш-файл из сервера, потом сравнивается хеш-файл клиента с сервером
+        public async void DownloadModUpdateAsync(IProgress<ProgressData> progress)
         {          
             await Task.Run(async () =>
             {
@@ -73,50 +74,74 @@ namespace EC_Launcher
                 {
                     var remoteHashList = new List<KeyValuePair<string, string>>();
                     var localHashList = new List<KeyValuePair<string, string>>();
+                    var progressData = new ProgressData
+                    {
+                        value = 0,
+                        max = 1,
+                        statusText = "HashList.md5"                      
+                    };
+                    if (progress != null) //Сообщить пользователя что скачается хеш-файл
+                    {
+                        progress.Report(progressData);
+                    }
 
+                    // Скачать хеш файл сервера
                     var streamRemoteHashFile = await dbx.Files.DownloadAsync(rootFolder + "/launcher/HashList.md5").Result.GetContentAsByteArrayAsync();
-                    var streamLocalHashFile = new FileStream("HashList.md5", FileMode.Open);
 
+                    // Сохранить хеш файл сервера на кеш папке
+                    var streamLocalHashFile = new FileStream("HashList.md5", FileMode.Open);                
                     File.WriteAllBytes(App.globalVars.CacheFolder + "\\launcher\\HashList.md5", streamRemoteHashFile);
 
+                    // Список хеш значение сервера
                     remoteHashList = HashFile.GetHashListFromFile(new FileStream(App.globalVars.CacheFolder + "\\launcher\\HashList.md5", FileMode.Open));
+
+                    // Список хеш значение клиента
                     localHashList = HashFile.GetHashListFromFile(streamLocalHashFile);
 
                     // UNIX path separator '/'
                     // Windows path separator '\\'
                     // All files convert to UNIX path separator
+                    // Все пути в хеш файле(HashList.md5) в виде windows разделитела, надо его конвертировать на UNIX разделителя чтобы сервер взаимодействовал с ним
+                    
+                    // Список изменённые файлы в сервере
                     var ChangedFilesList = localHashList.Except(remoteHashList).Select(item => item.Key.Replace("\\", "/")).ToList();
+
+                    // Список файлы клиента
                     var LocalFilesList = (from item in localHashList select item.Key.Replace("\\", "/")).ToList();
+
+                    // Список файлы сервера
                     var RemoteFilesList = (from item in remoteHashList select item.Key.Replace("\\", "/")).ToList();
+
+                    // Новые файлы который добавлен в сервере
                     var NewFilesList = RemoteFilesList.Except(LocalFilesList).ToList();
-                    var DeletedFilesList = LocalFilesList.Except(RemoteFilesList).ToList();                                     
 
-                    int maxDownloadedFiles = ChangedFilesList.Count + NewFilesList.Count;
+                    // Удаленные файлы из сервера
+                    var DeletedFilesList = LocalFilesList.Except(RemoteFilesList).ToList();
 
-                    int checkedFile = 0;
-                    int progressPercent = 0;
+                    // Общее количество файлов для скачивание
+                    progressData.max = ChangedFilesList.Count + NewFilesList.Count;                   
 
                     foreach (var file in ChangedFilesList)
                     {
                         await DownloadFromDbx(rootFolder, file);
-                        checkedFile++;
-                        progressPercent = GetPercentage(checkedFile, maxDownloadedFiles);
+                        progressData.value++;
+                        progressData.statusText = Path.GetFileName(file);
 
                         if (progress != null)
                         {
-                            progress.Report(progressPercent);
+                            progress.Report(progressData);
                         }                      
                     }
 
                     foreach (var file in NewFilesList)
                     {
                         await DownloadFromDbx(rootFolder, file);
-                        checkedFile++;
-                        progressPercent = GetPercentage(checkedFile, maxDownloadedFiles);
+                        progressData.value++;
+                        progressData.statusText = Path.GetFileName(file);
 
                         if (progress != null)
                         {
-                            progress.Report(progressPercent);
+                            progress.Report(progressData);
                         }                        
                     }
 
@@ -136,7 +161,7 @@ namespace EC_Launcher
                     {
                         if(!file.Contains("EC_Launcher.exe") && !file.Contains("Settings.xml"))
                         {
-                            // Перемещать файл .mod в MyDocuments/Paradox Interacive/Hearts of Iron IV/mod
+                            // Перемещать файл .mod в MyDocuments\Paradox Interacive\Hearts of Iron IV\mod
                             if (file.Contains("Economic_Crisis.mod")) 
                             {
                                 MoveFile(file, modsFolder);
@@ -155,6 +180,7 @@ namespace EC_Launcher
             });
         }
 
+        // Скачиваем обновленный файл EC_Launcher.exe по частям
         public async void DownloadAppUpdateAsync(IProgress<int> progress)
         {          
             await Task.Run(async () =>
@@ -176,7 +202,7 @@ namespace EC_Launcher
                                 while (length > 0)
                                 {
                                     file.Write(buffer, 0, length);
-                                    var percentage = GetPercentage((int)file.Length, (int)fileSize);
+                                    var percentage = ProgressData.GetPercentage((int)file.Length, (int)fileSize);
                                     length = stream.Read(buffer, 0, bufferSize);
 
                                     if (progress != null)
@@ -203,7 +229,7 @@ namespace EC_Launcher
                 byte[] data = await response.GetContentAsByteArrayAsync();
                 string fileNameWindows = file.Replace("/", "\\");
 
-                //если не существует такой каталог, тогда создаем новый каталог
+                // Если не существует такой каталог в папке кеша, тогда создаем новый каталог
                 if (!Directory.Exists(App.globalVars.CacheFolder + Path.GetDirectoryName(fileNameWindows)))
                 {
                     Directory.CreateDirectory(App.globalVars.CacheFolder + Path.GetDirectoryName(fileNameWindows));
@@ -211,12 +237,7 @@ namespace EC_Launcher
 
                 File.WriteAllBytes(App.globalVars.CacheFolder + fileNameWindows, data);
             }
-        }
-
-        private int GetPercentage(int current, int max)
-        {
-            return (current * 100) / max;
-        }        
+        }              
 
         private void MoveFile(string sourceFileFromCacheFolder, string destDirName)
         {           
@@ -234,6 +255,8 @@ namespace EC_Launcher
             File.Copy(sourceFileFromCacheFolder, destDirName + fileName, true);           
         }
 
+        // Сообщить пользователя что надо перезагрузить лаунчера после скачивание обновлении лаунчера
+        // Активируем наш Updater.exe передаем только одна аршумент который путь к обновленный лаунчер в кеш папке
         private void MessageToUserAndClose()
         {
             MessageBox.Show("The application update has successfully downloaded, please press OK for continue", "Downloaded", MessageBoxButton.OK, MessageBoxImage.Information);

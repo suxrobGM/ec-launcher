@@ -11,27 +11,30 @@ namespace EC_Launcher
 {
     public class HashFile
     {
-        //список хеши файлов
+        // Список хеш значений файлы мода
         private List<KeyValuePair<string, string>> HashDict;
-        public int ProgressPercent;
-        public int MaxFiles;      
+        private ProgressData progressData;      
 
         public HashFile()
-        {
-            this.ProgressPercent = 0;
-            this.MaxFiles = 0;
-            this.HashDict = new List<KeyValuePair<string, string>>();            
+        {      
+            this.HashDict = new List<KeyValuePair<string, string>>();
+            progressData = new ProgressData();
         }
 
-        public async void GetGameFileHashesAsync(IProgress<int> progress)
-        {          
-            //получить польный список файлов(где-то 17-18к шт.)
-            string[] files = Directory.GetFiles(App.globalVars.ModDirectory, "*", SearchOption.AllDirectories);
-            MaxFiles = Directory.GetFiles(App.globalVars.ModDirectory, "*", SearchOption.AllDirectories).Count((file) => { return !file.Contains(".git") ? true : false; });
+        public async void GetGameFileHashesAsync(IProgress<ProgressData> progress)
+        {   
+            if(App.globalVars.ModDirectory == String.Empty)
+            {
+                throw new Exception("Please set the right directory of the mod");
+            }
 
-            HashDict =  await GetHashListAsync(files, progress);
+            // Получить польный список файлов мода (около 17-18к шт. файлов)
+            string[] files = Directory.GetFiles(App.globalVars.ModDirectory, "*", SearchOption.AllDirectories);                   
 
-            //Записать данные в файле HashList.md5
+            // Получить список хеш значений файлов
+            HashDict =  await GetHashListAsync(files, progress); 
+
+            // Асинхронно записать данные на файле HashList.md5
             WriteHashListAsync("HashList.md5", HashDict);
         }
 
@@ -52,32 +55,39 @@ namespace EC_Launcher
             await Task.Run(action);        
         }
 
-        private async Task<List<KeyValuePair<string, string>>> GetHashListAsync(string[] files_dir, IProgress<int> progress)
+        // Метод возвращает список пар имя файла и md5 хеш значения
+        private async Task<List<KeyValuePair<string, string>>> GetHashListAsync(string[] files_dir, IProgress<ProgressData> progress)
         {            
-            List<KeyValuePair<string, string>> HashList = new List<KeyValuePair<string, string>>();
-            int checkedFile = 0;
+            List<KeyValuePair<string, string>> HashList = new List<KeyValuePair<string, string>>();           
 
-            //Многопоточный режим
+            // Многопоточный режим
+            // Поток возвращает список пар "ключ-значение" здесь ключ имя файла, а значений это md5 хеш
             await Task.Run(() =>
             {
-                //Использование PLINQ
+                // Получить общее количество файлов
+                progressData.max = files_dir.Count(file => !file.Contains(".git") && !file.Contains("_cache") && !file.Contains("Settings.xml") && !file.Contains("HashList.md5") && !file.Contains("EC_Launcher.exe"));
+
+                // Использование PLINQ
                 HashList = files_dir.AsParallel()
                 .AsOrdered()
-                .Where(file => !file.Contains(".git") && !file.Contains(".xml") && !file.Contains("HashList.md5") && !file.Contains("EC_Launcher.exe") && !file.Contains("_cache"))
+                .Where(file => !file.Contains(".git") && !file.Contains("_cache") && !file.Contains("Settings.xml") && !file.Contains("HashList.md5") && !file.Contains("EC_Launcher.exe"))
                 .Select(file =>
                 {
                     var stream = File.OpenRead(file);
+
+                    // Получить имя файла в виде например, /common/national_focus/russia.txt
                     string file_name = file.Remove(0, App.globalVars.ModDirectory.Length);
-                    string md5Value = GetHash_MD5(stream);
-                    KeyValuePair<string, string> keyValuePair = new KeyValuePair<string, string>(file_name, md5Value);
+
+                    // Получить md5 хеш значений
+                    string md5_value = GetHash_MD5(stream);
+                    KeyValuePair<string, string> keyValuePair = new KeyValuePair<string, string>(file_name, md5_value);
+
+                    progressData.value++;      
 
                     if (progress != null)
                     {
-                        progress.Report(ProgressPercent);
-                    }
-
-                    checkedFile++;
-                    ProgressPercent = GetPercentage(checkedFile, MaxFiles);
+                        progress.Report(progressData);
+                    }                   
                     return keyValuePair;
                 })
                 .OrderBy(pair => pair.Key)
@@ -86,7 +96,7 @@ namespace EC_Launcher
             return HashList;          
         }
 
-        //получить md5 хеша
+        // Получить md5 хеш значений файла
         public string GetHash_MD5(Stream stream)
         {
             byte[] bytes;
@@ -105,7 +115,9 @@ namespace EC_Launcher
             return buffer.ToString();
         }
 
-        //Read hash data from HashList file
+        // Считать хеш значений из файла
+        // Структура файл должна быть вот таком виде:
+        // <md5 хеш значения> - <имя файла>
         public static List<KeyValuePair<string, string>> GetHashListFromFile(FileStream HashListFile)
         {
             StreamReader reader = new StreamReader(HashListFile);
@@ -123,11 +135,6 @@ namespace EC_Launcher
             }
 
             return HashList;
-        }
-
-        private static int GetPercentage(int current, int max)
-        {
-            return (current * 100) / max;
-        }
+        }      
     }
 }

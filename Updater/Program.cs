@@ -16,9 +16,11 @@ namespace Updater
                 {
                     Console.WriteLine(arg);
                 }
+
                 string programmFromCache = args[0];
                 string pocessName = Path.GetFileNameWithoutExtension(args[0]);
                 string exeFileName = Path.GetFileName(args[0]);
+
                 Process[] myProcesses = Process.GetProcessesByName(pocessName);
                 Console.WriteLine(myProcesses.Length);
 
@@ -34,7 +36,8 @@ namespace Updater
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);                
+                Console.WriteLine(ex.Message);
+                Console.ReadLine();
             }
         }
     }

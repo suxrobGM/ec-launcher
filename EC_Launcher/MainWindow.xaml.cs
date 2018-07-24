@@ -49,7 +49,7 @@ namespace EC_Launcher
                 MessageBox.Show(this, ex.Message, this.FindResource("m_ERROR").ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            //Если имеется лиц. копия игры стим тогда запускать игру из лаунчера стима
+            // Если имеется лиц. копия игры стим тогда запускать игру из лаунчера стима
             if (App.globalVars.IsSteamVersion)
             {
                 try
@@ -78,7 +78,7 @@ namespace EC_Launcher
             }           
         }
 
-        //Очистить остальные моды и добавить Economic Crisis к списке модов в файле конфиг игры settings.txt
+        // Очистить остальные моды и добавить Economic Crisis к списке модов в файле конфиг игры settings.txt
         private void SetLastModInGameSettings()
         {
             string gameSettingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV");
@@ -110,7 +110,7 @@ namespace EC_Launcher
             }
         }
 
-        //Проверка наличие файла Economic_Crisis.mod в пути Hearts of Iron IV/mod/ если нету файл тогда копировать файл
+        //Проверка наличие файла Economic_Crisis.mod в пути Hearts of Iron IV/mod/ если нету файл тогда надо копировать файл
         private void CheckModFile()
         {
             string gameModFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod");           
@@ -125,7 +125,9 @@ namespace EC_Launcher
         {
             try
             {
-                var client = new UpdaterClient();
+                var client = new UpdaterClient(); //клиент для скачивание обновление
+
+                // Проверка обновлении лаунчера
                 if (client.CheckAppUpdate())
                 {
                     var mboxResult = MessageBox.Show(this, $"{this.FindResource("m_AvailableAppUpdateText").ToString()}  {client.RemoteAppVersion}.\n{this.FindResource("m_DownloadChooseOptionText").ToString()}", this.FindResource("m_AvailableAppUpdateCaption").ToString(), MessageBoxButton.OKCancel, MessageBoxImage.Question);
@@ -135,23 +137,24 @@ namespace EC_Launcher
                         var progress = new Progress<int>(value => ProgressBar1.Dispatcher.Invoke(() => ProgressBar1.Value = ++value));
                         client.DownloadAppUpdateAsync(progress);
                     }
-                }
-                //else
-                //{
-                //    MessageBox.Show(this, this.FindResource("m_NoAppUpdateText").ToString(), this.FindResource("m_NoAppUpdateCaption").ToString(), MessageBoxButton.OK, MessageBoxImage.Information);
-                //}                
+                }                               
 
+                // Проверка обновления мода
                 if (client.CheckModUpdate())
                 {
                     var mboxResult = MessageBox.Show(this, $"{this.FindResource("m_AvailableModUpdateText").ToString()}  {client.RemoteModVersion}.\n{this.FindResource("m_DownloadChooseOptionText").ToString()}", this.FindResource("m_AvailableModUpdateCaption").ToString(), MessageBoxButton.OKCancel, MessageBoxImage.Question);
                     if (mboxResult == MessageBoxResult.OK)
-                    {
-                        statusText.Text = this.FindResource("m_UpdatingMod").ToString();
-                        var progress = new Progress<int>(value => ProgressBar1.Dispatcher.Invoke(() => ProgressBar1.Value = ++value));
+                    {                     
+                        var progress = new Progress<ProgressData>(progressData => 
+                        {
+                            ProgressBar1.Dispatcher.Invoke(() => ProgressBar1.Value = progressData.GetPercentage());
+                            statusText.Dispatcher.Invoke(() => statusText.Text = $"{this.FindResource("m_UpdatingMod").ToString()} {progressData.statusText}");
+                            statusCountText.Dispatcher.Invoke(() => statusCountText.Text = $"{progressData.value}/{progressData.max}");
+                        });
                         client.DownloadModUpdateAsync(progress);                       
                     }
                 }
-                else
+                else // Сообщить что клиент использует самый последняя версия мода
                 {
                     MessageBox.Show(this, this.FindResource("m_NoModUpdateText").ToString(), this.FindResource("m_NoModUpdateCaption").ToString(), MessageBoxButton.OK, MessageBoxImage.Information);
                 }
@@ -169,7 +172,11 @@ namespace EC_Launcher
                 var hashFile = new HashFile();
                 //Обновление ProgressBar1 из асинхронного потока
                 statusText.Text = this.FindResource("m_GeneratingHash").ToString();
-                var  progress = new Progress<int>(value => ProgressBar1.Dispatcher.Invoke(() => ProgressBar1.Value = ++value));
+                var  progress = new Progress<ProgressData>(progressData =>
+                {
+                    ProgressBar1.Dispatcher.Invoke(() => ProgressBar1.Value = progressData.GetPercentage());
+                    statusCountText.Dispatcher.Invoke(() => statusCountText.Text = $"{progressData.value}/{progressData.max}");
+                });
                 hashFile.GetGameFileHashesAsync(progress);
             }
             catch (Exception ex)
@@ -226,6 +233,7 @@ namespace EC_Launcher
             Process.Start("https://www.moddb.com/mods/hearts-of-iron-iv-economic-crisis");
         }
 
+        // При закрытие приложении надо удалять папка кеша
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -247,10 +255,9 @@ namespace EC_Launcher
             if (ProgressBar1.Value == ProgressBar1.Maximum)
             {   
                 ProgressBar1.Value = 0;
-                statusText.Text = String.Empty;
+                statusText.Text = $"{this.FindResource("m_ProgressFinished")}";
+                statusCountText.Text = String.Empty;
             }
-        }
-
-        
+        }      
     }
 }
