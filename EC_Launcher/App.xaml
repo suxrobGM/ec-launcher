@@ -10,6 +10,7 @@
                 <ResourceDictionary Source="resources/ButtonStyle.xaml"/>
                 <ResourceDictionary Source="resources/ButtonBackgroundImage.xaml"/>
                 <ResourceDictionary Source="resources/lang.xaml"/>
+                <ResourceDictionary Source="resources/LabelStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>    
         </ResourceDictionary>
     </Application.Resources>
