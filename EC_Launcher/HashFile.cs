@@ -23,7 +23,7 @@ namespace EC_Launcher
 
         public async void GetGameFileHashesAsync(IProgress<ProgressData> progress)
         {   
-            if(App.globalVars.ModDirectory == String.Empty)
+            if(!Directory.Exists(App.globalVars.ModDirectory))
             {
                 throw new Exception("Please set the right directory of the mod");
             }

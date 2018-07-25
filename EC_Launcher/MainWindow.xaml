@@ -23,11 +23,13 @@
             <ImageBrush ImageSource="Background.bmp"/>
         </Grid.Background>
 
-        <WebBrowser x:Name="WBrowser" HorizontalAlignment="Left" Height="307" Margin="237,71,0,0" VerticalAlignment="Top" Width="553">
-            <WebBrowser.Effect>
-                <DropShadowEffect BlurRadius="50" Direction="100" RenderingBias="Quality" ShadowDepth="10"/>
-            </WebBrowser.Effect>
-        </WebBrowser>
+        <WebBrowser 
+            x:Name="WBrowser" 
+            HorizontalAlignment="Left" 
+            Height="321" 
+            Margin="237,57,0,0" 
+            VerticalAlignment="Top" 
+            Width="553"/>
 
         <StackPanel HorizontalAlignment="Left" Height="186" Margin="10,140,0,0" VerticalAlignment="Top" Width="176">
 

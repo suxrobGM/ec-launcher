@@ -1,5 +1,4 @@
 ﻿using System;
-using Dropbox.Api;
 using System.Xml.Linq;
 using System.IO;
 using System.Threading.Tasks;
@@ -7,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Diagnostics;
+using Dropbox.Api;
 
 namespace EC_Launcher
 {

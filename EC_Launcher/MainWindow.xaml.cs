@@ -20,7 +20,7 @@ namespace EC_Launcher
         public MainWindow()
         {
             InitializeComponent();
-            WBrowser.Navigate("https://vk.com/ec_hoi_mod");
+            WBrowser.Navigate("https://m.facebook.com/HOI.Economic.Crisis");          
 
             SettingsWind = new SettingsWindow();
             ReportBugWind = new ReportBugWindow();
