@@ -29,7 +29,7 @@
             Height="321" 
             Margin="237,57,0,0" 
             VerticalAlignment="Top" 
-            Width="553"/>
+            Width="553" LoadCompleted="WBrowser_LoadCompleted"/>
 
         <StackPanel HorizontalAlignment="Left" Height="186" Margin="10,140,0,0" VerticalAlignment="Top" Width="176">
 

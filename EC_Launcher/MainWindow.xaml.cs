@@ -2,9 +2,9 @@
 using System.Windows;
 using System.IO;
 using System.Diagnostics;
-using Microsoft.Win32;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Win32;
 
 namespace EC_Launcher
 {
@@ -13,14 +13,18 @@ namespace EC_Launcher
     /// </summary>
     public partial class MainWindow : Window
     {      
-        private SettingsWindow SettingsWind; //Новая окна Settings
+        private SettingsWindow SettingsWind; // Новая окна Settings
         private ReportBugWindow ReportBugWind;
-        private DonateWindow donateWindow;                    
+        private DonateWindow donateWindow;
+        private bool firstLoadedPage; // Проверять что лаунчер загрузил первая страница фейсбука
 
         public MainWindow()
         {
             InitializeComponent();
-            WBrowser.Navigate("https://m.facebook.com/HOI.Economic.Crisis");          
+
+            // Загрузить страница мода в Фейсбуке 
+            WBrowser.Navigate("https://m.facebook.com/HOI.Economic.Crisis");
+            firstLoadedPage = false;
 
             SettingsWind = new SettingsWindow();
             ReportBugWind = new ReportBugWindow();
@@ -258,6 +262,17 @@ namespace EC_Launcher
                 statusText.Text = $"{this.FindResource("m_ProgressFinished")}";
                 statusCountText.Text = String.Empty;
             }
-        }      
+        }
+
+        // Покрутить скролл немного ниже в первом странице фейсбука  
+        private void WBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+            if(!firstLoadedPage)
+            {
+                var html = WBrowser.Document as mshtml.HTMLDocument;
+                html.parentWindow.scroll(0, 710);
+                firstLoadedPage = true;
+            }                      
+        }
     }
 }
