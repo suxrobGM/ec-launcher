@@ -178,7 +178,7 @@ namespace EC_Launcher
                 statusText.Text = this.FindResource("m_GeneratingHash").ToString();
                 var  progress = new Progress<ProgressData>(progressData =>
                 {
-                    ProgressBar1.Dispatcher.Invoke(() => ProgressBar1.Value = progressData.GetPercentage());
+                    ProgressBar1.Dispatcher.Invoke(() => ProgressBar1.Value = progressData.GetPercentage() + 1);
                     statusCountText.Dispatcher.Invoke(() => statusCountText.Text = $"{progressData.value}/{progressData.max}");
                 });
                 hashFile.GetGameFileHashesAsync(progress);
