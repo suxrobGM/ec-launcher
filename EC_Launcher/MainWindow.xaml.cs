@@ -16,7 +16,7 @@ namespace EC_Launcher
         private SettingsWindow SettingsWind; // Новая окна Settings
         private ReportBugWindow ReportBugWind;
         private DonateWindow donateWindow;
-        private bool firstLoadedPage; // Проверять что лаунчер загрузил первая страница фейсбука
+        private bool firstPageLoaded; // Проверять что лаунчер загрузил первая страница фейсбука
 
         public MainWindow()
         {
@@ -24,7 +24,7 @@ namespace EC_Launcher
 
             // Загрузить страница мода в Фейсбуке 
             WBrowser.Navigate("https://m.facebook.com/HOI.Economic.Crisis");
-            firstLoadedPage = false;
+            firstPageLoaded = false;
 
             SettingsWind = new SettingsWindow();
             ReportBugWind = new ReportBugWindow();
@@ -267,11 +267,11 @@ namespace EC_Launcher
         // Покрутить скролл немного ниже в первом странице фейсбука  
         private void WBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
-            if(!firstLoadedPage)
+            if(!firstPageLoaded)
             {
                 var html = WBrowser.Document as mshtml.HTMLDocument;
                 html.parentWindow.scroll(0, 710);
-                firstLoadedPage = true;
+                firstPageLoaded = true;
             }                      
         }
     }
