@@ -152,7 +152,7 @@ namespace EC_Launcher
                         var progress = new Progress<ProgressData>(progressData => 
                         {
                             ProgressBar1.Dispatcher.Invoke(() => ProgressBar1.Value = progressData.GetPercentage());
-                            statusText.Dispatcher.Invoke(() => statusText.Text = $"{this.FindResource("m_UpdatingMod").ToString()} {progressData.statusText}");
+                            statusText.Dispatcher.Invoke(() => statusText.Text = $"{this.FindResource("m_UpdatingMod").ToString()} \t{progressData.statusText}");
                             statusCountText.Dispatcher.Invoke(() => statusCountText.Text = $"{progressData.value}/{progressData.max}");
                         });
                         client.DownloadModUpdateAsync(progress);                       

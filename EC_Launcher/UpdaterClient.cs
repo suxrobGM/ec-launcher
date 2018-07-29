@@ -33,9 +33,13 @@ namespace EC_Launcher
                 this.remoteVersionXML = XDocument.Load(streamXML);
                 this.remoteVersionXML.Save(App.globalVars.CacheFolder + @"\launcher\Version.xml");              
             }
-            catch(Exception)
+            catch (DropboxException)
             {
                 throw new Exception("Network connection error or Server does not response");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
@@ -84,33 +88,32 @@ namespace EC_Launcher
                     {
                         progress.Report(progressData);
                     }
+                    
+                    // Скачать хеш-файл сервера
+                    var remoteHashFile = await dbx.Files.DownloadAsync(rootFolder + "/launcher/HashList.md5").Result.GetContentAsByteArrayAsync();
 
-                    // Скачать хеш файл сервера
-                    var streamRemoteHashFile = await dbx.Files.DownloadAsync(rootFolder + "/launcher/HashList.md5").Result.GetContentAsByteArrayAsync();
+                    // Сохранить хеш-файл сервера на папке кеша
+                    File.WriteAllBytes(App.globalVars.CacheFolder + "\\launcher\\HashList.md5", remoteHashFile);
 
-                    // Сохранить хеш файл сервера на кеш папке
-                    var streamLocalHashFile = new FileStream("HashList.md5", FileMode.Open);                
-                    File.WriteAllBytes(App.globalVars.CacheFolder + "\\launcher\\HashList.md5", streamRemoteHashFile);
+                    // Хеш-файл клиента
+                    var localHashFile = new FileStream("HashList.md5", FileMode.Open);                                   
 
-                    // Список хеш значение сервера
+                    // Список хеш-значение сервера
                     remoteHashList = HashFile.GetHashListFromFile(new FileStream(App.globalVars.CacheFolder + "\\launcher\\HashList.md5", FileMode.Open));
 
-                    // Список хеш значение клиента
-                    localHashList = HashFile.GetHashListFromFile(streamLocalHashFile);
+                    // Список хеш-значение клиента
+                    localHashList = HashFile.GetHashListFromFile(localHashFile);
 
                     // UNIX path separator '/'
                     // Windows path separator '\\'
                     // All files convert to UNIX path separator
-                    // Все пути в хеш файле(HashList.md5) в виде windows разделитела, надо его конвертировать на UNIX разделителя чтобы сервер взаимодействовал с ним
-                    
-                    // Список изменённые файлы в сервере
-                    var ChangedFilesList = localHashList.Except(remoteHashList).Select(item => item.Key.Replace("\\", "/")).ToList();
+                    // Все пути в хеш файле(HashList.md5) в виде windows разделитела, надо его конвертировать на UNIX разделителя чтобы сервер взаимодействовал с ним                                     
 
                     // Список файлы клиента
                     var LocalFilesList = (from item in localHashList select item.Key.Replace("\\", "/")).ToList();
 
                     // Список файлы сервера
-                    var RemoteFilesList = (from item in remoteHashList select item.Key.Replace("\\", "/")).ToList();
+                    var RemoteFilesList = (from item in remoteHashList select item.Key.Replace("\\", "/")).ToList();                 
 
                     // Новые файлы который добавлен в сервере
                     var NewFilesList = RemoteFilesList.Except(LocalFilesList).ToList();
@@ -118,42 +121,55 @@ namespace EC_Launcher
                     // Удаленные файлы из сервера
                     var DeletedFilesList = LocalFilesList.Except(RemoteFilesList).ToList();
 
+                    // Список изменённые файлы в сервере (файлы который различается md5 значение)
+                    var ChangedFilesList = localHashList
+                                           .Except(remoteHashList)
+                                           .Select(item => item.Key.Replace("\\", "/"))
+                                           .Except(DeletedFilesList) // Исключить удалленыые файлы
+                                           .ToList();
+
                     // Общее количество файлов для скачивание
                     progressData.max = ChangedFilesList.Count + NewFilesList.Count;                   
 
                     foreach (var file in ChangedFilesList)
                     {
-                        await DownloadFromDbx(rootFolder, file);
-                        progressData.value++;
-                        progressData.statusText = Path.GetFileName(file);
+                        progressData.statusText = Path.GetFileName(file);                       
+                        progressData.value++;                       
 
                         if (progress != null)
                         {
                             progress.Report(progressData);
-                        }                      
+                        }
+                        await DownloadFromDbx(rootFolder, file);
                     }
 
                     foreach (var file in NewFilesList)
                     {
-                        await DownloadFromDbx(rootFolder, file);
-                        progressData.value++;
-                        progressData.statusText = Path.GetFileName(file);
+                        progressData.statusText = Path.GetFileName(file);                       
+                        progressData.value++;                        
 
                         if (progress != null)
                         {
                             progress.Report(progressData);
-                        }                        
+                        }
+                        await DownloadFromDbx(rootFolder, file);
                     }
 
                     foreach (var file in DeletedFilesList)
                     {
                         string fileNameWindows = file.Replace("/", "\\");
-                        File.Delete(App.globalVars.ModDirectory + fileNameWindows);
-                        //File.Create(App.globalVars.CacheFolder + fileNameWindows + "_deleted");
+
+                        if(File.Exists(App.globalVars.ModDirectory + fileNameWindows))
+                        {
+                            File.Delete(App.globalVars.ModDirectory + fileNameWindows);                           
+                        }
+                        //File.Create(App.globalVars.CacheFolder + fileNameWindows + "_deleted").Close();
                     }
 
                     // Получаем список скачанных файлов в папке кеша
                     string[] cacheFiles = Directory.GetFiles(App.globalVars.CacheFolder, "*", SearchOption.AllDirectories);
+
+                    // Получаем путь к папке Hearts of Iron IV/mod
                     string modsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod");
 
                     // Перемещаем файлы из папке кеша на папку мода
@@ -173,9 +189,13 @@ namespace EC_Launcher
                         }
                     }
                 }
-                catch (Exception)
+                catch(DropboxException)
                 {
                     throw new Exception("Network connection error or Server does not response");
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
                 }
             });
         }
@@ -215,10 +235,14 @@ namespace EC_Launcher
                     }
                     MessageToUserAndClose();
                 }
-                catch (Exception)
+                catch (DropboxException)
                 {
                     throw new Exception("Network connection error or Server does not response");
-                }               
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
             });           
         }
 
@@ -256,7 +280,7 @@ namespace EC_Launcher
         }
 
         // Сообщить пользователя что надо перезагрузить лаунчера после скачивание обновлении лаунчера
-        // Активируем наш Updater.exe передаем только одна аршумент который путь к обновленный лаунчер в кеш папке
+        // Активируем наш Updater.exe передаем только одна аргумент который указывает путь к обновленный лаунчер в кеш папке
         private void MessageToUserAndClose()
         {
             MessageBox.Show("The application update has successfully downloaded, please press OK for continue", "Downloaded", MessageBoxButton.OK, MessageBoxImage.Information);

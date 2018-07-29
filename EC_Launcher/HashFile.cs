@@ -133,6 +133,7 @@ namespace EC_Launcher
                     HashList.Add(new KeyValuePair<string, string>(key, value));
                 }
             }
+            reader.Close();
 
             return HashList;
         }      
