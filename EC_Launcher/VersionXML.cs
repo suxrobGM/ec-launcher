@@ -21,30 +21,30 @@ namespace EC_Launcher
             xDoc = XDocument.Load(versionXML_File);
         }
 
-        public string ModVersion
+        public Version ModVersion
         {
             get
             {
                 var modVersion = xDoc.Element("Version").Element("Mod_Version").Value;
-                return modVersion;
+                return Version.Parse(modVersion);
             }
             set
             {
-                xDoc.Element("Version").Element("Mod_Version").Value = value;
+                xDoc.Element("Version").Element("Mod_Version").Value = value.ToString();
                 xDoc.Save(versionXML_File);
             }
         }
 
-        public string AppVersion
+        public Version AppVersion
         {
             get
             {
                 var appVersion = xDoc.Element("Version").Element("App_Version").Value;
-                return appVersion;
+                return Version.Parse(appVersion);
             }
             set
             {
-                xDoc.Element("Version").Element("App_Version").Value = value;
+                xDoc.Element("Version").Element("App_Version").Value = value.ToString();
                 xDoc.Save(versionXML_File);
             }
         }

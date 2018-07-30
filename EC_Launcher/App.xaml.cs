@@ -73,10 +73,11 @@ namespace EC_Launcher
             versionXML = new VersionXML();
 
             //Load config from XML file
-            globalVars.ModVersion = new Version(versionXML.ModVersion);
+            globalVars.ModVersion = versionXML.ModVersion;
             globalVars.ModDirectory = settingsXML.ModPath;
             globalVars.GameDirectory = settingsXML.GamePath;
             globalVars.IsSteamVersion = settingsXML.IsSteamVersion;
+            versionXML.AppVersion = globalVars.ApplicationVersion;
 
             m_Languages.Clear();
             m_Languages.Add(new CultureInfo("en-US")); //Нейтральная культура для этого проекта

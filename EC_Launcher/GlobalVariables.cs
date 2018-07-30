@@ -20,7 +20,7 @@ namespace EC_Launcher
         public GlobalVariables()
         {
             appVersion = Assembly.GetExecutingAssembly().GetName().Version;
-            modVersion = new Version("0.6.3.0"); //default start version
+            modVersion = Version.Parse("0.6.3.0"); //default start version
             modDir = String.Empty;
             gameDir = String.Empty;
             devMode = false;
@@ -72,10 +72,10 @@ namespace EC_Launcher
         }
 
         //Свойства
-        public bool DevMode { get => devMode; set => devMode = value; }
-        public Version ApplicationVersion { get => appVersion; }
+        public bool DevMode { get => devMode; set => devMode = value; }       
         public Version ModVersion { get => modVersion; set => modVersion = value; }
-        public string CacheFolder { get => cacheFolder; set => cacheFolder = value; }
+        public Version ApplicationVersion { get => appVersion; }
+        public string CacheFolder { get => cacheFolder; }
         public bool IsSteamVersion
         {
             get => isSteamVersion;
@@ -85,16 +85,13 @@ namespace EC_Launcher
                 if (App.settingsXML != null)
                 {
                     App.settingsXML.IsSteamVersion = value;
-                }
+                }               
                 RaisePropertyChanged("IsSteamVersion");
             }
         }
         public string ModDirectory
         {
-            get
-            {
-                return modDir;
-            }
+            get => modDir;          
             set
             {
                 modDir = value;
@@ -107,10 +104,7 @@ namespace EC_Launcher
         }
         public string GameDirectory
         {
-            get
-            {
-                return gameDir;
-            }
+            get => gameDir;          
             set
             {
                 gameDir = value;
