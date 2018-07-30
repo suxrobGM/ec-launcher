@@ -20,7 +20,7 @@ namespace EC_Launcher
 
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent();           
 
             // Загрузить страница мода в Фейсбуке 
             WBrowser.Navigate("https://m.facebook.com/HOI.Economic.Crisis");
@@ -163,9 +163,9 @@ namespace EC_Launcher
                     MessageBox.Show(this, this.FindResource("m_NoModUpdateText").ToString(), this.FindResource("m_NoModUpdateCaption").ToString(), MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
-            catch(Exception ex)
+            catch(Exception)
             {
-                MessageBox.Show(this, ex.Message, this.FindResource("m_ERROR").ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(this, "Network connection error or server does not response", this.FindResource("m_ERROR").ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
             }     
         }
 
