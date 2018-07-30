@@ -9,8 +9,8 @@ namespace EC_Launcher
     public sealed class GlobalVariables : INotifyPropertyChanged // Наследуемся от нужного интерфеса
     {   
         //Поля Данных
-        private string modDir;
-        private string gameDir;
+        private string modDirectory;
+        private string gameDirectory;
         private Version appVersion;
         private Version modVersion;
         private bool devMode;
@@ -21,8 +21,8 @@ namespace EC_Launcher
         {
             appVersion = Assembly.GetExecutingAssembly().GetName().Version;
             modVersion = Version.Parse("0.6.3.0"); //default start version
-            modDir = String.Empty;
-            gameDir = String.Empty;
+            modDirectory = String.Empty;
+            gameDirectory = String.Empty;
             devMode = false;
             isSteamVersion = false;
             cacheFolder = "_cache\\Economic_Crisis";
@@ -32,20 +32,20 @@ namespace EC_Launcher
             string gameSteamPath = steamPath + @"\steamapps\common\Hearts of Iron IV";
 
             // Получаем каталог мода в виде: <My Documents>\Paradox Interactive\Hearts of Iron IV\mod\Economic_Crisis
-            string modPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod", "Economic_Crisis");
+            string EconomicCrisisModPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod", "Economic_Crisis");
 
             // Первый запуск приложений
             // Проверяем что есть ли стим версия игры у клиента
             if (Directory.Exists(gameSteamPath) && (!File.Exists("Settings.XML") || File.ReadAllText("Settings.XML") == String.Empty))
             {
-                gameDir = gameSteamPath;
+                gameDirectory = gameSteamPath;
                 isSteamVersion = true;
             }
 
             // Проверяем что существует ли каталог мода <My Documents>\Paradox Interactive\Hearts of Iron IV\mod\Economic_Crisis
-            if (Directory.Exists(modPath) && (!File.Exists("Settings.XML") || File.ReadAllText("Settings.XML") == String.Empty))
+            if (Directory.Exists(EconomicCrisisModPath) && (!File.Exists("Settings.XML") || File.ReadAllText("Settings.XML") == String.Empty))
             {
-                modDir = modPath;
+                modDirectory = EconomicCrisisModPath;
             }
 
             // Сразу при запуска приложений создать каталог кеша: _cache\Economic_Crisis\launcher
@@ -91,10 +91,10 @@ namespace EC_Launcher
         }
         public string ModDirectory
         {
-            get => modDir;          
+            get => modDirectory;          
             set
             {
-                modDir = value;
+                modDirectory = value;
                 if(App.settingsXML != null)
                 {
                     App.settingsXML.ModPath = value;
@@ -104,10 +104,10 @@ namespace EC_Launcher
         }
         public string GameDirectory
         {
-            get => gameDir;          
+            get => gameDirectory;          
             set
             {
-                gameDir = value;
+                gameDirectory = value;
                 if(App.settingsXML != null)
                 {
                     App.settingsXML.GamePath = value;
