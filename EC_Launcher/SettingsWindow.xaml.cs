@@ -81,24 +81,32 @@ namespace EC_Launcher
 
         private void SteamVer_ChkBox_Checked(object sender, RoutedEventArgs e)
         {
-            string steamPath = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Valve\Steam", "InstallPath", String.Empty).ToString();
-            string gameSteamPath = steamPath + @"\steamapps\common\Hearts of Iron IV";
-
-            if (SteamVersion_ChkBox.IsChecked.Value)
+            try
             {
-                if(!Directory.Exists(gameSteamPath))
+                string steamPath = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Valve\Steam", "InstallPath", String.Empty).ToString();
+                string gameSteamPath = steamPath + @"\steamapps\common\Hearts of Iron IV";
+
+                if (SteamVersion_ChkBox.IsChecked.Value)
                 {
-                    System.Windows.MessageBox.Show(this, this.FindResource("m_HaveNotSteamVersion").ToString(), this.FindResource("m_ERROR").ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
-                    SteamVersion_ChkBox.IsChecked = false;
-                    App.globalVars.IsSteamVersion = false;
+                    if (!Directory.Exists(gameSteamPath))
+                    {
+                        System.Windows.MessageBox.Show(this, this.FindResource("m_HaveNotSteamVersion").ToString(), this.FindResource("m_ERROR").ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
+                        SteamVersion_ChkBox.IsChecked = false;
+                        App.globalVars.IsSteamVersion = false;
+                    }
+                    else
+                    {
+                        App.globalVars.IsSteamVersion = true;
+                    }
                 }
                 else
                 {
-                    App.globalVars.IsSteamVersion = true;
+                    App.globalVars.IsSteamVersion = false;
                 }
             }
-            else
+            catch(Exception)
             {
+                SteamVersion_ChkBox.IsChecked = false;
                 App.globalVars.IsSteamVersion = false;
             }
         }

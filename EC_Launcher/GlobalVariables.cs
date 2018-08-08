@@ -27,20 +27,24 @@ namespace EC_Launcher
             isSteamVersion = false;
             cacheFolder = "_cache\\Economic_Crisis";
 
-            // Проверят что есть ли стим у клиента, если нету тогда строка возвращает String.Empty
-            string steamPath = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Valve\Steam", "InstallPath", String.Empty).ToString();     
-            string gameSteamPath = steamPath + @"\steamapps\common\Hearts of Iron IV";
+            try
+            {
+                // Проверят что есть ли стим у клиента, если нету тогда строка возвращает String.Empty
+                string steamPath = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Valve\Steam", "InstallPath", String.Empty).ToString();
+                string gameSteamPath = steamPath + @"\steamapps\common\Hearts of Iron IV";
+                
+                // Первый запуск приложений
+                // Проверяем что есть ли стим версия игры у клиента
+                if (Directory.Exists(gameSteamPath) && (!File.Exists("Settings.XML") || File.ReadAllText("Settings.XML") == String.Empty))
+                {
+                    gameDirectory = gameSteamPath;
+                    isSteamVersion = true;
+                }
+            }
+            catch (Exception) { }
 
             // Получаем каталог мода в виде: <My Documents>\Paradox Interactive\Hearts of Iron IV\mod\Economic_Crisis
             string EconomicCrisisModPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod", "Economic_Crisis");
-
-            // Первый запуск приложений
-            // Проверяем что есть ли стим версия игры у клиента
-            if (Directory.Exists(gameSteamPath) && (!File.Exists("Settings.XML") || File.ReadAllText("Settings.XML") == String.Empty))
-            {
-                gameDirectory = gameSteamPath;
-                isSteamVersion = true;
-            }
 
             // Проверяем что существует ли каталог мода <My Documents>\Paradox Interactive\Hearts of Iron IV\mod\Economic_Crisis
             if (Directory.Exists(EconomicCrisisModPath) && (!File.Exists("Settings.XML") || File.ReadAllText("Settings.XML") == String.Empty))
