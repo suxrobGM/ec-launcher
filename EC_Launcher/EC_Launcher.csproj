@@ -53,7 +53,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icon_EC.ico</ApplicationIcon>
+    <ApplicationIcon>Icons\icon_EC.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>8638C6AFB31E5487CD5139423B5ED5895F817A0A</ManifestCertificateThumbprint>
@@ -109,32 +109,32 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DonateWindow.xaml.cs">
+    <Compile Include="Views\DonateWindow.xaml.cs">
       <DependentUpon>DonateWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ProgressData.cs" />
-    <Compile Include="ReportBugWindow.xaml.cs">
+    <Compile Include="Models\ProgressData.cs" />
+    <Compile Include="Views\ReportBugWindow.xaml.cs">
       <DependentUpon>ReportBugWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SettingsWindow.xaml.cs">
+    <Compile Include="Views\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SettingsXML.cs" />
-    <Compile Include="UpdaterClient.cs" />
-    <Compile Include="VersionXML.cs" />
-    <Page Include="DonateWindow.xaml">
+    <Compile Include="Models\SettingsXML.cs" />
+    <Compile Include="Models\UpdaterClient.cs" />
+    <Compile Include="Models\VersionXML.cs" />
+    <Page Include="Views\DonateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="resources\ButtonBackgroundImage.xaml">
+    <Page Include="Resources\ButtonBackgroundImage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="resources\ButtonStyle.xaml">
+    <Page Include="Resources\ButtonStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -142,29 +142,29 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GlobalVariables.cs" />
-    <Compile Include="HashFile.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Models\GlobalVariables.cs" />
+    <Compile Include="Models\HashFile.cs" />
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ReportBugWindow.xaml">
+    <Page Include="Views\ReportBugWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="resources\LabelStyle.xaml">
+    <Page Include="Resources\LabelStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="resources\lang.ru-RU.xaml">
+    <Page Include="Resources\Lang.ru-RU.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="resources\lang.xaml">
+    <Page Include="Resources\Lang.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SettingsWindow.xaml">
+    <Page Include="Views\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -189,12 +189,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Background.bmp">
+    <Resource Include="Resources\Background.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icon_EC.ico" />
+    <Resource Include="Icons\icon_EC.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.1">
@@ -209,48 +209,48 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icons\discord.png" />
+    <Resource Include="Icons\discord.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icons\facebook.png" />
-    <Resource Include="icons\youtube.png" />
+    <Resource Include="Icons\facebook.png" />
+    <Resource Include="Icons\youtube.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icons\vk.png" />
+    <Resource Include="Icons\vk.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icons\header_wide_bg.png" />
+    <Resource Include="Icons\header_wide_bg.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icons\actions_close_cancel_blue.png" />
-    <Resource Include="icons\actions_close_cancel_green.png" />
+    <Resource Include="Icons\actions_close_cancel_blue.png" />
+    <Resource Include="Icons\actions_close_cancel_green.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icons\close_box_blue.png" />
+    <Resource Include="Icons\close_box_blue.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icons\close_box_green.png" />
+    <Resource Include="Icons\close_box_green.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icons\cancel_button.png" />
+    <Resource Include="Icons\cancel_button.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icons\youtube-black.png" />
+    <Resource Include="Icons\youtube-black.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icons\facebook-black.png" />
+    <Resource Include="Icons\facebook-black.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icons\vk-black.png" />
+    <Resource Include="Icons\vk-black.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icons\discord-black.png" />
+    <Resource Include="Icons\discord-black.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icons\steam-black.png" />
+    <Resource Include="Icons\steam-black.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icons\moddb-black.png" />
+    <Resource Include="Icons\moddb-black.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

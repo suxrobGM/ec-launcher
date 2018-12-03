@@ -40,16 +40,16 @@ namespace EC_Launcher
                 switch (value.Name)
                 {
                     case "ru-RU":
-                        dict.Source = new Uri(String.Format("resources/lang.{0}.xaml", value.Name), UriKind.Relative);
+                        dict.Source = new Uri(String.Format("Resources/Lang.{0}.xaml", value.Name), UriKind.Relative);
                         break;                   
                     default:
-                        dict.Source = new Uri("resources/lang.xaml", UriKind.Relative);
+                        dict.Source = new Uri("Resources/Lang.xaml", UriKind.Relative);
                         break;
                 }
 
                 //3. Находим старую ResourceDictionary и удаляем его и добавляем новую ResourceDictionary
                 ResourceDictionary oldDict = (from d in Application.Current.Resources.MergedDictionaries
-                                              where d.Source != null && d.Source.OriginalString.StartsWith("resources/lang.")
+                                              where d.Source != null && d.Source.OriginalString.StartsWith("Resources/Lang.")
                                               select d).First();
                 if (oldDict != null)
                 {
