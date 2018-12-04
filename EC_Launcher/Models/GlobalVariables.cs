@@ -6,26 +6,20 @@ using Microsoft.Win32;
 
 namespace EC_Launcher
 {
-    public sealed class GlobalVariables : INotifyPropertyChanged // Наследуемся от нужного интерфеса
-    {   
-        //Поля Данных
+    public sealed class GlobalVariables : INotifyPropertyChanged 
+    {        
         private string modDirectory;
-        private string gameDirectory;
-        private Version appVersion;
-        private Version modVersion;
-        private bool devMode;
-        private string cacheFolder;
+        private string gameDirectory;      
         private bool isSteamVersion;
 
         public GlobalVariables()
-        {
-            appVersion = Assembly.GetExecutingAssembly().GetName().Version;
-            modVersion = Version.Parse("0.6.3.0"); //default start version
+        {          
+            ModVersion = Version.Parse("0.6.3.0"); //default start version
             modDirectory = String.Empty;
             gameDirectory = String.Empty;
-            devMode = false;
+            DevMode = false;
             isSteamVersion = false;
-            cacheFolder = "_cache\\Economic_Crisis";
+            CacheFolder = "_cache\\Economic_Crisis";
 
             try
             {
@@ -63,23 +57,13 @@ namespace EC_Launcher
             {
                 File.Create("HashList.md5").Close();
             }                      
-        }
-
-        // Событие, которое нужно вызывать при изменении
-        public event PropertyChangedEventHandler PropertyChanged; 
-
-        // Для удобства обернем событие в метод с единственным параметром - имя изменяемого свойства
-        public void RaisePropertyChanged(string propertyName)
-        {
-            // Если кто-то на него подписан, то вызывем его
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        }       
 
         //Свойства
-        public bool DevMode { get => devMode; set => devMode = value; }       
-        public Version ModVersion { get => modVersion; set => modVersion = value; }
-        public Version ApplicationVersion { get => appVersion; }
-        public string CacheFolder { get => cacheFolder; }
+        public bool DevMode { get; set; }       
+        public Version ModVersion { get; set; }
+        public Version ApplicationVersion { get => Assembly.GetExecutingAssembly().GetName().Version; }
+        public string CacheFolder { get; set; }
         public bool IsSteamVersion
         {
             get => isSteamVersion;
@@ -118,6 +102,18 @@ namespace EC_Launcher
                 }               
                 RaisePropertyChanged("GameDirectory");
             }
-        }   
+        }
+
+        #region INotifyPropertyChanged
+        // Событие, которое нужно вызывать при изменении
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // Для удобства обернем событие в метод с единственным параметром - имя изменяемого свойства
+        public void RaisePropertyChanged(string propertyName)
+        {
+            // Если кто-то на него подписан, то вызывем его
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
 }
