@@ -6,9 +6,11 @@
         xmlns:local="clr-namespace:EC_Launcher"
         mc:Ignorable="d"
         Title="Donate" 
-        Height="330.667" 
-        Width="457.333" 
-        Closing="Window_Closing">
+        Height="330" 
+        Width="457" 
+        Closing="Window_Closing" 
+        WindowStartupLocation="CenterOwner">
+    
     <Grid>
         <Grid.Background>
             <RadialGradientBrush>
@@ -16,6 +18,6 @@
                 <GradientStop Color="#FF212020" Offset="1"/>
             </RadialGradientBrush>
         </Grid.Background>
-        
     </Grid>
+    
 </Window>

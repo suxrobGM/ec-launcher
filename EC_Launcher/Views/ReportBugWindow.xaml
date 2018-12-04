@@ -7,9 +7,11 @@
         mc:Ignorable="d"
         ResizeMode="NoResize"
         Title="Report Bug"
-        Height="330.667" 
-        Width="457.333" 
-        Closing="Window_Closing">
+        Height="330" 
+        Width="457" 
+        Closing="Window_Closing" 
+        WindowStartupLocation="CenterOwner">
+    
     <Grid>
         <Grid.Background>
             <RadialGradientBrush>
@@ -37,4 +39,5 @@
         <Label Content="{DynamicResource m_YourNameLabel}" HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" Width="120" FontWeight="Bold" Foreground="#FFFFFDFD" FontStyle="Italic"/>
         <Label Content="{DynamicResource m_WriteAboutBugLabel}" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" Width="156" FontWeight="Bold" Foreground="#FFFFFDFD" FontStyle="Italic"/>
     </Grid>
+    
 </Window>

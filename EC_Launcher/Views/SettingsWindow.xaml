@@ -6,7 +6,12 @@
         xmlns:local="clr-namespace:EC_Launcher"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="Settings" Height="310.825" Width="551.7" Closing="Window_Closing">
+        Title="Settings" 
+        Height="311" 
+        Width="551" 
+        Closing="Window_Closing" 
+        WindowStartupLocation="CenterOwner">
+    
     <Grid>
         <Grid.Background>
             <RadialGradientBrush>
@@ -26,6 +31,6 @@
         <Button x:Name="GameDir_Button" Content="..." HorizontalAlignment="Left" Margin="491,36,0,0" VerticalAlignment="Top" Width="29" Height="27" Click="GameDir_Button_Click" FontWeight="Bold"/>
         <Button x:Name="ModDir_Button" Content="..." HorizontalAlignment="Left" Margin="491,94,0,0" VerticalAlignment="Top" Width="29" Height="27" Click="ModDir_Button_Click" FontWeight="Bold"/>
         <CheckBox x:Name="SteamVersion_ChkBox" IsChecked="{Binding Path = IsSteamVersion}" Content="{DynamicResource m_SteamVersionChkBox}" HorizontalAlignment="Left" Margin="10,144,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" Checked="SteamVer_ChkBox_Checked"/>
-
     </Grid>
+    
 </Window>
