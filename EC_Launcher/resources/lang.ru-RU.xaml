@@ -12,7 +12,6 @@
     <v:String x:Key="m_FollowUsLabel">Подпишитесь на нас</v:String>
     <v:String x:Key="m_ModVersionLabel">Версия мода:</v:String>
     <v:String x:Key="m_LauncherVersionLabel">Версия лаунчера:</v:String>
-    <v:String x:Key="m_Author">Автор: SuxrobGM</v:String>
     <v:String x:Key="m_DevMode">Режим разработчика</v:String>
     <v:String x:Key="m_HaveNotSteamVersion">У вас нет steam-версии оригинальной игры</v:String>
 

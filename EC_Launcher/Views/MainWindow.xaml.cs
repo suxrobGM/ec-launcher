@@ -237,6 +237,11 @@ namespace EC_Launcher
             Process.Start("https://www.moddb.com/mods/hearts-of-iron-iv-economic-crisis");
         }
 
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            Process.Start("https://www.facebook.com/suxrobgm");
+        }
+
         // При закрытие приложении надо удалять папка кеша
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
@@ -273,6 +278,6 @@ namespace EC_Launcher
                 html.parentWindow.scroll(0, 710);
                 firstPageLoaded = true;
             }                      
-        }
+        }       
     }
 }

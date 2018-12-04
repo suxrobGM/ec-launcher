@@ -11,8 +11,7 @@
     <v:String x:Key="m_GenerateHash">Generate Hash</v:String>
     <v:String x:Key="m_FollowUsLabel">Follow us</v:String>
     <v:String x:Key="m_ModVersionLabel">Mod Version: </v:String>
-    <v:String x:Key="m_LauncherVersionLabel">Launcher Version: </v:String>
-    <v:String x:Key="m_Author">Developed by SuxrobGM</v:String>
+    <v:String x:Key="m_LauncherVersionLabel">Launcher Version:</v:String>
     <v:String x:Key="m_DevMode">Developer Mode</v:String>
     
     <!--Settings Window-->
