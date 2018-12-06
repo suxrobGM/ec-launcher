@@ -27,6 +27,10 @@
     <v:String x:Key="m_SendButton">Отправить</v:String>
 
     <!--Donate Window-->
+    <v:String x:Key="m_DonateDesc">
+        Donate for support future of project and server. Please include your name in the payment comment. Top donaters will be in the list of project supporters. Best regards, EC Dev Team
+    </v:String>
+    <v:String x:Key="m_DonateWalletsLabel">Наши кошельки для оплаты:</v:String>
 
     <!--Message Box Texts-->
     <v:String x:Key="m_ERROR">ОШИБКА</v:String>
