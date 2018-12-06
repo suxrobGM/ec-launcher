@@ -117,7 +117,7 @@
 
         <Label x:Name="ModVersionLabel" Content="{DynamicResource m_ModVersionLabel}" HorizontalAlignment="Left" Margin="10,506,0,0" VerticalAlignment="Top" FontWeight="Bold" Background="{x:Null}" FontSize="9" Foreground="White"/>
         <Label x:Name="LauncherVersionLabel" Content="{DynamicResource m_LauncherVersionLabel}" HorizontalAlignment="Left" Margin="10,493,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="9" Foreground="#FFF7F7F7"/>
-        <Label x:Name="DeveloperMode_Label" Content="{DynamicResource m_DevMode}" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFF30000" FontWeight="Bold"/>
+        <Label x:Name="DeveloperMode_Label" Content="{DynamicResource m_DevMode}" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFF30000" FontWeight="Bold" FontSize="18"/>
         <Label Content="{DynamicResource m_FollowUsLabel}" HorizontalAlignment="Left" Margin="32,396,0,0" VerticalAlignment="Top" FontWeight="Bold">
             <Label.Foreground>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
