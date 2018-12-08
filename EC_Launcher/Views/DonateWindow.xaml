@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:EC_Launcher"
         mc:Ignorable="d"
         Title="Donate" 
-        Height="330" 
+        Height="380" 
         Width="457" 
         Closing="Window_Closing" 
         WindowStartupLocation="CenterOwner" 
@@ -14,26 +14,44 @@
 
     <Grid>
         <Grid.Background>
-            <RadialGradientBrush>
-                <GradientStop Color="Black"/>
-                <GradientStop Color="#FF212020" Offset="1"/>
-            </RadialGradientBrush>
+            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                <GradientStop Color="#FF2F2F2F"/>
+                <GradientStop Color="#FF252525" Offset="1"/>
+            </LinearGradientBrush>
         </Grid.Background>
-        <TextBlock Text="{DynamicResource m_DonateDesc}" TextWrapping="Wrap" Foreground="White" TextDecorations="{x:Null}" FontWeight="Bold" Height="58" VerticalAlignment="Top" Margin="5,0"/>
+
+        <TextBlock Text="{DynamicResource m_DonateDesc}" TextWrapping="Wrap" Foreground="White" TextDecorations="{x:Null}" FontWeight="Bold" Height="58" VerticalAlignment="Top" Margin="5,5,5,0"/>
         <TextBlock HorizontalAlignment="Left" Margin="195,63,0,0" TextWrapping="Wrap" Text="{DynamicResource m_DonateWalletsLabel}" VerticalAlignment="Top" Foreground="White" FontWeight="Bold"/>
-        <WrapPanel HorizontalAlignment="Left" Height="185" Margin="10,84,0,0" VerticalAlignment="Top" Width="430">
-            <Image HorizontalAlignment="Left" Height="58" VerticalAlignment="Top" Width="184" Source="/EC_Launcher;component/Icons/webmoney_logo.png"/>
+        
+        <WrapPanel HorizontalAlignment="Left" Height="245" Margin="10,84,0,0" VerticalAlignment="Top" Width="430">
+            <!--Web money-->
+            <Button x:Name="WebMoneyBtn" Background="{x:Null}" BorderBrush="{x:Null}" Click="WebMoneyBtn_Click">
+                <Image Height="58" Width="184" Source="/EC_Launcher;component/Icons/webmoney_logo.png"/>
+            </Button>
             <StackPanel Height="50" Width="136" Margin="5,0,0,0">
                 <TextBox IsReadOnly="True" HorizontalAlignment="Left" TextWrapping="Wrap" Text="WMZ: Z161759845739" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" Height="15" Background="{x:Null}" BorderBrush="{x:Null}"/>
                 <TextBox IsReadOnly="True" HorizontalAlignment="Left" TextWrapping="Wrap" Text="WMR: R829584988832" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" Height="15" Background="{x:Null}" BorderBrush="{x:Null}"/>
                 <TextBox IsReadOnly="True" HorizontalAlignment="Left" TextWrapping="Wrap" Text="WMX: X250174717185" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" Height="15" Background="{x:Null}" BorderBrush="{x:Null}"/>
             </StackPanel>
-            <Image HorizontalAlignment="Left" Height="58" VerticalAlignment="Top" Width="184" Source="/EC_Launcher;component/Icons/qiwi_logo.png"/>
+            
+            <!--Yandex money-->
+            <Button x:Name="YandexMoneyBtn" Background="{x:Null}" BorderBrush="{x:Null}" Click="YandexMoneyBtn_Click">
+                <Image Height="58" Width="184" Source="/EC_Launcher;component/Icons/yamoney_logo.png"/>
+            </Button>
+            <TextBox IsReadOnly="True" HorizontalAlignment="Left" TextWrapping="Wrap" Text="410017131230374" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" Height="18" Margin="0,20,0,0" Background="{x:Null}" BorderBrush="{x:Null}"/>
+            
+            <!--Qiwi-->
+            <Button x:Name="QiwiBtn" Background="{x:Null}" BorderBrush="{x:Null}" Click="QiwiBtn_Click">
+                <Image Height="58" Width="184" Source="/EC_Launcher;component/Icons/qiwi_logo.png"/>
+            </Button>
             <TextBox IsReadOnly="True" HorizontalAlignment="Left" TextWrapping="Wrap" Text="+998979250729" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" Height="18" Margin="0,20,0,0" Background="{x:Null}" BorderBrush="{x:Null}"/>
-            <Image HorizontalAlignment="Left" Height="58" VerticalAlignment="Top" Width="156" Source="/EC_Launcher;component/Icons/bitcoin_logo.png"/>
+
+            <!--Bitcoin-->
+            <Button Background="{x:Null}" BorderBrush="{x:Null}">
+                <Image Height="58" Width="156" Source="/EC_Launcher;component/Icons/bitcoin_logo.png"/>
+            </Button>
             <TextBox IsReadOnly="True" HorizontalAlignment="Left" TextWrapping="Wrap" Text="1FjG9a7jzoW5SgLsAGZcxXAc82bpmyVWN6" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" Height="18" Margin="0,20,0,0" Width="255" Background="{x:Null}" BorderBrush="{x:Null}"/>
         </WrapPanel>
-
     </Grid>
 
 </Window>
