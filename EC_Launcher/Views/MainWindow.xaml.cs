@@ -114,7 +114,7 @@ namespace EC_Launcher
             }
         }
 
-        //Проверка наличие файла Economic_Crisis.mod в пути Hearts of Iron IV/mod/ если нету файл тогда надо копировать файл
+        // Проверка наличие файла Economic_Crisis.mod в пути Hearts of Iron IV/mod/ если нету файл тогда надо копировать файл
         private void CheckModFile()
         {
             string gameModFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod");           
@@ -158,14 +158,14 @@ namespace EC_Launcher
                         client.DownloadModUpdateAsync(progress);                       
                     }
                 }
-                else // Сообщить что клиент использует самый последняя версия мода
+                else // Сообщить что клиент использует самая последняя версия мода
                 {
                     MessageBox.Show(this, this.FindResource("m_NoModUpdateText").ToString(), this.FindResource("m_NoModUpdateCaption").ToString(), MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
-            catch(Exception)
+            catch(Exception ex)
             {
-                MessageBox.Show(this, "Network connection error or server does not response", this.FindResource("m_ERROR").ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(this, "Network connection error or server does not response \n" + ex.Message, this.FindResource("m_ERROR").ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
             }     
         }
 
@@ -247,15 +247,14 @@ namespace EC_Launcher
         {
             try
             {
-                if (Directory.Exists("_cache"))
-                {
-                    Directory.Delete("_cache", true);
-                }
-                Environment.Exit(0);
+                if (Directory.Exists("_cache"))               
+                    Directory.Delete("_cache", true);                
+                
             }
-            catch(Exception ex)
+            catch(Exception) { }
+            finally
             {
-                MessageBox.Show(this, ex.Message, this.FindResource("m_ERROR").ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
+                Environment.Exit(0);
             }
         }        
 
