@@ -1,64 +1,89 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Xml.Linq;
+using Microsoft.Win32;
+using Prism.Mvvm;
 
-namespace EC_Launcher
+namespace EC_Launcher.Models
 {
-    public class SettingsXML
+    public class SettingsXml : BindableBase
     {
-        private string settingsXML_File;
+        private readonly string xmlFile;
+        private string gamePath;
+        private string modPath;
+        private string appLanguage;
+        private bool isSteamVersion;
+        private bool firstExec;
         private XDocument xDoc;
 
-        public SettingsXML()
+        public SettingsXml()
         {
-            settingsXML_File = "Settings.xml";
-
-            //если не существует файл, то создать файл и запольнить 
+            xmlFile = "Settings.xml";
+                  
             if (!File.Exists("Settings.xml") || File.ReadAllText("Settings.xml") == String.Empty)
             {
                 File.Create("Settings.xml").Close();
-                this.SetDefaultSettings(App.globalVars.GameDirectory, App.globalVars.ModDirectory, App.globalVars.IsSteamVersion);
+                gamePath = GetSteamGamePath();
+                modPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                //modPath = modPath.Remove(modPath.IndexOf("\\launcher"), "\\launcher".Length);
+                appLanguage = "English";
+                isSteamVersion = CheckGameSteamVersion();
+                firstExec = true;
+                SetDefaultSettings();
             }
-            xDoc = XDocument.Load(settingsXML_File);
+            xDoc = XDocument.Load(xmlFile);
         }
 
         public string GamePath
         {
             get
             {
-                var gamePath = xDoc.Element("General_Settings").Element("Game_Path").Value;
+                if(!firstExec)
+                {
+                    gamePath = xDoc.Element("General_Settings").Element("Game_Path").Value;
+                }
                 return gamePath;
-            }
+            } 
             set
             {               
+                SetProperty(ref gamePath, value);
                 xDoc.Element("General_Settings").Element("Game_Path").Value = value;
-                xDoc.Save(settingsXML_File);
+                xDoc.Save(xmlFile);
             }
         }
         public string ModPath
         {
             get
             {
-                var modPath = xDoc.Element("General_Settings").Element("Mod_Path").Value;
+                if (!firstExec)
+                {
+                    modPath = xDoc.Element("General_Settings").Element("Mod_Path").Value;
+                }
                 return modPath;
             }
             set
             {
+                SetProperty(ref modPath, value);
                 xDoc.Element("General_Settings").Element("Mod_Path").Value = value;
-                xDoc.Save(settingsXML_File);
+                xDoc.Save(xmlFile);
             }
         }
         public string AppLanguage
         {
             get
             {
-                var language = xDoc.Element("General_Settings").Element("Language").Value;
-                return language;
+                if (!firstExec)
+                {
+                    appLanguage = xDoc.Element("General_Settings").Element("Language").Value;
+                }
+                return appLanguage;
             }
             set
             {
+                SetProperty(ref appLanguage, value);
                 xDoc.Element("General_Settings").Element("Language").Value = value;
-                xDoc.Save(settingsXML_File);
+                xDoc.Save(xmlFile);
             }
         }
 
@@ -66,42 +91,63 @@ namespace EC_Launcher
         {
             get
             {
-                var value = xDoc.Element("General_Settings").Element("Is_Steam_Version").Value;
-                if(value=="True")
+                if (!firstExec)
                 {
-                    return true;
+                    var languageValue  = xDoc.Element("General_Settings").Element("Language").Value;
+                    isSteamVersion = languageValue == "True" ? true : false;
                 }
-                return false;
+                return isSteamVersion;
             }
             set
             {
-                string SteamVersion_TF = "False";
-                if (value==true)
+                if(CheckGameSteamVersion())
                 {
-                    SteamVersion_TF = "True";
+                    SetProperty(ref isSteamVersion, value);
+                    xDoc.Element("General_Settings").Element("Is_Steam_Version").Value = value ? "True" : "False";
                 }
-                xDoc.Element("General_Settings").Element("Is_Steam_Version").Value = SteamVersion_TF;
-                xDoc.Save(settingsXML_File);
+                else
+                {
+                    SetProperty(ref isSteamVersion, false);
+                    xDoc.Element("General_Settings").Element("Is_Steam_Version").Value = "False";
+                }
+
+                xDoc.Save(xmlFile);
             }
         }
-        
-        private void SetDefaultSettings(string GamePath, string ModPath, bool isSteamVersion, string Language = "English")
-        {
-            string SteamVersion_TF = "False";
-            if (isSteamVersion)
-            {
-                SteamVersion_TF = "True";
-            }
 
+        private bool CheckGameSteamVersion()
+        {
+            // Проверят что есть ли стим у клиента, если нету тогда строка возвращает String.Empty
+            string steamPath = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Valve\Steam", "InstallPath", String.Empty).ToString();
+            string gameSteamPath = steamPath + @"\steamapps\common\Hearts of Iron IV";
+           
+            // Проверяем что есть ли стим версия игры у клиента           
+            return Directory.Exists(gameSteamPath);
+        }
+
+        private string GetSteamGamePath()
+        {
+            string steamPath = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Valve\Steam", "InstallPath", String.Empty).ToString();
+            if (steamPath != String.Empty)
+            {
+                string gameSteamPath = steamPath + @"\steamapps\common\Hearts of Iron IV";
+                if (Directory.Exists(gameSteamPath))
+                    return gameSteamPath;
+            }
+            return String.Empty;
+        }
+        
+        private void SetDefaultSettings()
+        {          
             XDocument SettingsDoc = new XDocument(
                                             new XElement("General_Settings",
-                                                new XElement("Game_Path", GamePath),
-                                                new XElement("Mod_Path", ModPath),
-                                                new XElement("Is_Steam_Version", SteamVersion_TF),
-                                                new XElement("Language", Language)
+                                                new XElement("Game_Path", gamePath),
+                                                new XElement("Mod_Path", modPath),
+                                                new XElement("Is_Steam_Version", isSteamVersion ? "True" : "False"),
+                                                new XElement("Language", appLanguage)
                                             )
                                         );
-            SettingsDoc.Save(settingsXML_File);
+            SettingsDoc.Save(xmlFile);
         }
     }
 }

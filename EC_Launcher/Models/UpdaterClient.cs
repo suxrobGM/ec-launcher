@@ -8,173 +8,125 @@ using System.Windows;
 using System.Diagnostics;
 using Dropbox.Api;
 
-namespace EC_Launcher
+namespace EC_Launcher.Models
 {
     /// <summary>
     /// Update Class used Dropbox API
     /// </summary>
     public class UpdaterClient
     {
-        private string tokenDropbox = "JCFYioFBHBAAAAAAAAAAFq4g6p6ZhtsYZJktjnNb_JFknLnJjKEMyASiPO7kKKK5";       
-        private string rootFolder = "/EC_Server_Files"; //Корневой папка сервера
-        private string versionXMLFile = "launcher/Version.xml";
-        private DropboxClient dbx;
-        private XDocument remoteVersionXML;
-        private List<KeyValuePair<string, string>> remoteHashList;
-        private List<KeyValuePair<string, string>> clientHashList;
-        private ProgressData progressData;
+        private readonly string dropboxToken;      
+        private readonly string rootFolder;
+        private readonly string localModPath;
+        private string cacheFolder;
+        private DropboxClient dropboxClient;
+     
+        public ProgressData ProgressData { get; }       
 
-        public Version RemoteAppVersion { get => VersionXML.ParseAppVersion(remoteVersionXML); }
-        public Version RemoteModVersion { get => VersionXML.ParseModVersion(remoteVersionXML); }
-        
-        /// <summary>
-        /// Список все файлы клиента
-        /// </summary>
-        public List<string> ClientFilesList { get; private set; }
-
-        /// <summary>
-        /// Список все файлы сервера
-        /// </summary>
-        public List<string> RemoteFilesList { get; private set; }
-
-        /// <summary>
-        /// Список новые файлы которые добавлена в сервере
-        /// </summary>
-        public List<string> NewFilesList { get; private set; }
-
-        /// <summary>
-        /// Список файлов которые удалена из сервера
-        /// </summary>
-        public List<string> DeletedFilesList { get; private set; }
-
-        /// <summary>
-        /// Список изменённые файлы в сервере (файлы который различается md5 значение)
-        /// </summary>
-        public List<string> ChangedFilesList { get; private set; }
-
-
-        public UpdaterClient()
-        {           
-            this.clientHashList = new List<KeyValuePair<string, string>>();
-            this.remoteHashList = new List<KeyValuePair<string, string>>();
-            this.progressData = new ProgressData();
-            this.dbx = new DropboxClient(tokenDropbox);
-
-            using (var response = dbx.Files.DownloadAsync(rootFolder + "/" + versionXMLFile).Result)
-            {
-                using (var streamXML = response.GetContentAsStreamAsync().Result)
-                {
-                    this.remoteVersionXML = XDocument.Load(streamXML);
-                    this.remoteVersionXML.Save(App.globalVars.CacheFolder + @"\launcher\Version.xml");
-                }
-            }
+        public UpdaterClient(string dropboxToken, string rootFolder, string cacheFolder, string localModPath)
+        {
+            this.dropboxToken = dropboxToken;
+            this.rootFolder = rootFolder;
+            this.cacheFolder = cacheFolder;
+            this.localModPath = localModPath;
+            ProgressData = new ProgressData();
+            dropboxClient = new DropboxClient(dropboxToken);          
         }
 
         /// <summary>
         /// Checks application update in the host of DropBox
         /// </summary>
         /// <returns> true if application has an update otherwise false</returns>
-        public bool CheckAppUpdate()
-        {          
-            if (App.globalVars.ApplicationVersion < this.RemoteAppVersion)
-            {              
-                return true;
-            }
-            return false;
+        public async Task<bool> CheckAppUpdateAsync()
+        {
+            return await Task.Run(async () =>
+            {
+                var localAppVersion = VersionXml.ParseLauncherVersion(XDocument.Load("Version.xml"));
+                var remoteAppVersion = await GetRemoteAppVersionAsync();
+
+                if (localAppVersion < remoteAppVersion)                
+                    return true;
+
+                return false;              
+            });                       
         }
 
         /// <summary>
         /// Checks mod update in the host of DropBox
         /// </summary>
         /// <returns> true if mod has an update otherwise false</returns>
-        public bool CheckModUpdate()
+        public async Task<bool> CheckModUpdateAsync()
         {
-            if (App.globalVars.ModVersion < this.RemoteModVersion)
-            {               
-                return true;
-            }        
-            return false;
-        }         
-
-        public async Task CheckModFilesAsync(IProgress<ProgressData> progress)
-        {           
-            this.progressData.value = 0;
-            this.progressData.max = 1;
-            this.progressData.statusText = "HashList.md5";
-            progress?.Report(progressData); //Сообщить пользователя что скачается хеш-файл           
-
-            using (var response = await dbx.Files.DownloadAsync(rootFolder + "/launcher/HashList.md5"))
+            return await Task.Run(async () =>
             {
-                // Скачать хеш-файл сервера
-                var remoteHashFile = await response.GetContentAsByteArrayAsync();
+                var localModVersion = VersionXml.ParseModVersion(XDocument.Load("Version.xml"));
+                var remoteModVersion = await GetRemoteModVersionAsync();
 
-                // Сохранить хеш-файл сервера на папке кеша
-                File.WriteAllBytes(App.globalVars.CacheFolder + "\\launcher\\HashList.md5", remoteHashFile);
+                if (localModVersion < remoteModVersion)
+                    return true;
 
-                // Хеш-файл клиента
-                using (var clientHashFile = new FileStream("HashList.md5", FileMode.Open))
-                {
-                    // Получить список хеш-значение сервера
-                    remoteHashList = HashFile.GetHashListFromFile(new FileStream(App.globalVars.CacheFolder + "\\launcher\\HashList.md5", FileMode.Open));
-
-                    // Получить список хеш-значение клиента
-                    clientHashList = HashFile.GetHashListFromFile(clientHashFile);
-
-                    // UNIX path separator '/'
-                    // Windows path separator '\\'
-                    // All files convert to UNIX path separator
-                    // Все пути в хеш файле(HashList.md5) в виде windows разделитела, надо его конвертировать на UNIX разделителя чтобы сервер взаимодействовал с ним                                                            
-                    this.ClientFilesList = (from item in clientHashList select item.Key.Replace("\\", "/")).ToList();
-                    this.RemoteFilesList = (from item in remoteHashList select item.Key.Replace("\\", "/")).ToList();
-                    this.NewFilesList = RemoteFilesList.Except(ClientFilesList).ToList();
-                    this.DeletedFilesList = ClientFilesList.Except(RemoteFilesList).ToList();
-                    this.ChangedFilesList = clientHashList
-                                           .Except(remoteHashList)
-                                           .Select(item => item.Key.Replace("\\", "/"))
-                                           .Except(DeletedFilesList) // Исключить файлы которые удалены из сервера
-                                           .ToList();
-                }
-            }
+                return false;
+            });
         }
-        
+
         // Скачать обновление, сначала скачается хеш-файл из сервера, потом сравнивается хеш-файл клиента с сервером
-        public async void DownloadModUpdateAsync(IProgress<ProgressData> progress)
-        {          
+        public async Task DownloadModUpdateAsync()
+        {
             await Task.Run(async () =>
             {
-                await CheckModFilesAsync(progress);
+                ProgressData.CurrentValue = 0;
+                ProgressData.MaxValue = 1;
+                ProgressData.StatusText = "Downloading metadata HashList.md5";
+             
+                // Скачать хеш-файл сервера
+                await DownloadStreamFromDropboxAsync(rootFolder, "/launcher/HashList.md5");
+
+                // Получить список хеш-значение сервера который скачана и сохранена в папке кеша
+                var remoteHashList = HashGenerator.GetHashListFromFile($"{cacheFolder}\\launcher\\HashList.md5");
+
+                // Получить список хеш-значение клиента
+                var localHashList = HashGenerator.GetHashListFromFile("HashList.md5");
+
+                // UNIX path separator '/'
+                // Windows path separator '\\'
+                // All files convert to UNIX path separator
+                // Все пути в хеш файле(HashList.md5) в виде windows разделитела, надо его конвертировать на UNIX разделителя чтобы сервер взаимодействовал с ним                                                            
+                var localFilesList = (from item in localHashList select item.Key.Replace("\\", "/")).ToList();
+                var remoteFilesList = (from item in remoteHashList select item.Key.Replace("\\", "/")).ToList();
+                var newFilesList = remoteFilesList.Except(localFilesList).ToList();
+                var deletedFilesList = localFilesList.Except(remoteFilesList).ToList();
+                var changedFilesList = localHashList.Except(remoteHashList)
+                                                    .Select(item => item.Key.Replace("\\", "/"))
+                                                    .Except(deletedFilesList)
+                                                    .ToList(); // Исключить файлы которые удалены из сервера
 
                 // Общее количество файлов для скачивание
-                this.progressData.max = this.ChangedFilesList.Count + this.NewFilesList.Count;
+                ProgressData.MaxValue = changedFilesList.Count + newFilesList.Count;
 
-                foreach (var file in this.ChangedFilesList)
+                foreach (var file in changedFilesList)
                 {
-                    this.progressData.statusText = Path.GetFileName(file);
-                    this.progressData.value++;
-                    progress?.Report(progressData);
-                    await DownloadFromDbx(rootFolder, file);
+                    ProgressData.StatusText = Path.GetFileName(file);
+                    await DownloadStreamFromDropboxAsync(rootFolder, file);
+                    ProgressData.CurrentValue++;
                 }
 
-                foreach (var file in this.NewFilesList)
+                foreach (var file in newFilesList)
                 {
-                    this.progressData.statusText = Path.GetFileName(file);
-                    this.progressData.value++;
-                    progress?.Report(progressData);
-                    await DownloadFromDbx(rootFolder, file);
+                    ProgressData.StatusText = Path.GetFileName(file);
+                    await DownloadStreamFromDropboxAsync(rootFolder, file);
+                    ProgressData.CurrentValue++;
                 }
 
-                foreach (var file in this.DeletedFilesList)
+                foreach (var file in deletedFilesList)
                 {
                     string fileNameWindows = file.Replace("/", "\\");
 
-                    if (File.Exists(App.globalVars.ModDirectory + fileNameWindows))
-                    {
-                        File.Delete(App.globalVars.ModDirectory + fileNameWindows);
-                    }
+                    if (File.Exists(localModPath + fileNameWindows))
+                        File.Delete(localModPath + fileNameWindows);
                 }
 
                 // Получаем список скачанных файлов в папке кеша
-                string[] cacheFiles = Directory.GetFiles(App.globalVars.CacheFolder, "*", SearchOption.AllDirectories);
+                string[] cacheFiles = Directory.GetFiles(cacheFolder, "*", SearchOption.AllDirectories);
 
                 // Получаем путь к папке Hearts of Iron IV/mod
                 string modsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod");
@@ -190,82 +142,139 @@ namespace EC_Launcher
                             CopyToFolder(file, modsFolder);
                             continue;
                         }
-                        CopyToFolder(file, App.globalVars.ModDirectory);
+                        CopyToFolder(file, localModPath);
+                    }
+                }
+
+                ProgressData.StatusText = "Economic Crisis has successfully updated!";
+            });          
+        }                  
+
+        // Скачиваем обновления для лаунчера
+        public async Task DownloadAppUpdateAsync()
+        {          
+            await Task.Run(async () =>
+            {
+                ProgressData.CurrentValue = 0;
+                ProgressData.MaxValue = 0;               
+                
+                var remoteLauncherFiles = await GetRemoteFiles($"{rootFolder}/launcher", true);
+                ProgressData.MaxValue = remoteLauncherFiles.Count;
+
+                foreach (var filePath in remoteLauncherFiles)
+                {
+                    ProgressData.StatusText = $"Downloading {Path.GetFileName(filePath)}";
+                    await DownloadStreamFromDropboxAsync(rootFolder, filePath);
+                    ProgressData.CurrentValue++;
+                }                
+                
+                NotifyUserThenClose();
+            });           
+        }
+
+        public async Task<Version> GetRemoteModVersionAsync()
+        {
+            return await Task.Run(async () =>
+            {
+                using (var response = await dropboxClient.Files.DownloadAsync(rootFolder + "/launcher/Version.xml"))
+                {
+                    using (var streamXML = await response.GetContentAsStreamAsync())
+                    {
+                        return VersionXml.ParseModVersion(XDocument.Load(streamXML));
                     }
                 }
             });
         }
 
-        // Скачиваем обновленный файл EC_Launcher.exe по частям
-        public async void DownloadAppUpdateAsync(IProgress<int> progress)
-        {          
+        public async Task<Version> GetRemoteAppVersionAsync()
+        {
+            return await Task.Run(async () =>
+            {
+                using (var response = await dropboxClient.Files.DownloadAsync(rootFolder + "/launcher/Version.xml"))
+                {
+                    using (var streamXML = await response.GetContentAsStreamAsync())
+                    {
+                        return VersionXml.ParseLauncherVersion(XDocument.Load(streamXML));
+                    }
+                }
+            });
+        }
+
+        private async Task<List<string>> GetRemoteFiles(string folderPath, bool recrusiveMode)
+        {
+            return await Task.Run(async () =>
+            {
+                var response = await dropboxClient.Files.ListFolderAsync(folderPath, recrusiveMode);               
+                return response.Entries.Select(i => i.PathDisplay).ToList();
+            });
+        }
+
+        private async Task DownloadBytesFromDropboxAsync(string rootFolder, string file)
+        {
             await Task.Run(async () =>
             {
-                using (var response = await dbx.Files.DownloadAsync(rootFolder + "/launcher/EC_Launcher.exe"))
+                using (var response = await dropboxClient.Files.DownloadAsync(rootFolder + file))
+                {
+                    byte[] data = await response.GetContentAsByteArrayAsync();
+                    string fileNameWindows = file.Replace("/", "\\");
+
+                    // Если не существует такой каталог в папке кеша, тогда создаем новый каталог
+                    if (!Directory.Exists(cacheFolder + Path.GetDirectoryName(fileNameWindows)))
+                        Directory.CreateDirectory(cacheFolder + Path.GetDirectoryName(fileNameWindows));
+
+                    File.WriteAllBytes(cacheFolder + fileNameWindows, data);
+                }
+            });           
+        }
+
+        private async Task DownloadStreamFromDropboxAsync(string rootFolder, string filePath)
+        {
+            await Task.Run(async () =>
+            {
+                using (var response = await dropboxClient.Files.DownloadAsync(rootFolder + filePath))
                 {
                     ulong fileSize = response.Response.Size;
                     const int bufferSize = 1024 * 1024;
                     byte[] buffer = new byte[bufferSize];
+                    //ProgressData.MaxValue = (long)fileSize;
 
                     using (var stream = await response.GetContentAsStreamAsync())
                     {
-                        using (var file = new FileStream(App.globalVars.CacheFolder + @"\launcher\EC_Launcher.exe", FileMode.OpenOrCreate))
+                        using (var file = new FileStream(cacheFolder + filePath, FileMode.OpenOrCreate))
                         {
                             var length = stream.Read(buffer, 0, bufferSize);
 
                             while (length > 0)
                             {
                                 file.Write(buffer, 0, length);
-                                var percentage = ProgressData.GetPercentage((int)file.Length, (int)fileSize);
+                                //ProgressData.CurrentValue = file.Length;
                                 length = stream.Read(buffer, 0, bufferSize);
-                                progress?.Report(percentage);
                             }
                         }
                     }
                 }
-                MessageToUserAndClose();
-            });           
+            });            
         }
-
-        private async Task DownloadFromDbx(string rootFolder, string file)
-        {
-            using (var response = await dbx.Files.DownloadAsync(rootFolder + file))
-            {              
-                byte[] data = await response.GetContentAsByteArrayAsync();
-                string fileNameWindows = file.Replace("/", "\\");
-
-                // Если не существует такой каталог в папке кеша, тогда создаем новый каталог
-                if (!Directory.Exists(App.globalVars.CacheFolder + Path.GetDirectoryName(fileNameWindows)))
-                {
-                    Directory.CreateDirectory(App.globalVars.CacheFolder + Path.GetDirectoryName(fileNameWindows));
-                }
-
-                File.WriteAllBytes(App.globalVars.CacheFolder + fileNameWindows, data);
-            }
-        }              
 
         private void CopyToFolder(string sourceFileFromCacheFolder, string destDirectory)
         {           
-            int fullLength = sourceFileFromCacheFolder.Length;
-            int cacheFolderLength = App.globalVars.CacheFolder.Length;
+            int fullLength = sourceFileFromCacheFolder.Length;           
 
-            string fileName = sourceFileFromCacheFolder.Remove(0, cacheFolderLength);
+            string fileName = sourceFileFromCacheFolder.Remove(0, cacheFolder.Length);
             string dirName = Path.GetDirectoryName(fileName);
 
-            if (!Directory.Exists(destDirectory + dirName))
-            {
-                Directory.CreateDirectory(destDirectory + dirName);
-            }
+            if (!Directory.Exists(destDirectory + dirName))            
+                Directory.CreateDirectory(destDirectory + dirName);           
 
             File.Copy(sourceFileFromCacheFolder, destDirectory + fileName, true);           
         }
 
         // Сообщить пользователя что надо перезагрузить лаунчера после скачивание обновлении лаунчера
         // Активируем наш Updater.exe передаем только одна аргумент который указывает путь к обновленный лаунчер в кеш папке
-        private void MessageToUserAndClose()
+        private void NotifyUserThenClose()
         {
             MessageBox.Show("The application update has successfully downloaded, please press OK for continue", "Downloaded", MessageBoxButton.OK, MessageBoxImage.Information);
-            string arguments = App.globalVars.CacheFolder + @"\launcher\EC_Launcher.exe";
+            string arguments = cacheFolder + @"\launcher\EC_Launcher.exe";
             Process.Start("Updater.exe", arguments);
         }
     }

@@ -1,21 +1,49 @@
 ﻿using System;
+using Prism.Mvvm;
 
-namespace EC_Launcher
+namespace EC_Launcher.Models
 {
-    public struct ProgressData
+    public class ProgressData : BindableBase
     {
-        public int value;
-        public int max;       
-        public string statusText;
+        private long currentValue;
+        private long maxValue;
+        private string statusText;
 
-        public int GetPercentage()
+        public long CurrentValue
         {
-            return (this.value * 100) / this.max;
+            get => currentValue;
+            set
+            {
+                SetProperty(ref currentValue, value);
+                RaisePropertyChanged("Percentage");
+            }
         }
-
-        public static int GetPercentage(int value, int max)
+        public long MaxValue
         {
-            return (value * 100) / max;
+            get => maxValue;
+            set
+            {
+                SetProperty(ref maxValue, value);
+                RaisePropertyChanged("Percentage");
+            }
         }
+        public int Percentage
+        {
+            get
+            {
+                if (MaxValue != 0)
+                    return (int)(CurrentValue * 100 / MaxValue);
+                else
+                    return 0;
+            }
+        } 
+        public string StatusText
+        {
+            get => statusText;
+            set
+            {
+                SetProperty(ref statusText, value);
+            }
+        }       
     }
 }

@@ -1,73 +1,73 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Xml.Linq;
+using Prism.Mvvm;
 
-namespace EC_Launcher
+namespace EC_Launcher.Models
 {
-    public class VersionXML
+    public class VersionXml : BindableBase
     {
-        private string versionXML_File;
+        private readonly string xmlFile;       
+        private Version modVersion;
+        private Version launcherVersion;
         private XDocument xDoc;
 
-        public VersionXML()
+        public VersionXml()
         {
-            versionXML_File = "Version.xml";           
-
+            xmlFile = "Version.xml";
+            launcherVersion = Assembly.GetExecutingAssembly().GetName().Version;
+            modVersion = new Version("0.6.3.0"); // 0.6.3.0 - default start version
+      
             if (!File.Exists("Version.xml") || File.ReadAllText("Version.xml") == String.Empty)
             {
                 File.Create("Version.xml").Close();
-                this.SetDefaultVersion(App.globalVars.ModVersion.ToString(), App.globalVars.ApplicationVersion.ToString());
+                SetDefaultVersion();
             }
-            xDoc = XDocument.Load(versionXML_File);
+            xDoc = XDocument.Load(xmlFile);
         }
 
         public Version ModVersion
         {
-            get
-            {
-                var modVersion = xDoc.Element("Version").Element("Mod_Version").Value;
-                return Version.Parse(modVersion);
-            }
+            get => modVersion;
             set
             {
+                SetProperty(ref modVersion, value);
                 xDoc.Element("Version").Element("Mod_Version").Value = value.ToString();
-                xDoc.Save(versionXML_File);
+                xDoc.Save(xmlFile);
             }
         }
 
-        public Version AppVersion
+        public Version LauncherVersion
         {
-            get
-            {
-                var appVersion = xDoc.Element("Version").Element("App_Version").Value;
-                return Version.Parse(appVersion);
-            }
+            get => launcherVersion;
             set
             {
+                SetProperty(ref launcherVersion, value);
                 xDoc.Element("Version").Element("App_Version").Value = value.ToString();
-                xDoc.Save(versionXML_File);
+                xDoc.Save(xmlFile);
             }
         }
         
-        public static Version ParseAppVersion(XDocument serverVersionXML)
+        public static Version ParseLauncherVersion(XDocument versionXml)
         {
-            return Version.Parse(serverVersionXML.Element("Version").Element("App_Version").Value);
+            return Version.Parse(versionXml.Element("Version").Element("App_Version").Value);
         }
-        public static Version ParseModVersion(XDocument serverVersionXML)
+        public static Version ParseModVersion(XDocument versionXml)
         {
-            return Version.Parse(serverVersionXML.Element("Version").Element("Mod_Version").Value);
+            return Version.Parse(versionXml.Element("Version").Element("Mod_Version").Value);
         }
 
-        private void SetDefaultVersion(string ModVersion, string AppVersion)
+        private void SetDefaultVersion()
         {
             XDocument VersionDoc = new XDocument(
                                         new XElement("Version",
                                             new XComment("Do not change these strings!!!"),
-                                            new XElement("Mod_Version", ModVersion),
-                                            new XElement("App_Version", AppVersion)
+                                            new XElement("Mod_Version", modVersion.ToString()),
+                                            new XElement("App_Version", launcherVersion.ToString())
                                             )
                                         );
-            VersionDoc.Save(versionXML_File);
+            VersionDoc.Save(xmlFile);
         }
     }
 }

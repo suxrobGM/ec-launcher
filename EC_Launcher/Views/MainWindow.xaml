@@ -1,285 +1,227 @@
-﻿<Window x:Class="EC_Launcher.MainWindow"
+﻿<Window x:Class="EC_Launcher.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:prism="http://prismlibrary.com/"
         xmlns:local="clr-namespace:EC_Launcher"
         mc:Ignorable="d"
-        WindowStyle="None"
-        ResizeMode="NoResize"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        ResizeMode="CanMinimize"
         Title="Hearts of Iron IV: Economic Crisis Launcher" 
-        Height="549" 
+        Height="550" 
         Width="800"
-        BorderBrush="#7F87CEEB"
-        BorderThickness="1">
+        WindowStartupLocation="CenterScreen">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <prism:InvokeCommandAction Command="{Binding ExitCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    
     <Window.Background>
         <ImageBrush ImageSource="/EC_Launcher;component/Resources/Background.bmp"/>
     </Window.Background>
-
-
-    <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="26" ResizeBorderThickness="5" />
-    </WindowChrome.WindowChrome>
 
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="/EC_Launcher;component/Resources/Background.bmp"/>
         </Grid.Background>
 
-        <Border Name="mask" CornerRadius="20" Width="560" BorderThickness="1"
-        BorderBrush="Black" Margin="238,57,0,147">
-            <Border.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#BF000000" Offset="0"/>
-                    <GradientStop Color="#BF5B5050" Offset="0.534"/>
-                </LinearGradientBrush>
-            </Border.Background>
-
-            <WebBrowser 
-            x:Name="WBrowser" 
-            HorizontalAlignment="Left" 
-            Height="323" 
-            Margin="9,9,0,0" 
-            VerticalAlignment="Top" 
-            Width="540" LoadCompleted="WBrowser_LoadCompleted"/>
-
-        </Border>
-
-
         <StackPanel HorizontalAlignment="Left" Height="186" Margin="10,140,0,0" VerticalAlignment="Top" Width="176">
 
-            <Button 
-                x:Name="OpenGameButton"
-                Content="{DynamicResource m_OpenGame}"               
-                VerticalAlignment="Top" 
+            <Button              
+                Content="{DynamicResource m_OpenGame}"
+                Command="{Binding OpenGameCommand}"
                 Width="176" 
                 Height="28"                 
-                Margin="0" 
-                Click="OpenGameButton_Click" 
-                HorizontalAlignment="Left" 
+                Margin="0"                              
                 Style="{DynamicResource ButtonStyle}"/>
 
             <Button 
-                x:Name="CheckUpdateButton" 
                 Content="{DynamicResource m_CheckUpdate}"                  
-                HorizontalAlignment="Left" 
-                VerticalAlignment="Top" 
+                Command="{Binding CheckUpdateCommand}"
                 Width="176" 
                 Height="28"                
-                Margin="0,3,0,0" 
-                Click="CheckUpdateButton_Click"
+                Margin="0,3,0,0"
                 Style="{DynamicResource ButtonStyle}"/>
 
             <Button 
                 x:Name="ReportBugButton" 
                 Content="{DynamicResource m_ReportBug}"               
-                HorizontalAlignment="Left" 
-                VerticalAlignment="Top" 
+                Command="{Binding ReportBugCommand}"
                 Width="176" 
-                Height="27"               
+                Height="28"               
                 Margin="0,3,0,0" 
-                Click="ReportBugButton_Click"
                 Style="{DynamicResource ButtonStyle}"/>
 
             <Button 
-                x:Name="DonateButton" 
                 Content="{DynamicResource m_Donate}"               
-                HorizontalAlignment="Left" 
-                VerticalAlignment="Top" 
+                Command="{Binding DonateCommand}"
                 Width="176" 
                 Height="28"                
-                Margin="0,3,0,0" Click="DonateButton_Click"
+                Margin="0,3,0,0"
                 Style="{DynamicResource ButtonStyle}"/>
 
             <Button 
-                x:Name="SettingsButton" 
-                Content="{DynamicResource m_Settings}"              
-                HorizontalAlignment="Left" 
-                VerticalAlignment="Top" 
+                Content="{DynamicResource m_Settings}"
+                Command="{Binding SettingsCommand}"
                 Width="176" 
                 Height="28" 
                 Margin="0,3,0,0" 
-                Click="SettingsButton_Click"
                 Style="{DynamicResource ButtonStyle}"/>
 
-            <Button 
-                x:Name="GenerateHashButton" 
+            <Button               
                 Content="{DynamicResource m_GenerateHash}"               
-                HorizontalAlignment="Left" 
-                VerticalAlignment="Top" 
+                Command="{Binding GenerateHashCommand}"
+                Visibility="{Binding DevModeVisibility}"
                 Width="176"
-                Height="27" 
-                Margin="0,3,0,0" 
-                Click="GenerateHashButton_Click"
+                Height="28" 
+                Margin="0,3,0,0"                
                 Style="{DynamicResource ButtonStyle}"/>
         </StackPanel>
-        <TextBlock x:Name="PgBar_TextBlock" Visibility="Hidden" Text="{Binding ElementName=ProgressBar1, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="133,290,642,113" />
 
-        <Label x:Name="ModVersionLabel" Content="{DynamicResource m_ModVersionLabel}" HorizontalAlignment="Left" Margin="10,506,0,0" VerticalAlignment="Top" FontWeight="Bold" Background="{x:Null}" FontSize="9" Foreground="White"/>
-        <Label x:Name="LauncherVersionLabel" Content="{DynamicResource m_LauncherVersionLabel}" HorizontalAlignment="Left" Margin="10,493,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="9" Foreground="#FFF7F7F7"/>
-        <Label x:Name="DeveloperMode_Label" Content="{DynamicResource m_DevMode}" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFF30000" FontWeight="Bold" FontSize="18"/>
-        <Label Content="{DynamicResource m_FollowUsLabel}" HorizontalAlignment="Left" Margin="32,396,0,0" VerticalAlignment="Top" FontWeight="Bold">
-            <Label.Foreground>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="Black" Offset="0"/>
-                    <GradientStop Color="White" Offset="1"/>
-                </LinearGradientBrush>
-            </Label.Foreground>
-        </Label>
-
-        <!-- Social community buttons -->
-        <StackPanel HorizontalAlignment="Left" Height="30" Margin="10,422,0,0" VerticalAlignment="Top" Width="222" Orientation="Horizontal">
-            <Button 
-                x:Name="FacebookButton"
-                Style="{StaticResource ButtonBackgroundImageShow}"
-                Content="" 
-                Width="30" 
-                Height="30" 
-                VerticalAlignment="Top" 
-                Click="FacebookButton_Click">
-                <Button.BorderBrush>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="Black" Offset="0"/>
-                        <GradientStop Color="#FFFDA100" Offset="1"/>
-                    </LinearGradientBrush>
-                </Button.BorderBrush>
-                <Button.Background>
-                    <ImageBrush ImageSource="/EC_Launcher;component/Icons/facebook-black.png"/>
-                </Button.Background>
-            </Button>
-            <Button 
-                x:Name="VKButton"
-                Style="{StaticResource ButtonBackgroundImageShow}"
-                Content="" 
-                Width="30" 
-                Click="VKButton_Click">
-                <Button.BorderBrush>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="Black" Offset="0"/>
-                        <GradientStop Color="#FFFDA100" Offset="1"/>
-                    </LinearGradientBrush>
-                </Button.BorderBrush>
-                <Button.Background>
-                    <ImageBrush ImageSource="/EC_Launcher;component/Icons/vk-black.png"/>
-                </Button.Background>
-            </Button>
-            <Button 
-                x:Name="YouTubeButton"
-                Style="{StaticResource ButtonBackgroundImageShow}"
-                Content="" 
-                Width="30" 
-                Click="YouTubeButton_Click">
-                <Button.BorderBrush>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="Black" Offset="0"/>
-                        <GradientStop Color="#FFFDA100" Offset="1"/>
-                    </LinearGradientBrush>
-                </Button.BorderBrush>
-                <Button.Background>
-                    <ImageBrush ImageSource="/EC_Launcher;component/Icons/youtube-black.png"/>
-                </Button.Background>
-            </Button>
-            <Button 
-                x:Name="DiscordButton"
-                Style="{StaticResource ButtonBackgroundImageShow}"
-                Content="" 
-                Width="30" 
-                Click="DiscordButton_Click" 
-                IsTabStop="False">
-                <Button.BorderBrush>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="Black" Offset="0"/>
-                        <GradientStop Color="#FFFDA100" Offset="1"/>
-                    </LinearGradientBrush>
-                </Button.BorderBrush>
-                <Button.Background>
-                    <ImageBrush ImageSource="/EC_Launcher;component/Icons/discord-black.png"/>
-                </Button.Background>
-            </Button>
-            <Button 
-                x:Name="SteamButton"
-                Style="{StaticResource ButtonBackgroundImageShow}"
-                Content="" 
-                Width="30" 
-                Click="SteamButton_Click">
-                <Button.BorderBrush>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="Black" Offset="0"/>
-                        <GradientStop Color="#FFFDA100" Offset="1"/>
-                    </LinearGradientBrush>
-                </Button.BorderBrush>
-                <Button.Background>
-                    <ImageBrush ImageSource="/EC_Launcher;component/Icons/steam-black.png"/>
-                </Button.Background>
-            </Button>
-            <Button 
-                x:Name="ModdbButton"
-                Style="{StaticResource ButtonBackgroundImageShow}"
-                Content="" 
-                Width="68" Click="ModdbButton_Click">
-                <Button.BorderBrush>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="Black" Offset="0"/>
-                        <GradientStop Color="#FFFDA100" Offset="1"/>
-                    </LinearGradientBrush>
-                </Button.BorderBrush>
-                <Button.Background>
-                    <ImageBrush ImageSource="/EC_Launcher;component/Icons/moddb-black.png"/>
-                </Button.Background>
-            </Button>
+        <StackPanel Orientation="Horizontal" Width="225" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="10,0,0,28.8">
+            <Label Content="Launcher version: " HorizontalAlignment="Left" FontWeight="Bold" Background="{x:Null}" FontSize="9" Foreground="White"/>
+            <Label Content="{Binding LauncherVersion}" HorizontalAlignment="Left" FontWeight="Bold" FontSize="9" Foreground="#FFF7F7F7"/>
+            <Label Content="Mod version: " HorizontalAlignment="Left" FontWeight="Bold" Background="{x:Null}" FontSize="9" Foreground="White"/>
+            <Label Content="{Binding ModVersion}" HorizontalAlignment="Left" FontWeight="Bold" Background="{x:Null}" FontSize="9" Foreground="White"/>
         </StackPanel>
 
-        <!-- Custom Top Bar -->
-        <Rectangle HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Width="800" Margin="0,-5,-2,0">
-            <Rectangle.Stroke>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="Black" Offset="0"/>
-                    <GradientStop Color="#FF003593" Offset="1"/>
-                </LinearGradientBrush>
-            </Rectangle.Stroke>
-            <Rectangle.Fill>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="Black"/>
-                    <GradientStop Color="White" Offset="1"/>
-                </LinearGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
-        <Button 
-            x:Name="CloseButton"
-            Style="{StaticResource ButtonBackgroundImageShow}"
-            Content="" 
-            HorizontalAlignment="Left" 
-            Margin="756,25,0,0" 
-            VerticalAlignment="Top" 
-            Width="32" 
-            Height="32" 
-            BorderBrush="{x:Null}" 
-            Click="CloseButton_Click">
-            <Button.Background>
-                <ImageBrush ImageSource="/EC_Launcher;component/icons/cancel_button.png"/>
-            </Button.Background>
-        </Button>
-        <Label Content="Hearts of Iron IV: Economic Crisis Launcher" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" FontFamily="Perpetua Titling MT" Height="25" Width="440.913" Style="{DynamicResource LabelStyle}">
-            <Label.Foreground>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="Black" Offset="1"/>
-                    <GradientStop Color="#FF0097FF"/>
-                </LinearGradientBrush>
-            </Label.Foreground>
-            <Label.Effect>
-                <DropShadowEffect Color="#FF0E0E0E" RenderingBias="Quality"/>
-            </Label.Effect>
-        </Label>
-        <Label HorizontalAlignment="Left" Margin="636,497,0,0" VerticalAlignment="Top" Foreground="White" FontStyle="Italic" FontWeight="Bold">
-            <Hyperlink NavigateUri="https://www.facebook.com/suxrobgm" RequestNavigate="Hyperlink_RequestNavigate">
+
+        <Label Content="{DynamicResource m_DevMode}" Visibility="{Binding DevModeVisibility}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFF30000" FontWeight="Bold" FontSize="18"/>
+
+
+
+        <Label Margin="636,497,10.4,9.8" Foreground="White" FontStyle="Italic" FontWeight="Bold">
+            <Hyperlink Command="{Binding GoToWebSiteCommand}" CommandParameter="https://www.facebook.com/suxrobgm">
                 Developed by SuxrobGM
             </Hyperlink>
         </Label>
-        <Grid HorizontalAlignment="Left" Height="52" Margin="238,400,0,0" VerticalAlignment="Top" Width="560">
-            <TextBlock x:Name="statusText" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="White" FontStyle="Italic" Margin="0,8,0,0"/>
-            <TextBlock x:Name="statusCountText" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="White" FontStyle="Italic" Margin="474,8,0,0" Height="16"/>
-            <ProgressBar x:Name="ProgressBar1" x:FieldModifier="public" HorizontalAlignment="Left" Height="23" Margin="0,28.96,0,0" VerticalAlignment="Top" Width="553" ValueChanged="ProgressBar1_ValueChanged"/>
-            <TextBlock Text="{Binding Value, ElementName=ProgressBar1, StringFormat=\{0:0\}%}" HorizontalAlignment="Left" Height="23" Margin="288,28.96,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="46" Background="{x:Null}" FontWeight="Bold" FontStyle="Italic"/>
+
+        <!--Progressbar-->
+        <Grid Margin="240,383,9.6,91.8">
+            <TextBlock Text="{Binding ProgressData.StatusText}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="White" FontStyle="Italic" Height="17"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Width="99" VerticalAlignment="Top" Height="17">
+                <TextBlock Text="{Binding ProgressData.CurrentValue}" TextWrapping="Wrap" Foreground="White" FontStyle="Italic"/>
+                <TextBlock Text="{Binding ProgressData.MaxValue, StringFormat={}/{0:0}}" TextWrapping="Wrap" Foreground="White" FontStyle="Italic"/>
+            </StackPanel>
+            <ProgressBar Value="{Binding ProgressData.Percentage, Mode=OneWay}" Height="23" VerticalAlignment="Bottom"/>
+            <TextBlock Text="{Binding ProgressData.Percentage, Mode=OneWay, StringFormat={}{0:0}%}" TextAlignment="Center" TextWrapping="Wrap" Width="46" Background="{x:Null}" FontWeight="Bold" FontStyle="Italic" Margin="249,22,247,0"/>
+        </Grid>
+        <Frame prism:RegionManager.RegionName="ViewsRegion" Content="" Margin="240,27,9.6,137.8" NavigationUIVisibility="Hidden"/>
+
+        <Grid Margin="10,367,558.6,81.8" Width="225">
+            <Label Content="{DynamicResource m_FollowUsLabel}" HorizontalAlignment="Left" Margin="68,1,0,0" VerticalAlignment="Top" FontWeight="Bold">
+                <Label.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="White" Offset="1"/>
+                    </LinearGradientBrush>
+                </Label.Foreground>
+            </Label>
+
+            <!-- Social community buttons -->
+            <StackPanel HorizontalAlignment="Left" Height="30" Width="222" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,0,0,10">
+                <Button 
+                Style="{StaticResource ButtonBackgroundImageShow}"
+                Command="{Binding GoToWebSiteCommand}"
+                CommandParameter="https://www.facebook.com/HOI.Economic.Crisis"
+                Content="" 
+                Width="30" 
+                Height="30">
+                    <Button.BorderBrush>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="Black" Offset="0"/>
+                            <GradientStop Color="#FFFDA100" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.BorderBrush>
+                    <Button.Background>
+                        <ImageBrush ImageSource="/EC_Launcher;component/Icons/facebook-black.png"/>
+                    </Button.Background>
+                </Button>
+                <Button                
+                Style="{StaticResource ButtonBackgroundImageShow}"
+                Command="{Binding GoToWebSiteCommand}"
+                CommandParameter="https://vk.com/ec_hoi_mod"
+                Content="" 
+                Width="30">
+                    <Button.BorderBrush>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="Black" Offset="0"/>
+                            <GradientStop Color="#FFFDA100" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.BorderBrush>
+                    <Button.Background>
+                        <ImageBrush ImageSource="/EC_Launcher;component/Icons/vk-black.png"/>
+                    </Button.Background>
+                </Button>
+                <Button                
+                Style="{StaticResource ButtonBackgroundImageShow}"
+                Command="{Binding GoToWebSiteCommand}"
+                CommandParameter="https://www.youtube.com/c/HeartsofIronIVEconomicCrisis2013"
+                Content="" 
+                Width="30">
+                    <Button.BorderBrush>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="Black" Offset="0"/>
+                            <GradientStop Color="#FFFDA100" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.BorderBrush>
+                    <Button.Background>
+                        <ImageBrush ImageSource="/EC_Launcher;component/Icons/youtube-black.png"/>
+                    </Button.Background>
+                </Button>
+                <Button                 
+                Style="{StaticResource ButtonBackgroundImageShow}"
+                Command="{Binding GoToWebSiteCommand}"
+                CommandParameter="https://discordapp.com/invite/GPbPBe2"
+                Content="" 
+                Width="30">
+                    <Button.BorderBrush>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="Black" Offset="0"/>
+                            <GradientStop Color="#FFFDA100" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.BorderBrush>
+                    <Button.Background>
+                        <ImageBrush ImageSource="/EC_Launcher;component/Icons/discord-black.png"/>
+                    </Button.Background>
+                </Button>
+                <Button                 
+                Style="{StaticResource ButtonBackgroundImageShow}"
+                Command="{Binding GoToWebSiteCommand}"
+                CommandParameter="https://steamcommunity.com/groups/ec_hoi_mod"
+                Content="" 
+                Width="30">
+                    <Button.BorderBrush>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="Black" Offset="0"/>
+                            <GradientStop Color="#FFFDA100" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.BorderBrush>
+                    <Button.Background>
+                        <ImageBrush ImageSource="/EC_Launcher;component/Icons/steam-black.png"/>
+                    </Button.Background>
+                </Button>
+                <Button                 
+                Style="{StaticResource ButtonBackgroundImageShow}"
+                Command="{Binding GoToWebSiteCommand}"
+                CommandParameter="https://www.moddb.com/mods/hearts-of-iron-iv-economic-crisis"
+                Content="" 
+                Width="68">
+                    <Button.BorderBrush>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="Black" Offset="0"/>
+                            <GradientStop Color="#FFFDA100" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.BorderBrush>
+                    <Button.Background>
+                        <ImageBrush ImageSource="/EC_Launcher;component/Icons/moddb-black.png"/>
+                    </Button.Background>
+                </Button>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>

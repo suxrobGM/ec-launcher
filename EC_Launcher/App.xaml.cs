@@ -1,26 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
+using Prism.Ioc;
+using Prism.Modularity;
+using Prism.Unity;
+using EC_Launcher.Views;
+using EC_Launcher.Models;
 
 namespace EC_Launcher
 {
     /// <summary>
     /// Логика взаимодействия для App.xaml
-    /// </summary>
-    public partial class App : Application
-    {
-        //Глобальный переменный содержить себя основные данные и используется во всех файлы проекта
-        public static GlobalVariables globalVars;
-        public static SettingsXML settingsXML;
-        public static VersionXML versionXML;
-
-        private static List<CultureInfo> m_Languages = new List<CultureInfo>();
-        //Евент для оповещения всех окон приложения
-        //public static event EventHandler LanguageChanged;
-        public static List<CultureInfo> Languages { get => m_Languages; }              
+    /// </summary>    
+    public partial class App : PrismApplication
+    {            
+        public static List<CultureInfo> Languages { get; private set; }
         public static CultureInfo Language
         {
             get
@@ -29,8 +27,10 @@ namespace EC_Launcher
             }
             set
             {
-                if (value == null) throw new ArgumentNullException("value");
-                if (value == System.Threading.Thread.CurrentThread.CurrentUICulture) return;
+                if (value == null)
+                    throw new ArgumentNullException("value");
+                if (value == System.Threading.Thread.CurrentThread.CurrentUICulture)
+                    return;
 
                 //1. Меняем язык приложения:
                 System.Threading.Thread.CurrentThread.CurrentUICulture = value;
@@ -41,7 +41,7 @@ namespace EC_Launcher
                 {
                     case "ru-RU":
                         dict.Source = new Uri(String.Format("Resources/Lang.{0}.xaml", value.Name), UriKind.Relative);
-                        break;                   
+                        break;
                     default:
                         dict.Source = new Uri("Resources/Lang.xaml", UriKind.Relative);
                         break;
@@ -60,39 +60,37 @@ namespace EC_Launcher
                 else
                 {
                     Application.Current.Resources.MergedDictionaries.Add(dict);
-                }
-
-                //4. Вызываем евент для оповещения всех окон.
-                //LanguageChanged(Application.Current, new EventArgs());
+                }               
             }
         }
+
         public App()
         {
-            globalVars = new GlobalVariables();
-            settingsXML = new SettingsXML();
-            versionXML = new VersionXML();
-
-            //Load config from XML file
-            globalVars.ModVersion = versionXML.ModVersion;
-            globalVars.ModDirectory = settingsXML.ModPath;
-            globalVars.GameDirectory = settingsXML.GamePath;
-            globalVars.IsSteamVersion = settingsXML.IsSteamVersion;
-            versionXML.AppVersion = globalVars.ApplicationVersion;
-
-            m_Languages.Clear();
-            m_Languages.Add(new CultureInfo("en-US")); //Нейтральная культура для этого проекта
-            m_Languages.Add(new CultureInfo("ru-RU"));          
+            Languages = new List<CultureInfo>();
+            Languages.Clear();
+            Languages.Add(new CultureInfo("en-US")); //Нейтральная культура для этого проекта
+            Languages.Add(new CultureInfo("ru-RU"));
         }
 
-        private void Application_Startup(object sender, StartupEventArgs e)
+        protected override Window CreateShell()
         {
-            foreach (string arg in e.Args)
-            {
-                if(arg == "-dev_mode") //аргумент -dev_mode включает режим разработчика
-                {
-                    globalVars.DevMode = true;
-                }
-            }    
+            if (Environment.CommandLine.ToLower().Contains("-dev_mode"))
+                SingletonModel.GetInstance().DevMode = true;
+
+            return Container.Resolve<MainWindow>();
         }
+
+        protected override void RegisterTypes(IContainerRegistry containerRegistry)
+        {
+            containerRegistry.RegisterForNavigation<BrowserPage>();
+            containerRegistry.RegisterForNavigation<ReportBugPage>();
+            containerRegistry.RegisterForNavigation<DonatePage>();
+            containerRegistry.RegisterForNavigation<SettingsPage>();            
+        }
+
+        protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
+        {
+            //moduleCatalog.AddModule<ModuleA.ModuleAModule>();           
+        }       
     }
 }
