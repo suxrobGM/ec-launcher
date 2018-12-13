@@ -38,6 +38,7 @@ namespace EC_Launcher.ViewModels
         {
             this.regionManager = regionManager;
             model = SingletonModel.GetInstance();
+            ProgressData = new ProgressData();
 
             if (model.DevMode)
                 DevModeVisibility = Visibility.Visible;
@@ -46,45 +47,65 @@ namespace EC_Launcher.ViewModels
             
             OpenGameCommand = new DelegateCommand(() =>
             {
-                model.CheckModFile();
-                model.SetTickGameLauncher();
+                try
+                {
+                    model.CheckModFile();
+                    model.SetTickGameLauncher();
 
-                if (model.SettingsXml.IsSteamVersion)
-                    model.StartSteamGame();
-                else
-                    model.StartNonSteamGame();
-
+                    if (model.SettingsXml.IsSteamVersion)
+                        model.StartSteamGame();
+                    else
+                        model.StartNonSteamGame();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             });
 
             CheckUpdateCommand = new DelegateCommand(async () =>
             {
                 string dropboxToken = "JCFYioFBHBAAAAAAAAAAFq4g6p6ZhtsYZJktjnNb_JFknLnJjKEMyASiPO7kKKK5";
                 string serverRootFolder = "/EC_Server_Files"; //Корневой папка мода в сервере              
+                ProgressData.StatusText = "Checking update...";
 
-                var updater = new UpdaterClient(dropboxToken, serverRootFolder, model.CacheFolder, model.SettingsXml.ModPath);
-                var hasLauncherUpdate = await updater.CheckAppUpdateAsync();
-                var hasModUpdate = await updater.CheckModUpdateAsync();
+                try
+                {
+                    var updater = new UpdaterClient(dropboxToken, serverRootFolder, model.CacheFolder, model.SettingsXml.ModPath);
+                    var hasLauncherUpdate = await updater.CheckAppUpdateAsync();
+                    var hasModUpdate = await updater.CheckModUpdateAsync();
 
-                if(hasLauncherUpdate)
-                {
-                    var remoteLauncherVersion = await updater.GetRemoteAppVersionAsync();
-                    var mboxResult = MessageBox.Show($"Available update for launcher. New version is  {remoteLauncherVersion}.\nDo you want to download the update?", "Available update for launcher!", MessageBoxButton.OKCancel, MessageBoxImage.Question);
-                    if (mboxResult == MessageBoxResult.OK)
+                    if (hasLauncherUpdate)
                     {
-                        ProgressData = updater.ProgressData;
-                        await updater.DownloadAppUpdateAsync();
-                    }                 
-                }
-                if(hasModUpdate)
-                {
-                    var remoteModVersion = await updater.GetRemoteModVersionAsync();
-                    var mboxResult = MessageBox.Show($"Available update for mod. New version is  {remoteModVersion}.\nDo you want to download the update?", "Available update for mod!", MessageBoxButton.OKCancel, MessageBoxImage.Question);
-                    if (mboxResult == MessageBoxResult.OK)
+                        var remoteLauncherVersion = await updater.GetRemoteAppVersionAsync();
+                        var mboxResult = MessageBox.Show($"Available update for launcher. New version is  {remoteLauncherVersion}.\nDo you want to download the update?", "Available update for launcher!", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+                        if (mboxResult == MessageBoxResult.OK)
+                        {
+                            ProgressData = updater.ProgressData;
+                            await updater.DownloadAppUpdateAsync();
+                        }
+                    }
+                    if (hasModUpdate)
                     {
-                        ProgressData = updater.ProgressData;
-                        await updater.DownloadModUpdateAsync();
+                        var remoteModVersion = await updater.GetRemoteModVersionAsync();
+                        var mboxResult = MessageBox.Show($"Available update for mod. New version is  {remoteModVersion}.\nDo you want to download the update?", "Available update for mod!", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+                        if (mboxResult == MessageBoxResult.OK)
+                        {
+                            ProgressData = updater.ProgressData;
+                            await updater.DownloadModUpdateAsync();
+                        }
+                    }
+                    else
+                    {
+                        ProgressData.StatusText = "";
+                        MessageBox.Show("You are using the last version of Economic Crisis", "Mod does not have update yet", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
+                catch (Exception ex)
+                {
+                    ProgressData.StatusText = "Updating has canceled";
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }               
             });
 
             ReportBugCommand = new DelegateCommand(() =>
@@ -104,6 +125,15 @@ namespace EC_Launcher.ViewModels
 
             GenerateHashCommand = new DelegateCommand(async () =>
             {
+                try
+                {
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
                 var exceptionFiles = new List<string>()
                 {
                     ".git",
