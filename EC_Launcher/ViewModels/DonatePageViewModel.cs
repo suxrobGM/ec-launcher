@@ -28,7 +28,7 @@ namespace EC_Launcher.ViewModels
 
             BackCommand = new DelegateCommand(() =>
             {
-                regionManager.RequestNavigate("ViewsRegion", "BrowserPage");
+                regionManager.RequestNavigate("ViewsRegion", "BrowserPage", new NavigationParameters("GoBack"));
             });
         }        
     }

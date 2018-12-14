@@ -105,14 +105,14 @@ namespace EC_Launcher.Models
 
                 foreach (var file in changedFilesList)
                 {
-                    ProgressData.StatusText = Path.GetFileName(file);
+                    ProgressData.StatusText = file;
                     await DownloadStreamFromDropboxAsync(rootFolder, file);
                     ProgressData.CurrentValue++;
                 }
 
                 foreach (var file in newFilesList)
                 {
-                    ProgressData.StatusText = Path.GetFileName(file);
+                    ProgressData.StatusText = file;
                     await DownloadStreamFromDropboxAsync(rootFolder, file);
                     ProgressData.CurrentValue++;
                 }
@@ -163,8 +163,9 @@ namespace EC_Launcher.Models
 
                 foreach (var filePath in remoteLauncherFiles)
                 {
-                    ProgressData.StatusText = $"Downloading {Path.GetFileName(filePath)}";
-                    await DownloadStreamFromDropboxAsync(rootFolder, filePath);
+                    var file = filePath.Substring(rootFolder.Length); // delete name of root folder in the path string
+                    ProgressData.StatusText = $"Downloading {Path.GetFileName(file)}";
+                    await DownloadStreamFromDropboxAsync(rootFolder, file);
                     ProgressData.CurrentValue++;
                 }                
                 
@@ -205,7 +206,7 @@ namespace EC_Launcher.Models
             return await Task.Run(async () =>
             {
                 var response = await dropboxClient.Files.ListFolderAsync(folderPath, recrusiveMode);               
-                return response.Entries.Select(i => i.PathDisplay).ToList();
+                return response.Entries.Where(i => i.IsFile).Select(i => i.PathDisplay).ToList();
             });
         }
 
@@ -240,6 +241,9 @@ namespace EC_Launcher.Models
 
                     using (var stream = await response.GetContentAsStreamAsync())
                     {
+                        if (!Directory.Exists(Path.GetDirectoryName(cacheFolder + filePath)))
+                            Directory.CreateDirectory(Path.GetDirectoryName(cacheFolder + filePath));
+
                         using (var file = new FileStream(cacheFolder + filePath, FileMode.OpenOrCreate))
                         {
                             var length = stream.Read(buffer, 0, bufferSize);
