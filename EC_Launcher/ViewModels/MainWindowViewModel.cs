@@ -40,6 +40,12 @@ namespace EC_Launcher.ViewModels
             model = SingletonModel.GetInstance();
             ProgressData = new ProgressData();
 
+            if (model.SettingsXml.AppLanguage == "English")
+                App.Language = App.Languages[0];
+            else if (model.SettingsXml.AppLanguage == "Russian")
+                App.Language = App.Languages[1];
+
+
             if (model.DevMode)
                 DevModeVisibility = Visibility.Visible;
             else

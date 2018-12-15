@@ -14,6 +14,7 @@ namespace EC_Launcher.ViewModels
     public class SettingsPageViewModel : BindableBase
     {
         private readonly IRegionManager regionManager;
+        private int selectedLanguageIndex;
         private SingletonModel model;        
 
 
@@ -44,6 +45,25 @@ namespace EC_Launcher.ViewModels
                 RaisePropertyChanged("IsSteamVersion");
             }
         }
+        public int SelectedLanguageIndex
+        {
+            get => selectedLanguageIndex;
+            set
+            {
+                SetProperty(ref selectedLanguageIndex, value);
+
+                if (selectedLanguageIndex == 0)
+                {
+                    App.Language = App.Languages[0]; //en-US
+                    model.SettingsXml.AppLanguage = "English";
+                }                    
+                else if (selectedLanguageIndex == 1)
+                {
+                    App.Language = App.Languages[1]; //ru-RU 
+                    model.SettingsXml.AppLanguage = "Russian";
+                }                            
+            }
+        }
         public DelegateCommand SetGamePathCommand { get; }
         public DelegateCommand SetModPathCommand { get; }
         public DelegateCommand BackCommand { get; }
@@ -52,6 +72,7 @@ namespace EC_Launcher.ViewModels
         {
             this.regionManager = regionManager;
             model = SingletonModel.GetInstance();
+            SelectedLanguageIndex = model.SettingsXml.AppLanguage == "English" ? 0 : 1;
 
             SetGamePathCommand = new DelegateCommand(() =>
             {

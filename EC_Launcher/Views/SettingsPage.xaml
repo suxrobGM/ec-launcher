@@ -37,7 +37,7 @@
 
         <!--Language label-->
         <Label Content="{DynamicResource m_LanguageLabel}" HorizontalAlignment="Left" Margin="10,202,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="White"/>
-        <ComboBox x:Name="Language_CBox" HorizontalAlignment="Left" Margin="8,227,0,0" VerticalAlignment="Top" Width="123">
+        <ComboBox SelectedIndex="{Binding SelectedLanguageIndex}" HorizontalAlignment="Left" Margin="8,227,0,0" VerticalAlignment="Top" Width="123">
             <ListBoxItem Content="English"/>
             <ListBoxItem Content="Russian"/>
         </ComboBox>

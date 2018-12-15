@@ -93,8 +93,8 @@ namespace EC_Launcher.Models
             {
                 if (!firstExec)
                 {
-                    var languageValue  = xDoc.Element("General_Settings").Element("Language").Value;
-                    isSteamVersion = languageValue == "True" ? true : false;
+                    var xValue  = xDoc.Element("General_Settings").Element("Is_Steam_Version").Value;
+                    isSteamVersion = xValue == "True" ? true : false;
                 }
                 return isSteamVersion;
             }
