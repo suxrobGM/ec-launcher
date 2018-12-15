@@ -24,17 +24,35 @@ namespace EC_Launcher.ViewModels
         private string logFilesPath;
         private string selectedScreenshotFile;
         private bool isAttachedLogFile;
-        private List<string> screenshotFilesPath;
+        
 
-        public string SenderName { get => senderName; set { SetProperty(ref senderName, value); } }
-        public string Text { get => text; set { SetProperty(ref text, value); } }
+        public string SenderName
+        {
+            get => senderName;
+            set
+            {
+                SetProperty(ref senderName, value);
+                SendCommand.RaiseCanExecuteChanged();
+            }
+        }
+        public string Text
+        {
+            get => text;
+            set
+            {
+                SetProperty(ref text, value);
+                SendCommand.RaiseCanExecuteChanged();
+            }
+        }
         public string SelectedScreenshotFile { get => selectedScreenshotFile; set { SetProperty(ref selectedScreenshotFile, value); } }
         public bool IsAttachedLogFile { get => isAttachedLogFile; set { SetProperty(ref isAttachedLogFile, value); } }
         public ObservableCollection<string> ScreenshotFiles { get; }
+        public ObservableCollection<string> ScreenshotFilesPath { get; }
         public DelegateCommand SendCommand { get; }
         public DelegateCommand BackCommand { get; }
         public DelegateCommand AddScreenshootsCommand { get; }
         public DelegateCommand RemoveSelectedFile { get; }
+
 
         public ReportBugPageViewModel(IRegionManager regionManager)
         {
@@ -42,7 +60,9 @@ namespace EC_Launcher.ViewModels
             logFilesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "logs");
             IsAttachedLogFile = true;
             ScreenshotFiles = new ObservableCollection<string>();
-            screenshotFilesPath = new List<string>();
+            ScreenshotFilesPath = new ObservableCollection<string>();
+            ScreenshotFilesPath.CollectionChanged += ScreenshotFilesPath_CollectionChanged;
+            
 
             AddScreenshootsCommand = new DelegateCommand(() =>
             {
@@ -50,17 +70,14 @@ namespace EC_Launcher.ViewModels
                 {
                     dialog.Multiselect = true;
                     dialog.Filter = "Image files (.png, .jpg)|*.png;*.jpg";
-                    dialog.ShowDialog();
-                    ScreenshotFiles.AddRange(dialog.SafeFileNames);
-                    screenshotFilesPath.AddRange(dialog.FileNames);                   
+                    dialog.ShowDialog();                    
+                    ScreenshotFilesPath.AddRange(dialog.FileNames);                   
                 }
             });
 
             RemoveSelectedFile = new DelegateCommand(() =>
-            {
-                string selectedFile = SelectedScreenshotFile;
-                ScreenshotFiles.Remove(selectedFile);
-                screenshotFilesPath.Remove(screenshotFilesPath.Find(i => i.Contains(selectedFile)));
+            {             
+                ScreenshotFilesPath.Remove(ScreenshotFilesPath.Where(i => i.Contains(SelectedScreenshotFile)).FirstOrDefault());
             });
 
             SendCommand = new DelegateCommand(() =>
@@ -73,8 +90,9 @@ namespace EC_Launcher.ViewModels
                 catch (Exception ex)
                 {
                     System.Windows.MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }              
-            });
+                }
+                
+            }, CanExecuteSendCommand);
 
             BackCommand = new DelegateCommand(() =>
             {
@@ -82,6 +100,32 @@ namespace EC_Launcher.ViewModels
             });
         }
 
+        private void ScreenshotFilesPath_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null)
+            {
+                if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+                {
+                    foreach (var item in e.NewItems)
+                    {
+                        ScreenshotFiles.Add(Path.GetFileName(item as string));
+                    }
+                }
+            }
+
+            if (e.OldItems != null && e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (var item in e.OldItems)
+                {
+                    ScreenshotFiles.Remove(Path.GetFileName(item as string));
+                }
+            }
+        }
+
+        private bool CanExecuteSendCommand()
+        {
+            return SenderName != null && SenderName != String.Empty && Text != null && Text != String.Empty;
+        }
 
         private void SendMessageEmail(string from, string to)
         {
@@ -97,9 +141,9 @@ namespace EC_Launcher.ViewModels
                     mm.Attachments.Add(new Attachment(GetExceptionsLogFile()));
                 }
                 
-                if(screenshotFilesPath.Any())
+                if(ScreenshotFilesPath.Any())
                 {
-                    foreach (var filePath in screenshotFilesPath)
+                    foreach (var filePath in ScreenshotFilesPath)
                     {
                         mm.Attachments.Add(new Attachment(filePath));
                     }                  
