@@ -125,27 +125,7 @@ namespace EC_Launcher.Models
                         File.Delete(localModPath + fileNameWindows);
                 }
 
-                // Получаем список скачанных файлов в папке кеша
-                string[] cacheFiles = Directory.GetFiles(cacheFolder, "*", SearchOption.AllDirectories);
-
-                // Получаем путь к папке Hearts of Iron IV/mod
-                string modsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod");
-
-                // Перемещаем файлы из папке кеша на папку мода
-                foreach (var file in cacheFiles)
-                {
-                    if (!file.Contains("EC_Launcher.exe") && !file.Contains("Settings.xml"))
-                    {
-                        // Перемещать файл .mod в MyDocuments\Paradox Interacive\Hearts of Iron IV\mod
-                        if (file.Contains("Economic_Crisis.mod"))
-                        {
-                            CopyToFolder(file, modsFolder);
-                            continue;
-                        }
-                        CopyToFolder(file, localModPath);
-                    }
-                }
-
+                MoveFilesFromCacheFolder();
                 ProgressData.StatusText = "Economic Crisis has successfully updated!";
             });          
         }                  
@@ -167,8 +147,9 @@ namespace EC_Launcher.Models
                     ProgressData.StatusText = $"Downloading {Path.GetFileName(file)}";
                     await DownloadStreamFromDropboxAsync(rootFolder, file);
                     ProgressData.CurrentValue++;
-                }                
-                
+                }
+
+                MoveFilesFromCacheFolder();
                 NotifyUserThenClose();
             });           
         }
@@ -271,6 +252,30 @@ namespace EC_Launcher.Models
                 Directory.CreateDirectory(destDirectory + dirName);           
 
             File.Copy(sourceFileFromCacheFolder, destDirectory + fileName, true);           
+        }
+
+        private void MoveFilesFromCacheFolder()
+        {
+            // Получаем список скачанных файлов в папке кеша
+            string[] cacheFiles = Directory.GetFiles(cacheFolder, "*", SearchOption.AllDirectories);
+
+            // Получаем путь к папке Hearts of Iron IV/mod
+            string modsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod");
+
+            // Перемещаем файлы из папке кеша на папку мода
+            foreach (var file in cacheFiles)
+            {
+                if (!file.Contains("EC_Launcher.exe") && !file.Contains("Settings.xml"))
+                {
+                    // Перемещать файл .mod в MyDocuments\Paradox Interacive\Hearts of Iron IV\mod
+                    if (file.Contains("Economic_Crisis.mod"))
+                    {
+                        CopyToFolder(file, modsFolder);
+                        continue;
+                    }
+                    CopyToFolder(file, localModPath);
+                }
+            }
         }
 
         // Сообщить пользователя что надо перезагрузить лаунчера после скачивание обновлении лаунчера
