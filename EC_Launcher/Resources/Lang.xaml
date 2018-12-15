@@ -24,6 +24,8 @@
     <v:String x:Key="m_YourNameLabel">Your Name:</v:String>
     <v:String x:Key="m_WriteAboutBugLabel">Write about bug:</v:String>
     <v:String x:Key="m_SendButton">Send</v:String>
+    <v:String x:Key="m_AttachLogFile">Attach log files</v:String>
+    <v:String x:Key="m_AddScreenshots">Add screenshots</v:String>
 
     <!--Donate Window-->
     <v:String x:Key="m_DonateDesc">
