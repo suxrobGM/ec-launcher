@@ -18,14 +18,14 @@
                 <GradientStop Color="#FF212020" Offset="1"/>
             </RadialGradientBrush>
         </Grid.Background>
-        
+
         <Button Command="{Binding BackCommand}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="33" Height="33" Background="{x:Null}" BorderBrush="{x:Null}">
             <Image Source="/EC_Launcher;component/Icons/back_button.png"/>
         </Button>
 
-        <TextBox Text="{Binding Text}" HorizontalAlignment="Left" Height="177" Margin="10,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="515"/>
+        <TextBox Text="{Binding Text}" HorizontalAlignment="Left" Height="177" Margin="10,0,0,36.2" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="303"/>
 
-        <Button Command="{Binding SendCommand}" Content="{DynamicResource m_SendButton}" HorizontalAlignment="Left" Margin="440,312,0,0" FontWeight="Bold" FontSize="14" FontFamily="Stencil" VerticalAlignment="Top" Width="85">
+        <Button Command="{Binding SendCommand}" Content="{DynamicResource m_SendButton}" HorizontalAlignment="Right" Margin="0,0,23,10.2" FontWeight="Bold" FontSize="14" FontFamily="Stencil" VerticalAlignment="Bottom" Width="85">
             <Button.BorderBrush>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Black" Offset="0"/>
@@ -39,8 +39,18 @@
                 </LinearGradientBrush>
             </Button.Foreground>
         </Button>
-        <TextBox Text="{Binding SenderName}" HorizontalAlignment="Left" Height="23" Margin="10,59,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210"/>
+        <TextBox Text="{Binding SenderName}" HorizontalAlignment="Left" Height="23" Margin="10,59,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="303"/>
         <Label Content="{DynamicResource m_YourNameLabel}" HorizontalAlignment="Left" Margin="10,33,0,0" VerticalAlignment="Top" Width="120" FontWeight="Bold" Foreground="#FFFFFDFD" FontStyle="Italic"/>
         <Label Content="{DynamicResource m_WriteAboutBugLabel}" HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" Width="156" FontWeight="Bold" Foreground="#FFFFFDFD" FontStyle="Italic"/>
+        <CheckBox IsChecked="{Binding IsAttachedLogFile}" Content="Attach log files" HorizontalAlignment="Left" Margin="10,0,0,10.2" VerticalAlignment="Bottom" Foreground="White"/>
+        <ListBox ItemsSource="{Binding ScreenshotFiles}" SelectedItem="{Binding SelectedScreenshotFile}" Margin="318,59,23,66.2" Background="{x:Null}" Foreground="White" FontStyle="Italic">
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Remove file" Command="{Binding RemoveSelectedFile}"/>
+                </ContextMenu>
+            </ListBox.ContextMenu>
+        </ListBox>
+        <Button Command="{Binding AddScreenshootsCommand}" Content="Add screenshots" Margin="318,0,23,36.2" VerticalAlignment="Bottom" FontWeight="Bold" Height="25"/>
+        <Label Content="Drag and Drop image file" HorizontalAlignment="Left" Margin="347,144,0,0" VerticalAlignment="Top" Foreground="#FF575757"/>
     </Grid>
 </Page>

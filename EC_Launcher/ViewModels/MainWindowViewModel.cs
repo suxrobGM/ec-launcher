@@ -127,23 +127,21 @@ namespace EC_Launcher.ViewModels
             {
                 try
                 {
-
+                    var exceptionFiles = new List<string>()
+                    {
+                        ".git",
+                        "_cache",
+                        "Settings.xml",
+                        "EC_Launcher.exe"
+                    };
+                    var hashGenerator = new HashGenerator(model.SettingsXml.ModPath, exceptionFiles);
+                    ProgressData = hashGenerator.ProgressData;
+                    await hashGenerator.GetGameFileHashesAsync();
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-
-                var exceptionFiles = new List<string>()
-                {
-                    ".git",
-                    "_cache",
-                    "Settings.xml",
-                    "EC_Launcher.exe"
-                };
-                var hashGenerator = new HashGenerator(model.SettingsXml.ModPath, exceptionFiles);
-                ProgressData = hashGenerator.ProgressData;
-                await hashGenerator.GetGameFileHashesAsync();
+                }               
             });
 
             ExitCommand = new DelegateCommand(() =>
