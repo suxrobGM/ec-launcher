@@ -130,7 +130,7 @@ namespace EC_Launcher.Models
         {
             await Task.Run(() =>
             {
-                using (var hashFile = new FileStream(OutputHashFile, FileMode.OpenOrCreate))
+                using (var hashFile = new FileStream(OutputHashFile, FileMode.Create))
                 {
                     using (var writer = new StreamWriter(hashFile))
                     {
