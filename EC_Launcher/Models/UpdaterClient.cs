@@ -188,7 +188,12 @@ namespace EC_Launcher.Models
             return await Task.Run(async () =>
             {
                 var response = await dropboxClient.Files.ListFolderAsync(folderPath, recrusiveMode);               
-                return response.Entries.Where(i => i.IsFile && !i.PathDisplay.Contains("Settings.xml") && !i.PathDisplay.Contains("HashList.md5")).Select(i => i.PathDisplay).ToList();
+                return response.Entries.Where(i => i.IsFile && 
+                                                    !i.PathDisplay.Contains("Settings.xml") &&
+                                                    !i.PathDisplay.Contains("Version.xml") &&
+                                                    !i.PathDisplay.Contains("HashList.md5"))
+                                                    .Select(i => i.PathDisplay)
+                                                    .ToList();
             });
         }
 
