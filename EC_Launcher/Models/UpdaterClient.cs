@@ -248,12 +248,21 @@ namespace EC_Launcher.Models
         }
 
         private void CopyToFolder(string sourceFileFromCacheFolder, string destDirectory)
-        {           
-            int fullLength = sourceFileFromCacheFolder.Length;           
-
+        {                     
             string fileName = sourceFileFromCacheFolder.Remove(0, cacheFolder.Length);
-            string dirName = Path.GetDirectoryName(fileName);
 
+            // Копировать Economic_Crisis.mod в папке MyDocuments\Paradox Interactive\Hearts of Iron IV\mod
+            if (fileName.Contains("Economic_Crisis.mod"))
+            {
+                string modsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod");
+                if (!Directory.Exists(modsFolder))
+                    Directory.CreateDirectory(modsFolder);                
+
+                File.Copy(sourceFileFromCacheFolder, modsFolder + "\\Economic_Crisis.mod", true);               
+            }
+
+            string dirName = Path.GetDirectoryName(fileName);
+            
             if (!Directory.Exists(destDirectory + dirName))            
                 Directory.CreateDirectory(destDirectory + dirName);           
 
@@ -264,21 +273,12 @@ namespace EC_Launcher.Models
         {
             // Получаем список скачанных файлов в папке кеша
             string[] cacheFiles = Directory.GetFiles(cacheFolder, "*", SearchOption.AllDirectories);
-
-            // Получаем путь к папке Hearts of Iron IV/mod
-            string modsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Paradox Interactive", "Hearts of Iron IV", "mod");
-
+           
             // Перемещаем файлы из папке кеша на папку мода
             foreach (var file in cacheFiles)
             {
                 if (!file.Contains("EC_Launcher.exe") && !file.Contains("Settings.xml"))
-                {
-                    // Перемещать файл .mod в MyDocuments\Paradox Interacive\Hearts of Iron IV\mod
-                    if (file.Contains("Economic_Crisis.mod"))
-                    {
-                        CopyToFolder(file, modsFolder);
-                        continue;
-                    }
+                {                                                              
                     CopyToFolder(file, localModPath);
                 }
             }
