@@ -91,7 +91,7 @@
 
         <Label Content="{DynamicResource m_DevMode}" Visibility="{Binding DevModeVisibility}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFF30000" FontWeight="Bold" FontSize="18"/>
 
-        <Label Margin="636,497,10.4,9.8" Foreground="White" FontStyle="Italic" FontWeight="Bold">
+        <Label  Foreground="White" FontStyle="Italic" FontWeight="Bold" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,9.6,20.8">
             <Hyperlink Command="{Binding GoToWebSiteCommand}" CommandParameter="https://www.facebook.com/suxrobgm">
                 Developed by SuxrobGM
             </Hyperlink>

@@ -26,7 +26,10 @@ namespace EC_Launcher.Models
                 File.Create("Settings.xml").Close();
                 gamePath = GetSteamGamePath();
                 modPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                //modPath = modPath.Remove(modPath.IndexOf("\\launcher"), "\\launcher".Length);
+
+                if(modPath.EndsWith("\\launcher"))
+                    modPath = modPath.Remove(modPath.IndexOf("\\launcher"), "\\launcher".Length);
+
                 appLanguage = "English";
                 isSteamVersion = CheckGameSteamVersion();
                 firstExec = true;
