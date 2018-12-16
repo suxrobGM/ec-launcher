@@ -10,11 +10,11 @@ namespace EC_Launcher.Models
     public class SettingsXml : BindableBase
     {
         private readonly string xmlFile;
+        private readonly bool firstExec;
         private string gamePath;
         private string modPath;
         private string appLanguage;
-        private bool isSteamVersion;
-        private bool firstExec;
+        private bool isSteamVersion;       
         private XDocument xDoc;
 
         public SettingsXml()
@@ -89,7 +89,6 @@ namespace EC_Launcher.Models
                 xDoc.Save(xmlFile);
             }
         }
-
         public bool IsSteamVersion
         {
             get

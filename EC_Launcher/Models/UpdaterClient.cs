@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows;
 using System.Diagnostics;
 using Dropbox.Api;
+using System.Reflection;
 
 namespace EC_Launcher.Models
 {
@@ -41,7 +42,7 @@ namespace EC_Launcher.Models
         {
             return await Task.Run(async () =>
             {
-                var localAppVersion = VersionXml.ParseLauncherVersion(XDocument.Load("Version.xml"));
+                var localAppVersion = Assembly.GetExecutingAssembly().GetName().Version;
                 var remoteAppVersion = await GetRemoteAppVersionAsync();
 
                 if (localAppVersion < remoteAppVersion)                
