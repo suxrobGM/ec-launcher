@@ -109,7 +109,7 @@
         </Grid>
         <Frame prism:RegionManager.RegionName="ViewsRegion" Content="" Margin="240,27,9.6,137.8" NavigationUIVisibility="Hidden" Navigating="Frame_Navigating"/>
 
-        <Grid Margin="10,367,558.6,81.8" Width="225">
+        <Grid Margin="10,367,553.6,81.8">
             <Label Content="{DynamicResource m_FollowUsLabel}" HorizontalAlignment="Left" Margin="68,1,0,0" VerticalAlignment="Top" FontWeight="Bold">
                 <Label.Foreground>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
