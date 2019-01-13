@@ -19,7 +19,7 @@
             </LinearGradientBrush>
         </Grid.Background>
 
-        <TextBlock Text="{DynamicResource m_DonateDesc}" TextWrapping="Wrap" Foreground="White" TextDecorations="{x:Null}" FontWeight="Bold" Height="34" VerticalAlignment="Top" Margin="10,38,10,0" FontSize="10"/>
+        <TextBlock Text="{DynamicResource m_DonateDesc}" TextWrapping="Wrap" Foreground="White" TextDecorations="{x:Null}" FontWeight="Bold" Height="39" VerticalAlignment="Top" Margin="10,38,10,0" FontSize="10"/>
         <TextBlock HorizontalAlignment="Left" Margin="195,77,0,0" TextWrapping="Wrap" Text="{DynamicResource m_DonateWalletsLabel}" VerticalAlignment="Top" Foreground="White" FontWeight="Bold"/>
 
         <WrapPanel HorizontalAlignment="Left" Height="245" Margin="10,98,0,0" VerticalAlignment="Top" Width="430">
