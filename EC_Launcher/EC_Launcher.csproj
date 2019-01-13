@@ -302,5 +302,8 @@
   <ItemGroup>
     <Resource Include="icon_EC.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Background.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

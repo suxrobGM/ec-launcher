@@ -19,14 +19,10 @@
             <prism:InvokeCommandAction Command="{Binding ExitCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    
-    <Window.Background>
-        <ImageBrush ImageSource="/EC_Launcher;component/Resources/Background.bmp"/>
-    </Window.Background>
 
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="/EC_Launcher;component/Resources/Background.bmp"/>
+            <ImageBrush ImageSource="/EC_Launcher;component/Resources/Background.jpg"/>
         </Grid.Background>
 
         <StackPanel HorizontalAlignment="Left" Height="186" Margin="10,140,0,0" VerticalAlignment="Top" Width="176">
@@ -98,18 +94,18 @@
         </Label>
 
         <!--Progressbar-->
-        <Grid Margin="240,383,9.6,91.8">
+        <Grid Margin="240,377,9.6,97.8">
             <TextBlock Text="{Binding ProgressData.StatusText}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="White" FontStyle="Italic" Height="17"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Width="80" VerticalAlignment="Top" Height="17">
                 <TextBlock Text="{Binding ProgressData.CurrentValue}" TextWrapping="Wrap" Foreground="White" FontStyle="Italic"/>
                 <TextBlock Text="{Binding ProgressData.MaxValue, StringFormat={}/{0:0}}" TextWrapping="Wrap" Foreground="White" FontStyle="Italic"/>
             </StackPanel>
             <ProgressBar Value="{Binding ProgressData.Percentage, Mode=OneWay}" Height="23" VerticalAlignment="Bottom"/>
-            <TextBlock Text="{Binding ProgressData.Percentage, Mode=OneWay, StringFormat={}{0:0}%}" TextAlignment="Center" TextWrapping="Wrap" Width="46" Background="{x:Null}" FontWeight="Bold" FontStyle="Italic" Margin="249,22,247,0"/>
+            <TextBlock Text="{Binding ProgressData.Percentage, Mode=OneWay, StringFormat={}{0:0}%}" TextAlignment="Center" TextWrapping="Wrap" Width="46" Background="{x:Null}" FontWeight="Bold" FontStyle="Italic" Margin="250,17,248,0"/>
         </Grid>
         <Frame prism:RegionManager.RegionName="ViewsRegion" Content="" Margin="240,27,9.6,137.8" NavigationUIVisibility="Hidden" Navigating="Frame_Navigating"/>
 
-        <Grid Margin="10,367,553.6,81.8">
+        <Grid Margin="10,364,553.6,84.8">
             <Label Content="{DynamicResource m_FollowUsLabel}" HorizontalAlignment="Left" Margin="68,1,0,0" VerticalAlignment="Top" FontWeight="Bold">
                 <Label.Foreground>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -120,7 +116,7 @@
             </Label>
 
             <!-- Social community buttons -->
-            <StackPanel HorizontalAlignment="Left" Height="30" Width="222" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,0,0,10">
+            <StackPanel HorizontalAlignment="Left" Height="30" Width="222" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,0,0,13">
                 <Button 
                 Style="{StaticResource ButtonBackgroundImageShow}"
                 Command="{Binding GoToWebSiteCommand}"
