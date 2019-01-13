@@ -74,6 +74,12 @@ namespace EC_Launcher.Models
         // <md5 хеш значения> - <имя файла>
         public static List<KeyValuePair<string, string>> GetHashListFromFile(string hashFilePath)
         {
+            if (!File.Exists(hashFilePath))
+            {
+                File.Create(hashFilePath).Close();
+                return new List<KeyValuePair<string, string>>();
+            }             
+
             using (var reader = new StreamReader(hashFilePath))
             {
                 var HashList = new List<KeyValuePair<string, string>>();

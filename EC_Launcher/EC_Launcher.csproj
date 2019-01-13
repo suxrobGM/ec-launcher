@@ -53,7 +53,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icons\icon_EC.ico</ApplicationIcon>
+    <ApplicationIcon>icon_EC.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>8638C6AFB31E5487CD5139423B5ED5895F817A0A</ManifestCertificateThumbprint>
@@ -298,6 +298,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\back_button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon_EC.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
