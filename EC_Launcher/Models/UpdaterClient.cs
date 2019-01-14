@@ -150,7 +150,9 @@ namespace EC_Launcher.Models
                     ProgressData.CurrentValue++;
                 }
 
-                MoveFilesFromCacheFolder();
+                string rootPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+                MoveUpdaterFromCache();
                 NotifyUserThenClose();
             });           
         }
@@ -282,6 +284,15 @@ namespace EC_Launcher.Models
                     CopyToFolder(file, localModPath);
                 }
             }
+        }
+
+        private void MoveUpdaterFromCache()
+        {
+            if (File.Exists($"{cacheFolder}\\launcher\\Updater.exe"))
+                File.Move($"{cacheFolder}\\launcher\\Updater.exe", $"{rootFolder}\\Updater.exe");
+
+            if (File.Exists($"{cacheFolder}\\launcher\\Updater.exe.config"))
+                File.Move($"{cacheFolder}\\launcher\\Updater.exe.config", $"{rootFolder}\\Updater.exe.config");
         }
 
         // Сообщить пользователя что надо перезагрузить лаунчера после скачивание обновлении лаунчера

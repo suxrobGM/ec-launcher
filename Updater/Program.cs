@@ -17,7 +17,9 @@ namespace Updater
                     Console.WriteLine(arg);
                 }
 
-                string programmFromCache = args[0];
+                string programFromCache = args[0];
+                string rootPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                string cachePath = rootPath + "\\" + Path.GetDirectoryName(args[0]);
                 string pocessName = Path.GetFileNameWithoutExtension(args[0]);
                 string exeFileName = Path.GetFileName(args[0]);
 
@@ -31,7 +33,9 @@ namespace Updater
                 }
                 Console.WriteLine(myProcesses.Length);
 
-                File.Copy(programmFromCache, Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\" + exeFileName, true);                
+                MoveFilesFromCache(cachePath, rootPath);
+                Console.WriteLine("Moving files from cache...");
+
                 Process.Start(exeFileName);                               
             }
             catch (Exception ex)
@@ -39,6 +43,21 @@ namespace Updater
                 Console.WriteLine(ex.Message);
                 Console.ReadLine();
             }
+        }
+
+        static void MoveFilesFromCache(string cachePath, string destPath)
+        {            
+            string[] cacheFiles = Directory.GetFiles(cachePath, "*", SearchOption.AllDirectories);
+            
+            foreach (var file in cacheFiles)
+            {
+                if (file.Contains("Updater.exe"))
+                    continue;
+
+                string fileName = "\\" + Path.GetFileName(file);
+                File.Copy(cachePath + fileName, destPath + fileName, true);
+            }
+           
         }
     }
 }
