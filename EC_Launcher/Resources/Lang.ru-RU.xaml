@@ -33,6 +33,7 @@
         Поддержите будущего проекта и состояние сервера. Пожалуйста, укажите ваше имя (или Discord хештег) в комментарии к платежу. Лучшие спонсоры попадет в списке топа (top-list). С наилучшими пожеланиями, EC Dev Team
     </v:String>
     <v:String x:Key="m_DonateWalletsLabel">Наши кошельки для оплаты:</v:String>
+    <v:String x:Key="m_DOnateButtonsClickLabel">Нажмите на один из следующих формы</v:String>
 
     <!--Message Box Texts-->
     <v:String x:Key="m_ERROR">ОШИБКА</v:String>

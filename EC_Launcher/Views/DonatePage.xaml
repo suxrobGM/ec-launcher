@@ -20,7 +20,7 @@
         </Grid.Background>
 
         <TextBlock Text="{DynamicResource m_DonateDesc}" TextWrapping="Wrap" Foreground="White" TextDecorations="{x:Null}" FontWeight="Bold" Height="39" VerticalAlignment="Top" Margin="10,38,10,0" FontSize="10"/>
-        <TextBlock HorizontalAlignment="Left" Margin="195,77,0,0" TextWrapping="Wrap" Text="{DynamicResource m_DonateWalletsLabel}" VerticalAlignment="Top" Foreground="White" FontWeight="Bold"/>
+        <TextBlock HorizontalAlignment="Left" Margin="215,77,0,0" Text="{DynamicResource m_DonateWalletsLabel}" VerticalAlignment="Top" Foreground="White" FontWeight="Bold"/>
 
         <WrapPanel HorizontalAlignment="Left" Height="245" Margin="10,98,0,0" VerticalAlignment="Top" Width="430">
             <!--Web money-->
@@ -54,5 +54,6 @@
         <Button Command="{Binding BackCommand}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="33" Height="33" Background="{x:Null}" BorderBrush="{x:Null}">
             <Image Source="/EC_Launcher;component/Icons/back_button.png"/>
         </Button>
+        <TextBlock HorizontalAlignment="Left" Margin="10,77,0,0" TextWrapping="Wrap" Text="{DynamicResource m_DOnateButtonsClickLabel}" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" FontSize="9"/>
     </Grid>
 </Page>

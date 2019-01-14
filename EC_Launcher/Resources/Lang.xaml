@@ -32,6 +32,7 @@
         Donate money for support future of project and server. Please include your name (or Discord hashtag) in the payment comment. Top donaters will be in the list of project supporters (top-list). Best regards, EC Dev Team
     </v:String>
     <v:String x:Key="m_DonateWalletsLabel">Our payment wallets:</v:String>
+    <v:String x:Key="m_DOnateButtonsClickLabel">Click one of the payment forms</v:String>
     
     <!--Message Box Texts-->
     <v:String x:Key="m_ERROR">ERROR</v:String>
