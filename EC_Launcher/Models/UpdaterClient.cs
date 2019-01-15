@@ -288,11 +288,23 @@ namespace EC_Launcher.Models
 
         private void MoveUpdaterFromCache()
         {
+            string localAppPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
             if (File.Exists($"{cacheFolder}\\launcher\\Updater.exe"))
-                File.Move($"{cacheFolder}\\launcher\\Updater.exe", $"{rootFolder}\\Updater.exe");
+            {
+                if (File.Exists($"{localAppPath}\\Updater.exe"))
+                    File.Delete($"{localAppPath}\\Updater.exe");
+
+                File.Move($"{cacheFolder}\\launcher\\Updater.exe", $"{localAppPath}\\Updater.exe");
+            }                
 
             if (File.Exists($"{cacheFolder}\\launcher\\Updater.exe.config"))
-                File.Move($"{cacheFolder}\\launcher\\Updater.exe.config", $"{rootFolder}\\Updater.exe.config");
+            {
+                if (File.Exists($"{localAppPath}\\Updater.exe.config"))
+                    File.Delete($"{localAppPath}\\Updater.exe.config");
+
+                File.Move($"{cacheFolder}\\launcher\\Updater.exe.config", $"{localAppPath}\\Updater.exe.config");
+            }                
         }
 
         // Сообщить пользователя что надо перезагрузить лаунчера после скачивание обновлении лаунчера
